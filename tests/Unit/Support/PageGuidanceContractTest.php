@@ -148,7 +148,7 @@ final class PageGuidanceContractTest extends TestCase
 		// Active rows use NC's 16% primary tint, not a solid fill.
 		$this->assertStringContainsString(
 			'color-mix(in srgb, var(--color-primary-element) 16%, transparent)',
-			$css,
+			(string)file_get_contents($this->root . '/css/navigation.css'),
 		);
 	}
 }
