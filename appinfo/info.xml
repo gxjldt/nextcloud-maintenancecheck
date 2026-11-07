@@ -5,8 +5,9 @@
 -->
 <info xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
 	<id>maintenancecheck</id>
-	<name>MaintenanceCheck</name>
+	<name>电梯维保</name>
 	<summary>Stop missing maintenance visits — due board, work orders and Servicebericht on your Nextcloud</summary>
+	<summary lang="zh_CN">到期不落空——到期看板、工单和维保记录单都在你的 Nextcloud 里</summary>
 	<summary lang="de">Keine Wartung mehr verpassen — Fälligkeiten, Arbeitsaufträge und Servicebericht in Ihrer Nextcloud</summary>
 	<description><![CDATA[
 # Know what is due. Close it in the field.
