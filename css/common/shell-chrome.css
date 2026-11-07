@@ -63,7 +63,11 @@
 	position: relative;
 }
 
-/* Buttons — AZ components.css touch targets (WCAG 2.5.5) */
+/* Buttons — NC 35 geometry: --default-clickable-area 34px, weight 500, 1rem
+   label. The AZ source used 44px everywhere (WCAG 2.5.5 AAA); that reads as a
+   foreign design system beside Files/Calendar, which ship 34px on fine
+   pointers. Keep the 44px floor only for coarse pointers, where it is the
+   actual accessibility requirement and NC itself uses --clickable-area-large. */
 #content.app-maintenancecheck .mn-btn,
 #content.app-maintenancecheck .button,
 #content.app-maintenancecheck button.button,
@@ -72,13 +76,13 @@
 	align-items: center;
 	justify-content: center;
 	gap: var(--mn-space-2, 0.5rem);
-	/* 44px, not 2.75rem: NC root font-size is 15px, so 2.75rem = 41.25px (< WCAG 2.5.5) */
-	min-height: 44px;
-	min-width: 44px;
-	padding: 0.625rem 1.15rem;
+	min-height: var(--mn-clickable-area, 34px);
+	min-width: var(--mn-clickable-area, 34px);
+	padding: 0 12px;
 	box-sizing: border-box;
-	border-radius: var(--mn-radius-md, 12px);
-	font-weight: 600;
+	border-radius: var(--border-radius-element, var(--mn-radius-md, 8px));
+	font-size: var(--mn-fs-md, 1rem);
+	font-weight: 500;
 	line-height: 1.25;
 	text-decoration: none;
 	cursor: pointer;
@@ -86,10 +90,9 @@
 #content.app-maintenancecheck .mn-btn--sm,
 #content.app-maintenancecheck .button.small,
 #content.app-maintenancecheck .button--sm {
-	/* Always ≥44×44 — design system §0.4 / WCAG 2.5.5 (no desktop exception) */
-	min-height: 44px;
-	min-width: 44px;
-	padding: var(--mn-space-2) var(--mn-space-3);
+	min-height: var(--mn-clickable-area, 34px);
+	min-width: var(--mn-clickable-area, 34px);
+	padding: 0 var(--mn-space-2, 8px);
 }
 /* ===== END AZ skip/btn parity ===== */
 

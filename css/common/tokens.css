@@ -14,9 +14,17 @@
 	--mn-space-7: 48px;
 	--mn-space-8: 64px;
 
-	--mn-radius-sm: 6px;
-	--mn-radius-md: 12px;
-	--mn-radius-lg: 16px;
+	/* NC 35 scale: --border-radius-small 4px / --border-radius-element 8px /
+	   --border-radius-container 12px. Keep in lockstep or the app reads as a
+	   different product next to Files/Calendar. */
+	/* NC 35 --default-clickable-area (34px on fine pointers, 48px on coarse).
+	   Coarse pointers are where the 44px WCAG 2.5.5 floor actually applies; NC
+	   itself only grows controls on touch, so match that instead of a global 44. */
+	--mn-clickable-area: 34px;
+
+	--mn-radius-sm: 4px;
+	--mn-radius-md: 8px;
+	--mn-radius-lg: 12px;
 
 	--mn-fs-xs: 0.75rem;
 	--mn-fs-sm: 0.875rem;
@@ -45,6 +53,12 @@
 	--mn-print-surface: #fff;
 	/* Ink on the light signature pad (not theme text — pad is always print-surface) */
 	--mn-signature-ink: #111;
+}
+
+@media (any-pointer: coarse) {
+	:root {
+		--mn-clickable-area: 44px;
+	}
 }
 
 /* Theme-bound tokens — must follow body [data-theme-*] where NC defines --color-* */
