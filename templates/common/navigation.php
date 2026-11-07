@@ -52,12 +52,11 @@ $settingsSectionNav = is_array($navUrls['settingsSections'] ?? null) ? $navUrls[
 $isAdmin = $isSettings;
 $isPlanning = $isDispatch || $isTours || $isKpi || $isExceptions;
 
-$mnNavLabel = static function (string $name, string $hint) use ($l): void {
+/* Single-line labels, like NC's own nav. The per-page hint stays on the link's
+ * title and aria-label instead of adding a second text line. */
+$mnNavLabel = static function (string $name, string $hint): void {
 	?>
-	<span class="mn-nav__label">
-		<span class="mn-nav__name"><?php p($name); ?></span>
-		<span class="mn-nav__hint"><?php p($hint); ?></span>
-	</span>
+	<span class="mn-nav__name"><?php p($name); ?></span>
 	<?php
 };
 ?>

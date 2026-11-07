@@ -38,22 +38,19 @@
  * Interaction chrome (--mn-nav-item-inset / radius): hover + active are inset
  * rounded pills. Never translateX on hover (it shifted child indent). Never
  * full-bleed square fills on accordion parents (looked like a broken slab). */
+/* Geometry from @nextcloud/vue NcAppNavigation(Item): 8px list padding, 4px gap,
+ * 42px rows, 16px icon in a --default-clickable-area gutter, 13px trailing pad,
+ * radius --border-radius-element. */
 #app-navigation {
-    --mn-nav-padding-inline: 1.25rem;
-    --mn-nav-icon-size: 1.125rem;
-    --mn-nav-gap-icon-text: 0.75rem;
-    --mn-nav-text-start: calc(
-        var(--mn-nav-padding-inline) + var(--mn-nav-icon-size) + var(--mn-nav-gap-icon-text)
-    );
-    /* Modest nest past parent label — readable hierarchy without a “floating” column */
-    --mn-nav-child-nest: 0.5rem;
-    --mn-nav-child-padding-inline: calc(var(--mn-nav-text-start) + var(--mn-nav-child-nest));
-    --mn-nav-rail-left: calc(
-        var(--mn-nav-item-inset) + var(--mn-nav-padding-inline) + (var(--mn-nav-icon-size) / 2) - 1px
-    );
+    --mn-nav-padding-inline: 0.5rem;
+    --mn-nav-icon-block: var(--default-clickable-area, 42px);
+    --mn-nav-icon-size: 1rem;
+    --mn-nav-gap-icon-text: 0;
+    --mn-nav-text-start: var(--mn-nav-icon-block);
+    --mn-nav-child-padding-inline: var(--mn-nav-text-start);
     --mn-nav-item-inset: 0.5rem;
-    --mn-nav-item-radius: var(--mn-radius-md, var(--border-radius-large, 8px));
-    --mn-nav-item-transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+    --mn-nav-item-radius: var(--border-radius-element, var(--border-radius-pill, 8px));
+    --mn-nav-item-transition: background-color 0.2s ease-in-out;
 }
 
 /* Section divider (before Manager / responsibilities) - clear visual separation */
@@ -68,7 +65,10 @@
 /* Navigation Menu - scrollable so Manager stays reachable when Verwaltung is expanded */
 .nav-menu {
     margin: 0;
-    padding: 1.5rem 0;
+    padding: var(--app-navigation-padding, 0.5rem) 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--default-grid-baseline, 4px);
     list-style: none;
     position: relative;
     z-index: 1;
@@ -80,6 +80,8 @@
 .nav-menu li {
     margin: 0;
     padding: 0;
+    flex-shrink: 0;
+    width: 100%;
 }
 
 /* Parent items with children (e.g. Verwaltung) */
@@ -90,39 +92,8 @@
 }
 
 .nav-parent-toggle,
-#app-navigation .nav-menu > .nav-item-has-children > button.nav-parent-toggle {
-    display: flex;
-    align-items: center;
-    gap: var(--mn-nav-gap-icon-text);
-    padding: 0.875rem var(--mn-nav-padding-inline);
-    box-sizing: border-box;
-    width: auto;
-    max-width: none;
-    margin: 0.15rem var(--mn-nav-item-inset);
-    background-color: transparent;
-    border: none;
-    box-shadow: none;
-    color: var(--color-main-text);
-    text-align: left;
-    cursor: pointer;
-    border-radius: var(--mn-nav-item-radius);
-    font-weight: 600;
-    font-size: 1rem;
-    line-height: 1.3;
-    min-height: 48px;
-    position: relative;
-    transition: var(--mn-nav-item-transition);
-}
-
 /* Accordion parent shares the same inset pill chrome as top-level links.
- * Class app-navigation-entry-button opts out of NC core button margins. */
-#app-navigation .nav-menu > .nav-item-has-children > button.nav-parent-toggle {
-    margin: 0.15rem var(--mn-nav-item-inset);
-    padding: 0.875rem var(--mn-nav-padding-inline);
-    border-radius: var(--mn-nav-item-radius);
-    width: auto;
-}
-
+ /* Parent toggle shares the row chrome of plain links. */
 /* Überschreibe mögliche Nextcloud-Standard-Paddings auf Listenelementen,
    damit Verwaltung und andere Einträge wirklich bis zum Rand gehen. */
 #app-navigation .nav-menu > li {
@@ -131,7 +102,7 @@
 }
 
 #app-navigation .nav-menu > .nav-item-has-children > button.nav-parent-toggle:hover {
-    background-color: color-mix(in srgb, var(--color-main-text) 12%, var(--color-main-background));
+    background-color: color-mix(in srgb, var(--color-primary-element) 8%, transparent);
     color: var(--color-main-text);
 }
 
@@ -141,18 +112,17 @@
 }
 
 #app-navigation .nav-menu > .nav-item-has-children > button.nav-parent-toggle:active {
-    background-color: color-mix(in srgb, var(--color-main-text) 16%, var(--color-main-background));
+    background-color: color-mix(in srgb, var(--color-primary-element) 16%, transparent);
 }
 
 /* Open accordion = structure only (chevron). Do not fake “active page” chrome. */
 #app-navigation .nav-menu > .nav-item-has-children.is-open > button.nav-parent-toggle {
     background-color: transparent;
     color: var(--color-main-text);
-    font-weight: 600;
 }
 
 #app-navigation .nav-menu > .nav-item-has-children.is-open > button.nav-parent-toggle:hover {
-    background-color: color-mix(in srgb, var(--color-main-text) 12%, var(--color-main-background));
+    background-color: color-mix(in srgb, var(--color-primary-element) 8%, transparent);
     color: var(--color-main-text);
 }
 
@@ -191,123 +161,68 @@
 
     #app-navigation .nav-menu > li > a,
     #app-navigation .nav-submenu > li > a,
-    #app-navigation .nav-submenu > li > a::after,
     #app-navigation .nav-parent-toggle {
         transition: none;
     }
 }
 
 /* Accordion children (Administration / Manager).
- * Hierarchy cues (shape + structure, not colour alone):
- * 1) DOM list nesting
- * 2) vertical rail under the parent icon column
- * 3) child label starts slightly past the parent label
+ * Native NC has no rail/bullet under a parent — children are plain rows indented
+ * by one icon gutter, same chrome as top-level rows.
  */
 #app-navigation .nav-submenu {
     list-style: none;
-    margin: 0.15rem 0 0.5rem;
-    padding: 0.1rem 0;
-    position: relative;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--default-grid-baseline, 4px);
 }
 
-/* Tree rail in the icon gutter — stays clear of active-row inset shadows */
-#app-navigation .nav-submenu::before {
-    content: '';
-    position: absolute;
-    left: var(--mn-nav-rail-left);
-    top: 0.35rem;
-    bottom: 0.35rem;
-    width: 2px;
-    border-radius: 1px;
-    background: var(--color-border-maxcontrast, var(--color-border));
-    opacity: 0.55;
-    pointer-events: none;
-    z-index: 0;
-}
-
-/* Navigation links: clear, touch-friendly (WCAG 2.5.5: 44px min touch target).
- * Horizontal inset via margin — hover/active pills stay rounded without shifting
- * label indent (padding tokens stay stable). No translateX on hover. */
+/* Navigation links — geometry from NcAppNavigationItem: 42px row, icon gutter of
+ * --default-clickable-area, 13px trailing pad, no inner padding. */
 #app-navigation .nav-menu > li > a {
     display: flex;
     align-items: center;
     gap: var(--mn-nav-gap-icon-text);
-    padding: 0.875rem var(--mn-nav-padding-inline);
+    padding: 0 calc((var(--mn-nav-icon-block) - 1rem) / 2) 0 0;
     box-sizing: border-box;
     text-decoration: none;
     color: var(--color-main-text);
     border-radius: var(--mn-nav-item-radius);
-    margin: 0.15rem var(--mn-nav-item-inset);
+    margin: 0 var(--mn-nav-padding-inline);
     transition: var(--mn-nav-item-transition);
-    font-weight: 500;
-    font-size: 1rem;
+    font-weight: normal;
+    font-size: var(--default-font-size, 1rem);
     line-height: 1.3;
-    min-height: 48px;
+    min-height: var(--mn-nav-icon-block);
     position: relative;
 }
 
-/* Child links: longhand padding only — never a padding shorthand that could
- * wipe padding-left (the historic cascade bug). ID + child combinator beats
- * any leftover .nav-menu a rules. No bullet markers — they stacked with nest
- * and pushed labels mid-parent-word. Indent tokens unchanged.
- *
- * Hover/active fill uses ::after starting past the tree rail so the rail stays
- * clean (full-row background used to paint over the gutter). */
+/* Child rows: same chrome, label starts one icon gutter in. */
 #app-navigation .nav-submenu > li > a {
     display: flex;
     align-items: center;
     gap: 0;
-    padding-top: 0.55rem;
-    padding-bottom: 0.55rem;
-    padding-right: var(--mn-nav-padding-inline);
-    padding-left: var(--mn-nav-child-padding-inline);
+    padding: 0 calc((var(--mn-nav-icon-block) - 1rem) / 2) 0 var(--mn-nav-child-padding-inline);
     box-sizing: border-box;
     text-decoration: none;
     color: var(--color-main-text);
     border-radius: var(--mn-nav-item-radius);
-    margin: 0.1rem var(--mn-nav-item-inset);
+    margin: 0 var(--mn-nav-padding-inline);
     background-color: transparent;
     transition: var(--mn-nav-item-transition);
-    font-weight: 500;
-    font-size: 0.9375rem;
+    font-weight: normal;
+    font-size: var(--default-font-size, 1rem);
     line-height: 1.3;
-    min-height: 44px;
+    min-height: var(--mn-nav-icon-block);
     position: relative;
-    z-index: 1;
-    isolation: isolate;
 }
 
-#app-navigation .nav-submenu > li > a::before {
-    content: none;
-    display: none;
-}
-
-#app-navigation .nav-submenu > li > a::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: calc(var(--mn-nav-rail-left) - var(--mn-nav-item-inset) + 0.4rem);
-    border-radius: var(--mn-nav-item-radius);
-    background-color: transparent;
-    z-index: -1;
-    pointer-events: none;
-    transition: background-color 0.15s ease;
-}
-
-#app-navigation .nav-menu > li > a:hover {
-    background-color: color-mix(in srgb, var(--color-main-text) 12%, var(--color-main-background));
-    color: var(--color-main-text);
-}
-
+#app-navigation .nav-menu > li > a:hover,
 #app-navigation .nav-submenu > li > a:hover {
-    background-color: transparent;
+    background-color: color-mix(in srgb, var(--color-primary-element) 8%, transparent);
     color: var(--color-main-text);
-}
-
-#app-navigation .nav-submenu > li > a:hover::after {
-    background-color: color-mix(in srgb, var(--color-main-text) 12%, var(--color-main-background));
 }
 
 /* Keyboard focus: clear ring (WCAG 2.1 AA 2.4.7 Focus Visible) */
@@ -317,46 +232,34 @@
     outline-offset: 2px;
 }
 
-/* Active page: solid primary pill — high contrast (primary-element-text on
- * primary-element). No inset bar, no layout shift vs idle indent. */
+/* Active row — NC tints 16% and hangs a 3px stripe off the leading edge. */
 #app-navigation .nav-menu > li.active > a,
-#app-navigation .nav-menu > li > a[aria-current="page"] {
-    background-color: var(--color-primary-element);
-    color: var(--color-primary-element-text);
-    font-weight: 600;
-    box-shadow: none;
-    border-left: none;
-}
-
+#app-navigation .nav-menu > li > a[aria-current="page"],
 #app-navigation .nav-submenu > li.active > a,
 #app-navigation .nav-submenu > li > a[aria-current="page"] {
-    background-color: transparent;
-    color: var(--color-primary-element-text);
-    font-weight: 600;
-    box-shadow: none;
-    border-left: none;
+    background-color: color-mix(in srgb, var(--color-primary-element) 16%, transparent);
+    color: var(--color-main-text);
 }
 
-#app-navigation .nav-submenu > li.active > a::after,
-#app-navigation .nav-submenu > li > a[aria-current="page"]::after {
+#app-navigation .nav-menu > li.active > a::before,
+#app-navigation .nav-menu > li > a[aria-current="page"]::before,
+#app-navigation .nav-submenu > li.active > a::before,
+#app-navigation .nav-submenu > li > a[aria-current="page"]::before {
+    content: '';
+    position: absolute;
+    inset-block: calc(var(--default-grid-baseline, 4px) * 2);
+    inset-inline-start: 0;
+    width: 3px;
+    border-radius: 999px;
     background-color: var(--color-primary-element);
 }
 
 #app-navigation .nav-menu > li.active > a:hover,
-#app-navigation .nav-menu > li > a[aria-current="page"]:hover {
-    background-color: var(--color-primary-element-hover, var(--color-primary-element));
-    color: var(--color-primary-element-text);
-}
-
+#app-navigation .nav-menu > li > a[aria-current="page"]:hover,
 #app-navigation .nav-submenu > li.active > a:hover,
 #app-navigation .nav-submenu > li > a[aria-current="page"]:hover {
-    background-color: transparent;
-    color: var(--color-primary-element-text);
-}
-
-#app-navigation .nav-submenu > li.active > a:hover::after,
-#app-navigation .nav-submenu > li > a[aria-current="page"]:hover::after {
-    background-color: var(--color-primary-element-hover, var(--color-primary-element));
+    background-color: color-mix(in srgb, var(--color-primary-element) 22%, transparent);
+    color: var(--color-main-text);
 }
 
 #app-navigation .nav-menu > li.active > a:focus-visible,
@@ -403,18 +306,6 @@
     text-overflow: ellipsis;
 }
 
-/* Two-line label + hint (DutyCheck parity) — allow wrap only on the label stack. */
-#app-navigation .nav-menu > li > a > span.mn-nav__label,
-#app-navigation .nav-submenu > li > a > span.mn-nav__label,
-#app-navigation .nav-parent-toggle > span.mn-nav__label {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.1rem;
-    white-space: normal;
-    overflow: hidden;
-}
-#app-navigation .nav-menu .mn-nav__name,
 #app-navigation .nav-submenu .mn-nav__name {
     display: block;
     max-width: 100%;
@@ -431,10 +322,13 @@
 
 #app-navigation .nav-menu .mn-nav__icon,
 #app-navigation .nav-parent-toggle .mn-nav__icon {
-    flex: 0 0 var(--mn-nav-icon-size);
-    width: var(--mn-nav-icon-size);
-    height: var(--mn-nav-icon-size);
-    max-width: var(--mn-nav-icon-size);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 var(--mn-nav-icon-block);
+    width: var(--mn-nav-icon-block);
+    height: var(--mn-nav-icon-block);
+    max-width: var(--mn-nav-icon-block);
 }
 
 /* Sidebar Header — flat brand block (MC family) */
@@ -515,9 +409,7 @@
     margin-top: auto;
     padding: 1.25rem 1rem;
     border-top: 1px solid var(--color-border);
-    background: linear-gradient(180deg,
-            transparent 0%,
-            color-mix(in srgb, var(--color-primary-element) 2%, transparent) 100%);
+    background: transparent;
     position: relative;
     z-index: 1;
 }
@@ -608,7 +500,6 @@
         --mn-nav-padding-inline: 1rem;
         --mn-nav-icon-size: 1rem;
         --mn-nav-gap-icon-text: 0.625rem;
-        --mn-nav-child-nest: 0.375rem;
         --mn-nav-item-inset: 0.375rem;
     }
 
@@ -620,9 +511,7 @@
     }
 
     #app-navigation .nav-submenu > li > a {
-        padding-left: var(--mn-nav-child-padding-inline);
-        padding-right: var(--mn-nav-padding-inline);
-        margin-inline: var(--mn-nav-item-inset);
+        padding-inline-end: calc((var(--mn-nav-icon-block) - 1rem) / 2);
     }
 
     .nav-menu .lucide-icon,

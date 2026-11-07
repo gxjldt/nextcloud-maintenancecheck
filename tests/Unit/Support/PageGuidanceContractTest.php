@@ -99,8 +99,9 @@ final class PageGuidanceContractTest extends TestCase
 	public function testNavigationExposesVisibleHints(): void
 	{
 		$nav = (string)file_get_contents($this->root . '/templates/common/navigation.php');
-		$this->assertStringContainsString('mn-nav__hint', $nav);
-		$this->assertStringContainsString('mn-nav__label', $nav);
+		$this->assertStringContainsString('mn-nav__name', $nav);
+		// Single-line rows: the hint rides on the link's title, not a second line.
+		$this->assertStringContainsString('aria-label="<?php p($l->t(', $nav);
 		$this->assertStringContainsString('What needs a visit — overdue first', $nav);
 		$this->assertStringContainsString('History and filters', $nav);
 	}
@@ -144,9 +145,9 @@ final class PageGuidanceContractTest extends TestCase
 			'/\.mn-quickstart__item\s+\.(?:mn-btn|button)[\s\S]{0,120}?align-self:\s*flex-start/s',
 			$css,
 		);
-		// Muted ink on tinted/primary active rows fails AA — hints inherit.
+		// Active rows use NC's 16% primary tint, not a solid fill.
 		$this->assertStringContainsString(
-			'#app-navigation .nav-menu > li.active > a .mn-nav__hint',
+			'color-mix(in srgb, var(--color-primary-element) 16%, transparent)',
 			$css,
 		);
 	}
