@@ -49,7 +49,7 @@ jobs:
       - name: Pack
         run: |
           mkdir -p build/release /tmp/stage/maintenancecheck
-          cp -a appinfo lib templates css js l10n img data docs screenshots \
+          cp -a appinfo lib templates css js l10n img data docs screenshots vendor \
                 composer.json composer.lock package.json package-lock.json \
                 phpunit.xml playwright.config.js infection.json5 \
                 CHANGELOG.md LICENSE README.md SECURITY.md .gitignore \
