@@ -72,8 +72,6 @@ $mnNavLabel = static function (string $name, string $hint) use ($l): void {
 				</div>
 				<div class="app-info">
 					<h3><?php p($l->t('MaintenanceCheck')); ?></h3>
-					<p class="app-brand__subtitle"><?php p($l->t('Recurring maintenance')); ?></p>
-					<p class="app-brand__role"><?php p($roleLabel); ?></p>
 				</div>
 			</div>
 		</div>

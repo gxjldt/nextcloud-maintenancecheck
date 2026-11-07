@@ -65,8 +65,9 @@
 }
 
 /* ── Filter panel (manager + compliance lists) ──────────────── */
+/* NC cards have no accent bar; keep an outline like native surfaces. */
 #app-content.mn-app .mn-filter-panel {
-	border-left: 4px solid var(--color-primary-element, #0082c9);
+	border: 1px solid var(--mn-border, var(--color-border));
 }
 
 #app-content.mn-app .mn-filter-panel__head {

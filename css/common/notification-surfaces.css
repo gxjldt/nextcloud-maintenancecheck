@@ -390,7 +390,6 @@
 	gap: var(--mn-space-3, 0.75rem);
 	padding: var(--mn-space-3, 0.75rem) var(--mn-space-4, 1rem);
 	border: 1px solid var(--mn-border, var(--color-border));
-	border-left-width: 4px;
 	border-radius: var(--mn-radius-md, 12px);
 	background: var(--mn-bg-card, var(--color-main-background));
 	box-shadow: var(--mn-shadow-md, 0 8px 24px color-mix(in srgb, var(--color-main-text) 12%, transparent));

@@ -224,8 +224,9 @@
 
 .mn-page-header__title {
 	margin: 0;
-	font-size: clamp(var(--mn-fs-xl), 3vw, 1.625rem);
-	font-weight: 700;
+	/* NC page headings sit at ~20px/600; 26px/700 is the SaaS look. */
+	font-size: 1.25rem;
+	font-weight: 600;
 	line-height: 1.25;
 }
 
@@ -246,17 +247,20 @@
 	align-items: center;
 	justify-content: center;
 	gap: var(--mn-space-2);
-	min-height: 44px;
-	padding: var(--mn-space-2) var(--mn-space-4);
-	border-radius: var(--mn-radius-md, 12px);
-	border: 1px solid transparent;
-	font-size: var(--mn-fs-sm);
-	font-weight: 600;
+	/* NC-native button metrics (core/css/server.css: min-height 34px on fine
+	   pointers, 44px on coarse; background = --color-primary-element-light,
+	   regular weight). Anything taller/bolder reads as another product. */
+	min-height: var(--mn-clickable-area, 34px);
+	padding: 0 var(--mn-space-3);
+	border-radius: var(--mn-radius-md, 8px);
+	border: none;
+	font-size: var(--default-font-size, var(--mn-fs-sm));
+	font-weight: normal;
 	cursor: pointer;
 	text-decoration: none;
 	box-sizing: border-box;
-	background: var(--color-background-dark);
-	color: var(--color-main-text);
+	background: var(--color-primary-element-light);
+	color: var(--color-primary-element-light-text, var(--color-main-text));
 	transition: background-color 0.1s ease;
 }
 
@@ -269,8 +273,6 @@
 .mn-btn--primary {
 	background: var(--color-primary-element);
 	color: var(--color-primary-element-text);
-	min-height: 48px;
-	min-width: 48px;
 }
 
 .mn-btn--primary:hover:not(:disabled) {
