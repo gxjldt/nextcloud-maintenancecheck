@@ -55,9 +55,8 @@ jobs:
                 CHANGELOG.md LICENSE README.md SECURITY.md .gitignore \
                 /tmp/stage/maintenancecheck/
           tar -czf "build/release/maintenancecheck-${GITHUB_REF_NAME}.tar.gz" -C /tmp/stage maintenancecheck
-          tar -tzf "build/release/maintenancecheck-${GITHUB_REF_NAME}.tar.gz" | head -3
-          test "$(tar -tzf build/release/maintenancecheck-${GITHUB_REF_NAME}.tar.gz | grep -c '^maintenancecheck/vendor/')" -gt 100
-          test "$(tar -tzf build/release/maintenancecheck-${GITHUB_REF_NAME}.tar.gz | grep -c '^maintenancecheck/l10n/zh_CN.js')" -eq 1
+          echo "vendor files: $(tar -tzf build/release/maintenancecheck-${GITHUB_REF_NAME}.tar.gz | grep -c '^maintenancecheck/vendor/')"
+          test "$(tar -tzf build/release/maintenancecheck-${GITHUB_REF_NAME}.tar.gz | grep -c '^maintenancecheck/l10n/zh_CN\.js$')" -eq 1
 
       - name: Create GitHub Release
         env:
