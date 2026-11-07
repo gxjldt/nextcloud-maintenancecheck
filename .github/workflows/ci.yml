@@ -26,3 +26,6 @@ jobs:
           tools: composer:v2
       - run: composer validate --no-check-publish
       - run: find lib tests templates -name '*.php' -print0 | xargs -0 -n1 -P4 php -l
+      - run: php scripts/check-l10n-parity.php
+      # .js 必须与 .json 同步：regenerate 后不许有 diff
+      - run: php scripts/regenerate-l10n-js.php && git diff --exit-code -- l10n

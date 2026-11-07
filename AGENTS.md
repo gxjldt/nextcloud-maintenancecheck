@@ -80,7 +80,7 @@ Nextcloud 应用加载器按固定路径找文件，`composer.json` 的 PSR-4 �
 
 ## 版本发布
 
-本仓不发 `v1.x`，那些是上游的号，跟着打会和上游 tag 冲突、也让「哪个版本含我们的改动」失去意义。
+**发版 = 打 tag 推送，其余全自动。** release.yml 在 tag `v*` 推送时：校验 tag 形状 → 把 tag 号注入 `appinfo/info.xml` 的 `<version>` → l10n 门禁 → `composer install --no-dev` → 打 tar.gz（顶层目录 `maintenancecheck/`，口径与上游一致：排除 tests/e2e/scripts/.github/.git）→ 创建 GitHub Release 并上传包。
 
 git tag 用上海时间，形如 `v2026.11.7.1500`：日期不补零，`1500` 是 15:00（时不补零、分两位、不带秒）。
 
@@ -92,16 +92,16 @@ git tag "v$VERSION"
 git push origin "v$VERSION"
 ```
 
-两个版本号各管各的，别互相覆盖：
+两个版本号各管各的：
 
 | 号 | 在哪 | 谁看 |
 |---|---|---|
 | `v2026.11.7.1500` | git tag / GitHub Release | 人，判断这批改动从什么时候上线 |
-| `1.3.5` | `appinfo/info.xml` 的 `<version>` | Nextcloud，靠它判断要不要升级 |
+| 注入值 `2026.11.7.1500` | 发布包内 `appinfo/info.xml` 的 `<version>` | Nextcloud，靠它判断要不要升级 |
 
-- 发**可用包**时 `info.xml` 必须递增，否则装上去不触发升级；递增幅度自定，与上游对齐时就跟上游号
-- 打包产物只上传到 GitHub Release，不进版本库（见硬规则 1）
-- 本仓没有 release 工作流，`.github/workflows/ci.yml` 只做语法检查；tar.gz 由本地打包上传
+- **不要手改仓库里的 `<version>`**。仓库里留着上游基线值（1.3.5）即可，发布包内的版本由 release.yml 按 tag 注入，用 `version_compare` 比较，`2026.11.7.950` < `2026.11.7.1000`（数字比较，不补零也对）
+- 上游 `v1.x` 形状的 tag 会被 workflow 的格式校验拒绝——防止误推上游 tag
+- 打包产物只进 GitHub Release，不进版本库（见硬规则 1）
 - 同一分钟再发才会撞号
 
 ## 修改后自检

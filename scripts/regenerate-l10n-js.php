@@ -26,6 +26,7 @@ $locales = array (
   9 => 'nb',
   10 => 'pt',
   11 => 'pt_BR',
+  12 => 'zh_CN',
 );
 
 $plurals = array (
@@ -41,6 +42,7 @@ $plurals = array (
   'pt' => 'nplurals=2; plural=(n != 1);',
   'pt_BR' => 'nplurals=2; plural=(n > 1);',
   'sv' => 'nplurals=2; plural=(n != 1);',
+  'zh_CN' => 'nplurals=1; plural=0;',
 );
 
 foreach ($locales as $lang) {
