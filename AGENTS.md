@@ -40,6 +40,70 @@ Nextcloud 应用加载器按固定路径找文件，`composer.json` 的 PSR-4 �
 3. **删除文件前先确认有引用**。`grep -rn "<文件名>" . --exclude-dir=.git --exclude-dir=vendor`，无命中才删。
 4. **测试脚本改名要同步改**：`phpunit.xml`、`composer.json` 的 `scripts`、`package.json` 的 `scripts`、`playwright.config.js` 的 `testMatch`/`globalSetup`、`.gitignore` 里的输出路径。
 
+## 提交信息
+
+格式与用词规则取自 workbuddy2api-panel 的 172 条非 Merge 提交统计（feat 65 / fix 62 / chore 17 / ci 9），scope 按本仓目录名取。
+
+### 格式
+
+`type(scope): 描述`
+
+- type 小写：常用 `feat`、`fix`、`chore`、`ci`；`refactor`、`docs`、`test`、`style`、`ui`、`revert` 少用
+- scope 是改动所在目录：`lib`、`templates`、`l10n`、`tests`、`e2e`、`scripts`、`appinfo`、`docs`、`ci`。跨模块或全局改动不写 scope，别硬凑
+- 描述用中文，标题显示宽度中位 57 列，不以句号结尾
+- 破坏性改动在 type 后加 `!`：`feat(lib)!: 移除 v1 访问令牌——只认 v2` 
+
+### 标题写什么
+
+说清改了什么，不写「优化」「调整」「修复问题」这类看不出内容的词。
+
+- `——` 引出原因或后果：`fix(templates): 工单页去掉重复的状态徽章——移动端换行`
+- `（）` 标注来源：`（合入上游 90818dd）`、`（issue #12）`
+- `+` 并列多件事：`fix(l10n): 补 zh_CN 词条 + 修正挪用语序`
+- 移植或同步上游时把上游 hash / PR 号写进标题，不写空泛的「同步上游」
+
+### 正文
+
+多数提交带正文，写「为什么」和根因，不重复标题。
+
+- 多件事用 `- ` 列点
+- 硬换行，行宽中位 69 列
+- 不用 `Co-Authored-By`，也不用 `BREAKING CHANGE` footer，破坏性改动用 `!`
+- 与上游的合并提交保留原英文标题，公司二开的提交用中文，`git log` 里一眼能分开
+
+### 反例
+
+- `Merge pull request #44 from ...` —— 合并提交
+- `修正券码兑换的提示文字` —— 没有 type
+- `docs+fix: 快速开始重排 + 修 Docker bind mount 陷阱` —— 复合 type，拆成两条
+- `fix: save config on Docker bind mounts` —— 本仓公司提交用中文，纯英文留给上游同步
+
+## 版本发布
+
+本仓不发 `v1.x`，那些是上游的号，跟着打会和上游 tag 冲突、也让「哪个版本含我们的改动」失去意义。
+
+git tag 用上海时间，形如 `v2026.11.7.1500`：日期不补零，`1500` 是 15:00（时不补零、分两位、不带秒）。
+
+```bash
+VERSION=$(TZ=Asia/Shanghai date +%Y.%-m.%-d.%-H%M)
+# TZ=Asia/Shanghai 在缺 tzdata 的环境（Windows git-bash）会静默回落 UTC，标签整整早 8 小时
+[ "$(TZ=UTC date +%H)" = "$(TZ=Asia/Shanghai date +%H)" ] && VERSION=$(date -u -d '+8 hours' +%Y.%-m.%-d.%-H%M)
+git tag "v$VERSION"
+git push origin "v$VERSION"
+```
+
+两个版本号各管各的，别互相覆盖：
+
+| 号 | 在哪 | 谁看 |
+|---|---|---|
+| `v2026.11.7.1500` | git tag / GitHub Release | 人，判断这批改动从什么时候上线 |
+| `1.3.5` | `appinfo/info.xml` 的 `<version>` | Nextcloud，靠它判断要不要升级 |
+
+- 发**可用包**时 `info.xml` 必须递增，否则装上去不触发升级；递增幅度自定，与上游对齐时就跟上游号
+- 打包产物只上传到 GitHub Release，不进版本库（见硬规则 1）
+- 本仓没有 release 工作流，`.github/workflows/ci.yml` 只做语法检查；tar.gz 由本地打包上传
+- 同一分钟再发才会撞号
+
 ## 修改后自检
 
 ```bash
