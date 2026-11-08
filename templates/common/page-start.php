@@ -70,7 +70,6 @@ require __DIR__ . '/navigation.php';
 	<a class="mn-skip-link" href="#mn-main-content"><?php p($l->t('Skip to main content')); ?></a>
 	<div id="mn-live-region" class="mn-sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
 	<div id="mn-alert-region" class="mn-sr-only" role="alert" aria-live="assertive" aria-atomic="true"></div>
-	<div id="mn-toast-region" class="mn-toast-region" role="region" aria-label="<?php p($l->t('Notifications')); ?>"></div>
 	<div id="app-content-wrapper" class="mn-shell">
 <?php if (is_array($parentCrumb)): ?>
 		<nav class="mn-breadcrumb" aria-label="<?php p($l->t('Breadcrumb')); ?>">

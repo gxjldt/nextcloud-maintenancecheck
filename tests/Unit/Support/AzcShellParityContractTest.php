@@ -200,12 +200,16 @@ final class AzcShellParityContractTest extends TestCase
 		}
 	}
 
-	public function testToastUsesAzcSemanticClasses(): void
+	public function testToastsDelegateToNextcloudCore(): void
 	{
 		$js = (string)file_get_contents($this->root . '/js/app.js');
-		$this->assertStringContainsString("toast--' + azcKind", $js);
+		// Core owns the toast surface (window.OCP.Toast); the app only maps kinds
+		// and keeps the dedup contract.
+		$this->assertStringContainsString('window.OCP.Toast', $js);
+		$this->assertMatchesRegularExpression("/kind === 'error'/", $js);
+		$this->assertStringContainsString('activeToasts[dedupKey]', $js);
+		$this->assertStringNotContainsString("toast--' + azcKind", $js);
 		$this->assertStringContainsString('modal-backdrop', $js);
-		$this->assertMatchesRegularExpression("/azcKind === 'error'|kind === 'error'/", $js);
 	}
 
 

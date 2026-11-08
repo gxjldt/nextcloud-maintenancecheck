@@ -69,8 +69,7 @@
 /* Scoped to app surfaces (incl. body-portaled dialogs/toasts) — never restyle NC core chrome */
 #content.app-maintenancecheck :focus-visible,
 .mn-dialog-overlay :focus-visible,
-.modal-backdrop :focus-visible,
-.mn-toast-region :focus-visible {
+.modal-backdrop :focus-visible {
 	outline: 3px solid var(--color-primary-element);
 	outline-offset: 2px;
 }
@@ -1645,70 +1644,24 @@ textarea.mn-input {
 	margin-top: var(--mn-space-5);
 }
 
-/* ── Toasts (A7) ───────────────────────────────────────────────────── */
-
-.mn-toast-region {
-	position: fixed;
-	/* Sit below NC #header — same token dialogs/overlays use */
-	top: calc(var(--mn-overlay-top, var(--header-height, 50px)) + var(--mn-space-2));
-	inset-inline-end: var(--mn-space-4);
-	z-index: 10010;
+/* ── Toasts ───────────────────────────────────────────────────────────
+   Rendered by Nextcloud core (window.OCP.Toast → @nextcloud/dialogs), which
+   owns the surface, colours, stacking and close button. Only the optional
+   action payload this app hands it needs layout. */
+.mn-toast__body {
 	display: flex;
 	flex-direction: column;
-	gap: var(--mn-space-2);
-	max-width: min(380px, calc(100vw - (2 * var(--mn-space-4))));
-	box-sizing: border-box;
-}
-
-.mn-toast {
-	display: flex;
-	flex-wrap: wrap;
-	gap: var(--mn-space-3);
 	align-items: flex-start;
-	padding: var(--mn-space-3) var(--mn-space-4);
-	border-radius: var(--mn-radius-md);
-	background: var(--color-main-background);
-	color: var(--color-main-text);
-	border: 1px solid var(--color-border);
-	border-inline-start: 4px solid var(--color-primary-element);
-	box-shadow: var(--mn-shadow-md);
-	font-size: var(--mn-fs-sm);
-}
-
-.mn-toast--success {
-	border-inline-start-color: var(--mn-success-border);
-}
-
-.mn-toast--error {
-	border-inline-start-color: var(--mn-danger-border);
+	gap: var(--mn-space-2);
 }
 
 .mn-toast__message {
-	/* basis:auto so an over-wide message wraps onto its own line at narrow
-	   viewports instead of crushing beside the 44px close button. */
-	flex: 1 1 auto;
-	min-width: 0;
 	margin: 0;
 	overflow-wrap: anywhere;
 }
 
-.mn-toast__close {
+.mn-toast__action {
 	flex-shrink: 0;
-	background: transparent;
-	border: none;
-	cursor: pointer;
-	padding: var(--mn-space-1);
-	min-width: 44px;
-	min-height: 44px;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	color: var(--color-text-maxcontrast);
-	border-radius: 4px;
-}
-
-.mn-toast__close:hover {
-	color: var(--color-main-text);
 }
 
 /* ── Settings ─────────────────────────────────────────────────────── */
@@ -1952,8 +1905,7 @@ textarea.mn-input {
 		animation: none;
 	}
 
-	.mn-btn,
-	.mn-toast {
+	.mn-btn {
 		transition: none;
 	}
 }
@@ -1983,10 +1935,6 @@ textarea.mn-input {
 		padding: var(--mn-space-4);
 	}
 
-	.mn-toast-region {
-		inset-inline: var(--mn-space-2);
-		max-width: none;
-	}
 }
 
 @media (max-width: 400px) {
@@ -2454,10 +2402,6 @@ body > .mn-dialog-overlay > .mn-dialog {
 	margin: 0;
 	padding-left: var(--mn-space-5, 20px);
 	list-style: disc;
-}
-.mn-toast__action {
-	margin-top: var(--mn-space-2, 8px);
-	min-height: 44px;
 }
 .mn-checklist__label {
 	margin: 0;

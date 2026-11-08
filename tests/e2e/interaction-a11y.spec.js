@@ -162,7 +162,7 @@ test('page header is one flat row: title, actions, then hint', async ({ page }) 
 	expect(layout.titleSize).toBeLessThanOrEqual(22)
 })
 
-test('toast region sits below the Nextcloud header via overlay token', async ({ page }) => {
+test('toasts come from Nextcloud core, not an app-owned region', async ({ page }) => {
 	const creds = primaryCreds()
 	test.skip(!creds, 'Requires NC_E2E_* / NC_ADMIN_*')
 
@@ -170,17 +170,17 @@ test('toast region sits below the Nextcloud header via overlay token', async ({ 
 	await page.goto('/apps/maintenancecheck/')
 	await expect(page.locator('#mn-main-content')).toBeVisible({ timeout: 30_000 })
 
-	const ok = await page.evaluate(() => {
-		const region = document.getElementById('mn-toast-region')
-		if (!region) {
-			return false
-		}
-		const top = parseFloat(getComputedStyle(region).top) || 0
-		const header = parseFloat(getComputedStyle(document.body).getPropertyValue('--header-height')) || 50
-		// Must clear the NC header (token + space-2), never sit under it
-		return top >= header
+	await expect(page.locator('#mn-toast-region')).toHaveCount(0)
+	const hasCoreApi = await page.evaluate(() => !!(window.OCP && window.OCP.Toast))
+	expect(hasCoreApi, 'window.OCP.Toast must be available').toBe(true)
+
+	const toast = await page.evaluate(async () => {
+		window.OCP.Toast.info('MN toast probe')
+		await new Promise((resolve) => setTimeout(resolve, 200))
+		const node = document.querySelector('.toastify.toast')
+		return node ? { present: true } : { present: false }
 	})
-	expect(ok, 'toast region top must be ≥ header height').toBe(true)
+	expect(toast.present, 'core toast must render for an app message').toBe(true)
 })
 
 test('prefers-reduced-motion collapses app transitions', async ({ page }) => {

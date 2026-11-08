@@ -17,6 +17,6 @@ test('offline API abort shows a network-error toast on customers', async ({ page
 	await page.route('**/apps/maintenancecheck/api/**', (route) => route.abort())
 	await page.goto('/apps/maintenancecheck/customers')
 	await expect(page.locator('#mn-main-content')).toBeVisible({ timeout: 30_000 })
-	await expect(page.locator('.mn-toast--error, .toast--error').first()).toBeVisible({ timeout: 15_000 })
-	await expect(page.locator('.mn-toast__message, .toast-content').first()).toContainText(/could not reach the server|verbindung/i)
+	await expect(page.locator('.toastify.toast-error, .mn-toast--error').first()).toBeVisible({ timeout: 15_000 })
+	await expect(page.locator('.mn-toast__message, .toastify.toast').first()).toContainText(/could not reach the server|verbindung/i)
 })

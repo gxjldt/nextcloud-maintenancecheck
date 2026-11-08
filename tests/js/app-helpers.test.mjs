@@ -271,15 +271,15 @@ test('SPEC §8.3 seat assignment uses NC user picker combobox', () => {
 	assert.match(source, /Choose a Nextcloud user from the list\./);
 });
 
-test('A9 touch targets: chip remove and toast close are ≥44px in CSS', async () => {
+test('A9 touch targets: chip remove is ≥44px, buttons follow the clickable area', async () => {
 	const css = await readFile(join(root, 'css', 'app.css'), 'utf8');
 	assert.match(css, /\.mn-chip__remove\s*\{[^}]*min-width:\s*44px/s);
 	assert.match(css, /\.mn-chip__remove\s*\{[^}]*min-height:\s*44px/s);
-	assert.match(css, /\.mn-toast__close\s*\{[^}]*min-width:\s*44px/s);
-	assert.match(css, /\.mn-toast__close\s*\{[^}]*min-height:\s*44px/s);
-	// Compact buttons follow Nextcloud's dense rows (34px fine pointer) and grow
-	// to the 44px coarse-pointer floor through --mn-clickable-area.
+	// Buttons follow Nextcloud's dense rows (34px fine pointer) and grow to the
+	// 44px coarse-pointer floor through --mn-clickable-area. The toast close
+	// button belongs to core's toast surface, not this stylesheet.
 	assert.match(css, /\.mn-btn\s*\{[^}]*min-height:\s*var\(--mn-clickable-area/s);
+	assert.doesNotMatch(css, /\.mn-toast__close/);
 });
 
 test('catalogs page: chip panels, no dead Status column, click-name edit', async () => {

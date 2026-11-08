@@ -711,75 +711,86 @@
 		announce(tn('%n result', '%n results', n));
 	}
 
+	/*
+	 * Toasts are Nextcloud's own: window.OCP.Toast (core/src/OCP/toast.js) wraps
+	 * @nextcloud/dialogs, so the surface, stacking, close affordance, aria-live
+	 * and dark/high-contrast colours are core's rather than this app's.
+	 *
+	 * Two app-side needs remain, both handled here instead of in CSS:
+	 *  - dedup on kind+text: an identical toast that is still showing just gets
+	 *    its dismiss timer re-armed (rapid retries, repeated API failures). Core
+	 *    toasts are started with timeout -1 so this file owns dismissal.
+	 *  - an optional action button: passed as a DOM payload, using core's
+	 *    `button primary` classes so it looks like every other NC button.
+	 */
+	var activeToasts = Object.create(null);
+
+	function toastApi() {
+		return (typeof window !== 'undefined' && window.OCP && window.OCP.Toast) || null;
+	}
+
 	function toast(message, type, action) {
-		var region = document.getElementById('mn-toast-region');
-		if (!region) {
+		var kind = type === 'error' ? 'error'
+			: (type === 'success' || type === 'ok' ? 'success'
+				: (type === 'warning' ? 'warning' : 'info'));
+		var lifetime = action ? 8000 : (kind === 'error' ? 5000 : 3000);
+		var dedupKey = kind + '|' + String(message) + '|' + (action && action.label ? String(action.label) : '');
+		var live = activeToasts[dedupKey];
+		if (live) {
+			window.clearTimeout(live.timer);
+			live.timer = window.setTimeout(live.dismiss, lifetime);
 			return;
 		}
-		var kind = type || 'info';
-		var azcKind = kind === 'error' ? 'error' : (kind === 'success' || kind === 'ok' ? 'success' : (kind === 'warning' ? 'warning' : 'info'));
-		var lifetime = action ? 8000 : (kind === 'error' ? 5000 : 3000);
-		/*
-		 * Dedup on kind+text (+action label): an identical toast already showing
-		 * just gets its dismiss timer reset instead of stacking duplicates
-		 * (rapid retries, repeated API failures). Canonical pattern:
-		 * customercheck/js/common/components.js showToast.
-		 */
-		var dedupKey = azcKind + '|' + String(message) + '|' + (action && action.label ? String(action.label) : '');
-		var existing = region.querySelectorAll('.mn-toast[data-mn-toast-key]');
-		for (var i = 0; i < existing.length; i++) {
-			if (existing[i].getAttribute('data-mn-toast-key') === dedupKey) {
-				var dupe = existing[i];
-				if (dupe._mnDismissTimer) {
-					window.clearTimeout(dupe._mnDismissTimer);
-				}
-				dupe._mnDismissTimer = window.setTimeout(function () {
-					if (dupe.parentNode) {
-						dupe.parentNode.removeChild(dupe);
-					}
-				}, lifetime);
-				return;
-			}
+
+		var api = toastApi();
+		if (!api) {
+			// No core toast (very old NC): keep the message reachable for AT.
+			announce(message, kind === 'error');
+			return;
 		}
-		var contentKids = [el('p', { class: 'mn-toast__message', text: message })];
+
+		var payload = message;
+		// Assigned once the toast entry exists; the action button dismisses first.
+		var dismissFn = null;
 		if (action && action.label && typeof action.onClick === 'function') {
-			contentKids.push(el('button', {
-				type: 'button',
-				class: 'mn-btn mn-btn--primary mn-toast__action',
-				text: action.label,
-				onClick: function () {
-					remove();
-					action.onClick();
-				},
-			}));
+			payload = el('div', { class: 'mn-toast__body' }, [
+				el('p', { class: 'mn-toast__message', text: message }),
+				el('button', {
+					type: 'button',
+					class: 'button primary mn-toast__action',
+					text: action.label,
+					onClick: function () {
+						if (dismissFn) {
+							dismissFn();
+						}
+						action.onClick();
+					},
+				}),
+			]);
 		}
-		var node = el('div', {
-			class: 'toast mn-toast toast--' + azcKind + (type ? ' mn-toast--' + type : ''),
-			role: kind === 'error' ? 'alert' : 'status',
-			'data-mn-toast-key': dedupKey,
-		}, [
-			el('div', { class: 'toast-content' }, contentKids),
-			el('button', {
-				type: 'button',
-				class: 'mn-toast__close',
-				'aria-label': tr('Dismiss'),
-				html: ICONS.x,
-				onClick: function () { remove(); },
-			}),
-		]);
-		var timer = window.setTimeout(remove, lifetime);
-		node._mnDismissTimer = timer;
-		function remove() {
-			window.clearTimeout(timer);
-			if (node._mnDismissTimer && node._mnDismissTimer !== timer) {
-				window.clearTimeout(node._mnDismissTimer);
+
+		var options = { timeout: -1, close: false };
+		var instance = kind === 'error' ? api.error(payload, options)
+			: kind === 'success' ? api.success(payload, options)
+				: kind === 'warning' ? api.warning(payload, options)
+					: api.info(payload, options);
+
+		var entry = { timer: null, dismiss: null };
+		entry.dismiss = function () {
+			window.clearTimeout(entry.timer);
+			delete activeToasts[dedupKey];
+			try {
+				if (instance && typeof instance.hideToast === 'function') {
+					instance.hideToast();
+				}
+			} catch (e) {
+				// Toast already gone.
 			}
-			if (node.parentNode) {
-				node.parentNode.removeChild(node);
-			}
-		}
-		region.appendChild(node);
-		announce(message, type === 'error');
+		};
+		dismissFn = entry.dismiss;
+		activeToasts[dedupKey] = entry;
+		entry.timer = window.setTimeout(entry.dismiss, lifetime);
+		announce(message, kind === 'error');
 	}
 
 	// ── Dialogs (A6: focus trap, Esc, focus return) ────────────────────

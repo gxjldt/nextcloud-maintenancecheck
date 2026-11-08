@@ -119,13 +119,13 @@ final class DesignSystemTokensContractTest extends TestCase
 		$this->assertSame([], $offenders, "Off-grid spacing (6/10/14/18/20px) must use --mn-space-* tokens:\n" . implode("\n", $offenders));
 	}
 
-	public function testToastRegionUsesOverlayToken(): void
+	public function testToastSurfaceIsOwnedByCore(): void
 	{
 		$css = (string)file_get_contents($this->root . '/css/app.css');
-		$this->assertMatchesRegularExpression(
-			'/\.mn-toast-region\s*\{[^}]*top:\s*calc\(\s*var\(--mn-overlay-top/s',
-			$css
-		);
+		// Core positions and themes toasts; the app only lays out an action payload.
+		$this->assertStringNotContainsString('.mn-toast-region', $css);
+		$this->assertStringNotContainsString('.mn-toast--', $css);
+		$this->assertStringContainsString('.mn-toast__body', $css);
 	}
 
 	public function testPageHeaderGeometryOwnedByShellChrome(): void
