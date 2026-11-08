@@ -38,7 +38,16 @@
 	display: none;
 }
 
-/* Nav footer (feedback menu) keeps its own surface but sits like a pinged entry. */
-#app-navigation .mn-nav-footer {
-	margin-top: auto;
+/* Help entry: core pins `li.pinned` to the bottom of the flex list, so the
+   footer only has to stop inheriting row metrics. */
+#app-navigation li.mn-nav-footer-slot {
+	display: block;
+	margin-inline: 0;
+	padding: 0;
+}
+
+#app-navigation li.mn-nav-footer-slot .mn-nav-footer {
+	margin: 0;
+	width: 100%;
+	box-sizing: border-box;
 }

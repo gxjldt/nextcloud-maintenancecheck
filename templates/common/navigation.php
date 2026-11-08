@@ -214,7 +214,9 @@ $navGroup = static function (string $id, string $href, string $label, string $hi
 				);
 			}
 			?>
+			<li class="pinned mn-nav-footer-slot">
+				<?php include __DIR__ . '/../parts/feedback-nav-footer.php'; ?>
+			</li>
 		</ul>
-	<?php include __DIR__ . '/../parts/feedback-nav-footer.php'; ?>
 	</nav>
 </div>

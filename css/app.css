@@ -2740,7 +2740,6 @@ textarea {
 
 /* === app-feedback:mn start === */
 #app-navigation .mn-nav-footer {
-	margin-top: auto;
 	flex-shrink: 0;
 	min-width: 0;
 	width: 100%;
