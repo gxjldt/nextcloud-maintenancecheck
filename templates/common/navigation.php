@@ -6,26 +6,25 @@ use OCA\MaintenanceCheck\Support\IconCatalog;
 use OCP\Util;
 
 /**
- * Sidebar navigation — ArbeitszeitCheck shell parity + DutyCheck-style hints.
+ * App navigation — plain Nextcloud navigation markup.
+ *
+ * Row metrics, hover, active and collapse states all come from Nextcloud core
+ * (#app-navigation:not(.vue) + .app-navigation-personal in core/css/apps.css).
+ * This template emits structure only; css/navigation.css keeps the inline icon
+ * glyph alignment and nothing else.
  *
  * @var \OCP\IL10N $l
  * @var string $pageId
  * @var bool $isAppAdmin
  * @var bool $isOffice
  * @var string $urlsJson
- * @var string $roleLabel
  */
 
 Util::addScript('maintenancecheck', 'common/navigation');
-Util::addScript('maintenancecheck', 'common/mobile-nav');
 // Soft keyboard: keep focused notes/inputs above the IME on phones.
 Util::addScript('maintenancecheck', 'common/keep-focused-visible');
 
-
 $navUrls = json_decode($urlsJson, true)['pages'] ?? [];
-$mnNavIcon = static function (string $name): string {
-	return IconCatalog::render($name, 'mn-nav__icon-svg');
-};
 
 $activeNavId = match ($pageId) {
 	'customer-detail' => 'customers',
@@ -44,159 +43,156 @@ $isExceptions = $activeNavId === 'exceptions';
 $isCustomers = $activeNavId === 'customers';
 $isEquipment = $activeNavId === 'equipment';
 $isCatalogs = $activeNavId === 'catalogs';
-$isSettings = $activeNavId === 'settings' || str_starts_with((string)$pageId, 'settings-');
-$activeSettingsSection = str_starts_with((string)$pageId, 'settings-')
-	? substr((string)$pageId, strlen('settings-'))
+$isSettings = $activeNavId === 'settings';
+$activeSettingsSection = str_starts_with($pageId, 'settings-')
+	? substr($pageId, strlen('settings-'))
 	: '';
 $settingsSectionNav = is_array($navUrls['settingsSections'] ?? null) ? $navUrls['settingsSections'] : [];
-$isAdmin = $isSettings;
 $isPlanning = $isDispatch || $isTours || $isKpi || $isExceptions;
+$isRegister = $isCustomers || $isEquipment || $isCatalogs;
 
-/* Single-line labels, like NC's own nav. The per-page hint stays on the link's
- * title and aria-label instead of adding a second text line. */
-$mnNavLabel = static function (string $name, string $hint): void {
+$navIcon = static fn (string $name): string => IconCatalog::render($name, 'nav-entry-icon-svg');
+
+/** First-level entry that links straight to a page. */
+$navEntry = static function (string $href, string $label, string $hint, string $icon, bool $active) use ($navIcon): void {
 	?>
-	<span class="mn-nav__name"><?php p($name); ?></span>
+	<li<?php if ($active): ?> class="active"<?php endif; ?>>
+		<a href="<?php p($href); ?>"
+			class="nav-entry-link"
+			title="<?php p($hint); ?>"
+			<?php if ($active): ?>aria-current="page"<?php endif; ?>>
+			<span class="nav-entry-icon" aria-hidden="true"><?php print_unescaped($navIcon($icon)); ?></span>
+			<span class="nav-entry-name"><?php p($label); ?></span>
+		</a>
+	</li>
+	<?php
+};
+
+/** Second-level entry — Nextcloud core indents these, so no icon. */
+$navSubEntry = static function (string $href, string $label, string $hint, bool $active): void {
+	?>
+	<li<?php if ($active): ?> class="active"<?php endif; ?>>
+		<a href="<?php p($href); ?>"
+			class="nav-entry-link"
+			title="<?php p($hint); ?>"
+			<?php if ($active): ?>aria-current="page"<?php endif; ?>>
+			<span class="nav-entry-name"><?php p($label); ?></span>
+		</a>
+	</li>
+	<?php
+};
+
+/**
+ * Collapsible group — core renders the chevron itself: it draws the triangle on
+ * `li.collapsible::before` and hides `> ul` unless the `li` carries `open`.
+ * `button.collapse` is core's hit area for that state, so the app adds no
+ * styling of its own.
+ */
+$navGroup = static function (string $id, string $href, string $label, string $hint, string $icon, bool $open, callable $children) use ($navIcon): void {
+	?>
+	<li class="collapsible<?php if ($open): ?> open<?php endif; ?>">
+		<a href="<?php p($href); ?>" class="nav-entry-link" title="<?php p($hint); ?>">
+			<span class="nav-entry-icon" aria-hidden="true"><?php print_unescaped($navIcon($icon)); ?></span>
+			<span class="nav-entry-name"><?php p($label); ?></span>
+		</a>
+		<button type="button"
+			class="collapse"
+			aria-expanded="<?php p($open ? 'true' : 'false'); ?>"
+			aria-controls="<?php p($id); ?>"
+			aria-label="<?php p($label); ?>"></button>
+		<ul id="<?php p($id); ?>">
+			<?php $children(); ?>
+		</ul>
+	</li>
 	<?php
 };
 ?>
 <div id="maintenancecheck-app" class="maintenancecheck-app">
+	<button type="button"
+		id="app-navigation-toggle"
+		class="icon-menu"
+		aria-controls="app-navigation"
+		aria-expanded="false"
+		aria-label="<?php p($l->t('Open navigation menu')); ?>"
+		data-aria-label-open="<?php p($l->t('Open navigation menu')); ?>"
+		data-aria-label-close="<?php p($l->t('Close navigation menu')); ?>"></button>
 	<a href="#app-navigation" class="skip-link mn-skip-link--nav"><?php p($l->t('Skip to app navigation')); ?></a>
 
-	<div id="app-navigation" class="mn-nav" role="navigation" aria-label="<?php p($l->t('Main navigation')); ?>">
-		<div class="sidebar-header">
-			<div class="app-brand">
-				<div class="app-icon" aria-hidden="true">
-					<span class="mn-nav__icon"><?php print_unescaped($mnNavIcon('wrench')); ?></span>
-				</div>
-				<div class="app-info">
-					<h3><?php p($l->t('MaintenanceCheck')); ?></h3>
-				</div>
-			</div>
-		</div>
+	<nav id="app-navigation"
+		class="app-navigation-personal"
+		aria-label="<?php p($l->t('Main navigation')); ?>">
+		<ul>
+			<?php
+			$navEntry(
+				(string)($navUrls['due'] ?? '#'),
+				$l->t('Due board'),
+				$l->t('Due board: What needs a visit'),
+				'layout-grid',
+				$isDue
+			);
+			$navEntry(
+				(string)($navUrls['visits'] ?? '#'),
+				$l->t('Visits'),
+				$l->t('Visits: History and filters'),
+				'calendar-check',
+				$isVisits
+			);
+			$navEntry(
+				(string)($navUrls['workOrders'] ?? '#'),
+				$l->t('Work orders'),
+				$l->t('Work orders: Planned and corrective work'),
+				'clipboard-list',
+				$isWorkOrders
+			);
 
-		<ul class="nav-menu">
-			<li class="<?php p($isDue ? 'active' : ''); ?>" <?php if ($isDue): ?>aria-current="page"<?php endif; ?>>
-				<a href="<?php p((string)($navUrls['due'] ?? '#')); ?>"
-					title="<?php p($l->t('Due board: What needs a visit')); ?>"
-					aria-label="<?php p($l->t('Go to due board')); ?>">
-					<span class="mn-nav__icon" aria-hidden="true"><?php print_unescaped($mnNavIcon('layout-grid')); ?></span>
-					<?php $mnNavLabel($l->t('Due board'), $l->t('What needs a visit — overdue first')); ?>
-				</a>
-			</li>
-			<li class="<?php p($isVisits ? 'active' : ''); ?>" <?php if ($isVisits): ?>aria-current="page"<?php endif; ?>>
-				<a href="<?php p((string)($navUrls['visits'] ?? '#')); ?>"
-					title="<?php p($l->t('Visits: History and filters')); ?>"
-					aria-label="<?php p($l->t('Go to visits')); ?>">
-					<span class="mn-nav__icon" aria-hidden="true"><?php print_unescaped($mnNavIcon('calendar-check')); ?></span>
-					<?php $mnNavLabel($l->t('Visits'), $l->t('History and filters')); ?>
-				</a>
-			</li>
-			<li class="<?php p($isWorkOrders ? 'active' : ''); ?>" <?php if ($isWorkOrders): ?>aria-current="page"<?php endif; ?>>
-				<a href="<?php p((string)($navUrls['workOrders'] ?? '#')); ?>"
-					title="<?php p($l->t('Work orders: Planned and corrective work')); ?>"
-					aria-label="<?php p($l->t('Go to work orders')); ?>">
-					<span class="mn-nav__icon" aria-hidden="true"><?php print_unescaped($mnNavIcon('clipboard-list')); ?></span>
-					<?php $mnNavLabel($l->t('Work orders'), $l->t('Planned and corrective work')); ?>
-				</a>
-			</li>
-			<?php if ($isOffice || $isAppAdmin): ?>
-				<li class="nav-section-divider" role="separator" aria-hidden="true"></li>
-				<li class="nav-item-has-children <?php p($isPlanning ? 'is-open' : ''); ?>">
-					<button class="nav-parent-toggle" type="button"
-						aria-expanded="<?php p($isPlanning ? 'true' : 'false'); ?>"
-						aria-controls="mn-planning-subnav">
-						<span class="mn-nav__icon" aria-hidden="true"><?php print_unescaped($mnNavIcon('kanban')); ?></span>
-						<?php $mnNavLabel($l->t('Planning'), $l->t('Assign jobs and day tours')); ?>
-						<span class="nav-parent-chevron" aria-hidden="true"></span>
-					</button>
-					<ul id="mn-planning-subnav" class="nav-submenu" <?php p($isPlanning ? '' : 'hidden'); ?>>
-						<li class="<?php p($isDispatch ? 'active' : ''); ?>" <?php if ($isDispatch): ?>aria-current="page"<?php endif; ?>>
-							<a href="<?php p((string)($navUrls['dispatch'] ?? '#')); ?>"
-								title="<?php p($l->t('Dispatch: Assign open work orders')); ?>"
-								aria-label="<?php p($l->t('Go to dispatch')); ?>">
-								<?php $mnNavLabel($l->t('Dispatch'), $l->t('Assign open jobs')); ?>
-							</a>
-						</li>
-						<li class="<?php p($isTours ? 'active' : ''); ?>" <?php if ($isTours): ?>aria-current="page"<?php endif; ?>>
-							<a href="<?php p((string)($navUrls['tours'] ?? '#')); ?>"
-								title="<?php p($l->t('Day tours: Stop-by-stop plans')); ?>"
-								aria-label="<?php p($l->t('Go to day tours')); ?>">
-								<?php $mnNavLabel($l->t('Day tours'), $l->t('Stop-by-stop day plans')); ?>
-							</a>
-						</li>
-						<li class="<?php p($isExceptions ? 'active' : ''); ?>" <?php if ($isExceptions): ?>aria-current="page"<?php endif; ?>>
-							<a href="<?php p((string)($navUrls['exceptions'] ?? '#')); ?>"
-								title="<?php p($l->t('Exceptions: Blocked and overdue work')); ?>"
-								aria-label="<?php p($l->t('Go to exceptions')); ?>">
-								<?php $mnNavLabel($l->t('Exceptions'), $l->t('Blocked and overdue work')); ?>
-							</a>
-						</li>
-						<li class="<?php p($isKpi ? 'active' : ''); ?>" <?php if ($isKpi): ?>aria-current="page"<?php endif; ?>>
-							<a href="<?php p((string)($navUrls['kpi'] ?? '#')); ?>"
-								title="<?php p($l->t('Ops KPI: Compliance and overdue snapshot')); ?>"
-								aria-label="<?php p($l->t('Go to ops KPI')); ?>">
-								<?php $mnNavLabel($l->t('Ops KPI'), $l->t('Compliance snapshot')); ?>
-							</a>
-						</li>
-					</ul>
-				</li>
-			<?php else: ?>
-				<li class="<?php p($isTours ? 'active' : ''); ?>" <?php if ($isTours): ?>aria-current="page"<?php endif; ?>>
-					<a href="<?php p((string)($navUrls['tours'] ?? '#')); ?>"
-						title="<?php p($l->t('Day tours: Stop-by-stop plans')); ?>"
-						aria-label="<?php p($l->t('Go to day tours')); ?>">
-						<span class="mn-nav__icon" aria-hidden="true"><?php print_unescaped($mnNavIcon('route')); ?></span>
-						<?php $mnNavLabel($l->t('My tour'), $l->t('Your stops today')); ?>
-					</a>
-				</li>
-			<?php endif; ?>
-			<li class="nav-section-divider" role="separator" aria-hidden="true"></li>
-			<li class="nav-item-has-children <?php p(($isCustomers || $isEquipment || $isCatalogs) ? 'is-open' : ''); ?>">
-				<button class="nav-parent-toggle" type="button"
-					aria-expanded="<?php p(($isCustomers || $isEquipment || $isCatalogs) ? 'true' : 'false'); ?>"
-					aria-controls="mn-register-subnav">
-					<span class="mn-nav__icon" aria-hidden="true"><?php print_unescaped($mnNavIcon('list-checks')); ?></span>
-					<?php $mnNavLabel($l->t('Register'), $l->t('Customers, equipment, catalogs')); ?>
-					<span class="nav-parent-chevron" aria-hidden="true"></span>
-				</button>
-				<ul id="mn-register-subnav" class="nav-submenu" <?php p(($isCustomers || $isEquipment || $isCatalogs) ? '' : 'hidden'); ?>>
-					<li class="<?php p($isCustomers ? 'active' : ''); ?>" <?php if ($isCustomers): ?>aria-current="page"<?php endif; ?>>
-						<a href="<?php p((string)($navUrls['customers'] ?? '#')); ?>"
-							title="<?php p($l->t('Customers: Sites you service')); ?>"
-							aria-label="<?php p($l->t('Go to customers')); ?>">
-							<?php $mnNavLabel($l->t('Customers'), $l->t('Sites you service')); ?>
-						</a>
-					</li>
-					<li class="<?php p($isEquipment ? 'active' : ''); ?>" <?php if ($isEquipment): ?>aria-current="page"<?php endif; ?>>
-						<a href="<?php p((string)($navUrls['equipment'] ?? '#')); ?>"
-							title="<?php p($l->t('Equipment: Units you maintain')); ?>"
-							aria-label="<?php p($l->t('Go to equipment')); ?>">
-							<?php $mnNavLabel($l->t('Equipment'), $l->t('Units you maintain')); ?>
-						</a>
-					</li>
-					<li class="<?php p($isCatalogs ? 'active' : ''); ?>" <?php if ($isCatalogs): ?>aria-current="page"<?php endif; ?>>
-						<a href="<?php p((string)($navUrls['catalogs'] ?? '#')); ?>"
-							title="<?php p($l->t('Catalogs: Types and intervals')); ?>"
-							aria-label="<?php p($l->t('Go to catalogs')); ?>">
-							<?php $mnNavLabel($l->t('Catalogs'), $l->t('Types and checklists')); ?>
-						</a>
-					</li>
-				</ul>
-			</li>
-			<?php if ($isAppAdmin): ?>
-				<li class="nav-section-divider" role="separator" aria-hidden="true"></li>
-				<li class="nav-item-has-children <?php p($isSettings ? 'is-open' : ''); ?>">
-					<button class="nav-parent-toggle" type="button"
-						aria-expanded="<?php p($isSettings ? 'true' : 'false'); ?>"
-						aria-controls="mn-settings-subnav"
-						aria-label="<?php p($l->t('Open settings')); ?>">
-						<span class="mn-nav__icon" aria-hidden="true"><?php print_unescaped($mnNavIcon('shield')); ?></span>
-						<?php $mnNavLabel($l->t('Settings'), $l->t('Access and license')); ?>
-						<span class="nav-parent-chevron" aria-hidden="true"></span>
-					</button>
-					<ul id="mn-settings-subnav" class="nav-submenu" <?php p($isSettings ? '' : 'hidden'); ?>>
-						<?php
+			if ($isOffice || $isAppAdmin) {
+				$navGroup(
+					'app-navigation-planning',
+					(string)($navUrls['dispatch'] ?? ($navUrls['tours'] ?? '#')),
+					$l->t('Planning'),
+					$l->t('Assign jobs and day tours'),
+					'kanban',
+					$isPlanning,
+					static function () use ($navSubEntry, $navUrls, $l, $isDispatch, $isTours, $isExceptions, $isKpi): void {
+						$navSubEntry((string)($navUrls['dispatch'] ?? '#'), $l->t('Dispatch'), $l->t('Dispatch: Assign open work orders'), $isDispatch);
+						$navSubEntry((string)($navUrls['tours'] ?? '#'), $l->t('Day tours'), $l->t('Day tours: Stop-by-stop plans'), $isTours);
+						$navSubEntry((string)($navUrls['exceptions'] ?? '#'), $l->t('Exceptions'), $l->t('Exceptions: Blocked and overdue work'), $isExceptions);
+						$navSubEntry((string)($navUrls['kpi'] ?? '#'), $l->t('Ops KPI'), $l->t('Ops KPI: Compliance and overdue snapshot'), $isKpi);
+					}
+				);
+			} else {
+				$navEntry(
+					(string)($navUrls['tours'] ?? '#'),
+					$l->t('My tour'),
+					$l->t('Your stops today'),
+					'route',
+					$isTours
+				);
+			}
+
+			$navGroup(
+				'app-navigation-register',
+				(string)($navUrls['customers'] ?? '#'),
+				$l->t('Register'),
+				$l->t('Customers, equipment, catalogs'),
+				'list-checks',
+				$isRegister,
+				static function () use ($navSubEntry, $navUrls, $l, $isCustomers, $isEquipment, $isCatalogs): void {
+					$navSubEntry((string)($navUrls['customers'] ?? '#'), $l->t('Customers'), $l->t('Customers: Sites you service'), $isCustomers);
+					$navSubEntry((string)($navUrls['equipment'] ?? '#'), $l->t('Equipment'), $l->t('Equipment: Units you maintain'), $isEquipment);
+					$navSubEntry((string)($navUrls['catalogs'] ?? '#'), $l->t('Catalogs'), $l->t('Catalogs: Types and intervals'), $isCatalogs);
+				}
+			);
+
+			if ($isAppAdmin) {
+				$navGroup(
+					'app-navigation-settings',
+					(string)($navUrls['settings'] ?? '#'),
+					$l->t('Settings'),
+					$l->t('Access and license'),
+					'settings',
+					$isSettings,
+					static function () use ($navSubEntry, $settingsSectionNav, $l, $activeSettingsSection): void {
 						$settingsLabels = [
 							'access' => [$l->t('Access'), $l->t('Who may open the app')],
 							'roles' => [$l->t('Roles'), $l->t('Office vs technicians')],
@@ -206,19 +202,19 @@ $mnNavLabel = static function (string $name, string $hint): void {
 							'license' => [$l->t('License & mobile'), $l->t('Keys and seats')],
 							'support' => [$l->t('Support us'), $l->t('Sponsoring and help')],
 						];
-						foreach ($settingsLabels as $sid => $pair):
-							$href = (string)($settingsSectionNav[$sid] ?? '#');
-							$active = $activeSettingsSection === $sid;
-							?>
-							<li class="<?php p($active ? 'active' : ''); ?>" <?php if ($active): ?>aria-current="page"<?php endif; ?>>
-								<a href="<?php p($href); ?>">
-									<?php $mnNavLabel($pair[0], $pair[1]); ?>
-								</a>
-							</li>
-						<?php endforeach; ?>
-					</ul>
-				</li>
-			<?php endif; ?>
+						foreach ($settingsLabels as $sid => $pair) {
+							$navSubEntry(
+								(string)($settingsSectionNav[$sid] ?? '#'),
+								$pair[0],
+								$pair[1],
+								$activeSettingsSection === $sid
+							);
+						}
+					}
+				);
+			}
+			?>
 		</ul>
 	<?php include __DIR__ . '/../parts/feedback-nav-footer.php'; ?>
-	</div>
+	</nav>
+</div>

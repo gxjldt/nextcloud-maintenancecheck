@@ -6,15 +6,20 @@ import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '../..');
 
-test('MN navigation shell uses AZ collapsible register + settings underpages', () => {
+test('MN navigation shell uses Nextcloud core navigation structure', () => {
 	const nav = readFileSync(join(root, 'templates/common/navigation.php'), 'utf8');
-	assert.match(nav, /mn-register-subnav/);
-	assert.match(nav, /nav-parent-toggle/);
-	assert.match(nav, /Open settings/);
-	assert.match(nav, /mn-settings-subnav/);
+	assert.match(nav, /id="app-navigation"/);
+	assert.match(nav, /app-navigation-personal/);
+	assert.match(nav, /app-navigation-register/);
+	assert.match(nav, /app-navigation-settings/);
+	// Core collapse contract: li.collapsible > button.collapse + `open` state.
+	assert.match(nav, /class="collapsible/);
+	assert.match(nav, /class="collapse"/);
 	assert.doesNotMatch(nav, /mn-admin-subnav/);
 	const js = readFileSync(join(root, 'js/common/navigation.js'), 'utf8');
 	assert.match(js, /aria-expanded/);
+	assert.match(js, /snapjs-left/);
+	assert.doesNotMatch(js, /mn-nav--open/);
 });
 
 test('MN dialogs use modal-backdrop and inert unlock', () => {

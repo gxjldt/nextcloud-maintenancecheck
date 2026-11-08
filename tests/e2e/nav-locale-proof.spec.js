@@ -43,7 +43,7 @@ test.describe('Localized nav group label (Register noun)', () => {
 					page.locator('#mn-customer-list, .mn-empty').first(),
 				).toBeVisible({ timeout: 30_000 })
 
-				const group = page.locator('button.nav-parent-toggle[aria-controls="mn-register-subnav"]')
+				const group = page.locator('button.collapse[aria-controls="app-navigation-register"]')
 				await expect(group).toBeVisible()
 				await expect(group).toContainText(expectLabel)
 				await expect(group).not.toContainText(forbid)

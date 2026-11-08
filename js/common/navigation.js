@@ -1,108 +1,113 @@
 /**
- * Navigation JavaScript for ArbeitszeitCheck App
- * Submenu toggles and keyboard navigation. Mobile drawer uses in-page Menu
- * (common/mobile-nav.js — #mn-nav-toggle / .mn-nav--open) because #content
- * overflow:hidden clips core #app-navigation-toggle (arbeitszeitcheck#33 /
- * Atlas ATLAS_MOBILE_NAV_CONTRACT).
+ * App navigation behaviour — deliberately thin.
  *
- * @copyright Copyright (c) 2024, Nextcloud GmbH
+ * Nextcloud core renders and styles plain `#app-navigation`:
+ *   - `li.collapsible` + `button.collapse` + `open` is core's own collapse
+ *     contract (see core/css/apps.css), the app only flips the state;
+ *   - `body.snapjs-left` + core's `#app-navigation-toggle` is core's mobile
+ *     drawer contract (see core/css/mobile.css), the app only flips the class.
+ *
+ * No roving tabindex, no custom drawer markup: links keep the browser's normal
+ * tab order, which is what Nextcloud's own navigation does.
+ *
  * @license AGPL-3.0-or-later
  */
+(function () {
+	'use strict';
 
-(function() {
-    'use strict';
+	const DESKTOP_MQ = '(min-width: 1024px)';
 
-    const APP_ID = 'maintenancecheck';
+	let toggleButton = null;
+	let nav = null;
 
-    function translate(key, fallback) {
-        if (typeof window !== 'undefined' && typeof window.t === 'function') {
-            const value = window.t(APP_ID, key);
-            if (value && value !== key) {
-                return value;
-            }
-        }
-        return fallback;
-    }
+	function isDesktop() {
+		return window.matchMedia(DESKTOP_MQ).matches;
+	}
 
-    const Navigation = {
-        menuNav: null,
+	function setDrawerOpen(open) {
+		document.body.classList.toggle('snapjs-left', open);
+		if (toggleButton) {
+			toggleButton.setAttribute('aria-expanded', open ? 'true' : 'false');
+			const openLabel = toggleButton.getAttribute('data-aria-label-open');
+			const closeLabel = toggleButton.getAttribute('data-aria-label-close');
+			if (open && closeLabel) {
+				toggleButton.setAttribute('aria-label', closeLabel);
+			} else if (!open && openLabel) {
+				toggleButton.setAttribute('aria-label', openLabel);
+			}
+		}
+	}
 
-        init() {
-            this.menuNav = document.getElementById('app-navigation');
-            if (!this.menuNav) {
-                return;
-            }
+	function isDrawerOpen() {
+		return document.body.classList.contains('snapjs-left');
+	}
 
-            this.setupSubmenuToggles();
-            this.setupAccessibility();
-        },
+	function setupCollapse() {
+		nav.querySelectorAll('li.collapsible > button.collapse').forEach((button) => {
+			button.addEventListener('click', (event) => {
+				event.preventDefault();
+				event.stopPropagation();
+				const group = button.closest('li.collapsible');
+				if (!group) {
+					return;
+				}
+				const open = !group.classList.contains('open');
+				group.classList.toggle('open', open);
+				button.setAttribute('aria-expanded', open ? 'true' : 'false');
+			});
+		});
+	}
 
-        setupSubmenuToggles() {
-            const parentToggles = this.menuNav.querySelectorAll('.nav-parent-toggle');
-            parentToggles.forEach((toggle) => {
-                const submenuId = toggle.getAttribute('aria-controls');
-                const submenu = submenuId ? this.menuNav.querySelector(`#${submenuId}`) : null;
-                if (!submenu) {
-                    return;
-                }
-                toggle.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
-                    toggle.setAttribute('aria-expanded', isExpanded ? 'false' : 'true');
-                    if (isExpanded) {
-                        submenu.setAttribute('hidden', '');
-                    } else {
-                        submenu.removeAttribute('hidden');
-                    }
-                });
-            });
-        },
+	function setupDrawer() {
+		if (!toggleButton) {
+			return;
+		}
+		toggleButton.addEventListener('click', () => {
+			setDrawerOpen(!isDrawerOpen());
+		});
 
-        setupAccessibility() {
-            this.menuNav.setAttribute('role', 'navigation');
-            this.menuNav.setAttribute('aria-label',
-                translate('Main navigation', 'Main navigation'));
-            this.setupKeyboardNavigation();
-        },
+		// Following a link closes the drawer, like core's mobile navigation.
+		nav.addEventListener('click', (event) => {
+			const link = event.target.closest('a[href]');
+			if (link && !isDesktop()) {
+				setDrawerOpen(false);
+			}
+		});
 
-        setupKeyboardNavigation() {
-            const navLinks = this.menuNav.querySelectorAll('a, .nav-parent-toggle');
+		document.addEventListener('keydown', (event) => {
+			if (event.key === 'Escape' && isDrawerOpen()) {
+				setDrawerOpen(false);
+				toggleButton.focus();
+			}
+		});
 
-            navLinks.forEach((link, index) => {
-                link.addEventListener('keydown', (e) => {
-                    if (e.key === 'ArrowDown') {
-                        e.preventDefault();
-                        const nextLink = navLinks[index + 1] || navLinks[0];
-                        if (nextLink) {
-                            nextLink.focus();
-                        }
-                    } else if (e.key === 'ArrowUp') {
-                        e.preventDefault();
-                        const prevLink = navLinks[index - 1] || navLinks[navLinks.length - 1];
-                        if (prevLink) {
-                            prevLink.focus();
-                        }
-                    } else if (e.key === 'Home') {
-                        e.preventDefault();
-                        navLinks[0].focus();
-                    } else if (e.key === 'End') {
-                        e.preventDefault();
-                        navLinks[navLinks.length - 1].focus();
-                    }
-                });
-            });
-        },
-    };
+		// Leaving the mobile breakpoint must not strand the drawer open.
+		const desktop = window.matchMedia(DESKTOP_MQ);
+		const onChange = (event) => {
+			if (event.matches) {
+				setDrawerOpen(false);
+			}
+		};
+		if (typeof desktop.addEventListener === 'function') {
+			desktop.addEventListener('change', onChange);
+		} else if (typeof desktop.addListener === 'function') {
+			desktop.addListener(onChange);
+		}
+	}
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-            Navigation.init();
-        });
-    } else {
-        Navigation.init();
-    }
+	function init() {
+		nav = document.getElementById('app-navigation');
+		if (!nav) {
+			return;
+		}
+		toggleButton = document.getElementById('app-navigation-toggle');
+		setupCollapse();
+		setupDrawer();
+	}
 
-    if (typeof window !== 'undefined') {
-        window.MaintenanceCheckNavigation = Navigation;
-    }
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', init);
+	} else {
+		init();
+	}
 })();

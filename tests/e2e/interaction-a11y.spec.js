@@ -36,8 +36,8 @@ test('keyboard focus produces a visible ring on app controls', async ({ page }) 
 	await expect(page.locator('#mn-main-content')).toBeVisible({ timeout: 30_000 })
 
 	const targets = [
-		page.locator('#app-navigation .nav-menu a').first(),
-		page.locator('#app-navigation .nav-parent-toggle').first(),
+		page.locator('#app-navigation .nav-entry-link').first(),
+		page.locator('#app-navigation button.collapse').first(),
 		page.locator('.mn-breadcrumb__link').first(),
 	]
 	for (const target of targets) {
@@ -72,7 +72,7 @@ test('sidebar accordion is fully keyboard operable', async ({ page }) => {
 	await page.goto('/apps/maintenancecheck/')
 	await expect(page.locator('#app-navigation')).toBeVisible({ timeout: 30_000 })
 
-	const toggle = page.locator('#app-navigation .nav-parent-toggle').first()
+	const toggle = page.locator('#app-navigation button.collapse').first()
 	test.skip(!await toggle.isVisible().catch(() => false), 'No accordion for this role')
 
 	const submenuId = await toggle.getAttribute('aria-controls')
@@ -108,9 +108,9 @@ test('touch targets are at least 44px on mobile and desktop viewports', async ({
 				'#app-content .mn-input',
 				'#app-content select',
 				'#app-content .mn-breadcrumb__link',
-				'#app-navigation .nav-menu > li > a',
-				'#app-navigation .nav-parent-toggle',
-				'#app-navigation .nav-submenu a',
+				'#app-navigation .nav-entry-link',
+				'#app-navigation button.collapse',
+				'#app-navigation li.collapsible ul a',
 			]
 			const bad = []
 			for (const el of document.querySelectorAll(selectors.join(','))) {

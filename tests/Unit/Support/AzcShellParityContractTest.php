@@ -36,7 +36,7 @@ final class AzcShellParityContractTest extends TestCase
 	public function testNavigationUsesCollapsibleRegisterAndSettingsUnderpages(): void
 	{
 		$nav = (string)file_get_contents($this->root . '/templates/common/navigation.php');
-		foreach (['nav-menu', 'nav-item-has-children', 'nav-submenu', 'mn-register-subnav', 'sidebar-header', 'Open settings', 'mn-settings-subnav'] as $token) {
+		foreach (['app-navigation-personal', 'class="collapsible', 'class="collapse"', 'app-navigation-register', 'app-navigation-settings', 'nav-entry-name'] as $token) {
 			$this->assertStringContainsString($token, $nav, $token);
 		}
 		// Bachus: Settings is nested under itself (Access…Support), never Administration.

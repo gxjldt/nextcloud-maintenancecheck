@@ -99,10 +99,10 @@ final class PageGuidanceContractTest extends TestCase
 	public function testNavigationExposesVisibleHints(): void
 	{
 		$nav = (string)file_get_contents($this->root . '/templates/common/navigation.php');
-		$this->assertStringContainsString('mn-nav__name', $nav);
+		$this->assertStringContainsString('nav-entry-name', $nav);
 		// Single-line rows: the hint rides on the link's title, not a second line.
-		$this->assertStringContainsString('aria-label="<?php p($l->t(', $nav);
-		$this->assertStringContainsString('What needs a visit — overdue first', $nav);
+		$this->assertStringContainsString('title="<?php p($hint); ?>"', $nav);
+		$this->assertStringContainsString('What needs a visit', $nav);
 		$this->assertStringContainsString('History and filters', $nav);
 	}
 

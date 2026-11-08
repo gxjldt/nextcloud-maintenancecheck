@@ -1,29 +1,36 @@
 // @ts-check
 /**
- * ATLAS_MOBILE_NAV_CONTRACT — in-page Menu opens drawer at phone width (no h-scroll).
- * overflow:hidden shell requires #mn-nav-toggle (core toggle absent/clipped).
+ * Mobile navigation contract — plain Nextcloud navigation.
+ *
+ * Under 1024px Nextcloud core positions #app-navigation off-canvas and expects
+ * the app to flip `body.snapjs-left`; #app-navigation-toggle is core's own
+ * 44px button (core/css/mobile.css). The app no longer ships a parallel drawer.
  */
-import { test } from '@playwright/test'
-import { createRequire } from 'node:module'
-import { fileURLToPath } from 'node:url'
-import { dirname, join } from 'node:path'
+import { test, expect } from '@playwright/test'
 import { login, primaryCreds } from './helpers/auth.js'
 
-const require = createRequire(import.meta.url)
-const { assertAtlasMobileNav } = require(
-	join(dirname(fileURLToPath(import.meta.url)), '../../../_shared/e2e/atlas-mobile-nav-contract.js'),
-)
-
-test('ATLAS_MOBILE_NAV_CONTRACT in-page Menu opens drawer', async ({ page }) => {
+test('MOBILE_NAV_CONTRACT core toggle opens the drawer', async ({ page }) => {
 	const creds = primaryCreds()
 	test.skip(!creds, 'Requires NC_E2E_* or NC_ADMIN_* credentials')
 	await page.setViewportSize({ width: 375, height: 812 })
 	await login(page, creds)
 	await page.goto('/apps/maintenancecheck/')
-	await page.waitForSelector('#mn-nav-toggle, [data-mn-nav-toggle]', { timeout: 30_000 })
-	await assertAtlasMobileNav(page, {
-		toggle: page.locator('#mn-nav-toggle, [data-mn-nav-toggle]').first(),
-		nav: page.locator('#app-navigation'),
-		openClass: /mn-nav--open/,
-	})
+
+	const toggle = page.locator('#app-navigation-toggle')
+	await expect(toggle).toBeVisible({ timeout: 30_000 })
+	await expect(toggle).toHaveAttribute('aria-expanded', 'false')
+
+	await toggle.click()
+	await expect(page.locator('body')).toHaveClass(/snapjs-left/)
+	await expect(toggle).toHaveAttribute('aria-expanded', 'true')
+
+	// Drawer must sit on-canvas and must not create horizontal scrolling.
+	const box = await page.locator('#app-navigation').boundingBox()
+	expect(box).not.toBeNull()
+	expect(box.x).toBe(0)
+	const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)
+	expect(overflow).toBeLessThanOrEqual(1)
+
+	await page.keyboard.press('Escape')
+	await expect(page.locator('body')).not.toHaveClass(/snapjs-left/)
 })

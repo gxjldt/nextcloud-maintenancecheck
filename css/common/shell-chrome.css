@@ -317,13 +317,7 @@
 }
 
 /* ── App shell ─────────────────────────────────────────────── */
-/* Sidebar alignment: see navigation.css (canonical); keep minimal guard here too */
-#content.app-maintenancecheck #app-navigation .nav-menu a,
-#content.app-maintenancecheck #app-navigation .nav-submenu a,
-#content.app-maintenancecheck #app-navigation .nav-parent-toggle {
-	justify-content: flex-start;
-	text-align: left;
-}
+/* Navigation rows are styled by Nextcloud core (.app-navigation-personal). */
 
 #app-content.mn-app {
 	display: flex;

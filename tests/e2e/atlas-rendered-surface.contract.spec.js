@@ -63,7 +63,7 @@ test.describe('Rendered-surface contract', () => {
 			await expect(page.locator('#mn-main-content')).toBeAttached({ timeout: 30_000 })
 			await assertAtlasRenderedSurface(page, {
 				content: '#mn-main-content',
-				navExclude: '#app-navigation, nav, .mn-nav',
+				navExclude: '#app-navigation, nav',
 				listAllow: LIST_ALLOW,
 			})
 		})

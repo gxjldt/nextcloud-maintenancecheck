@@ -95,7 +95,7 @@ test.describe('Page guidance UX', () => {
 		await expect(page.locator('#mn-main-content')).toBeVisible({ timeout: 30_000 })
 		await expect(page.locator('#mn-due-quickstart')).toBeHidden({ timeout: 10_000 })
 
-		await expect(page.locator('#app-navigation .mn-nav__name').first()).toBeVisible()
+		await expect(page.locator('#app-navigation .nav-entry-name').first()).toBeVisible()
 	})
 
 	test('settings policies underpage keeps guidance + axe', async ({ page }) => {
