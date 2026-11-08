@@ -42,7 +42,7 @@ require __DIR__ . '/parts/page-quickstart.php';
 	<button type="button" class="mn-chip is-active" data-mn-dispatch-filter="unassigned" aria-pressed="true"><?php p($l->t('Needs owner')); ?></button>
 	<button type="button" class="mn-chip" data-mn-dispatch-filter="all" aria-pressed="false"><?php p($l->t('All open')); ?></button>
 </div>
-<section class="mn-card mn-card--table-solo" aria-labelledby="mn-dispatch-title">
+<section class="mn-list-section" aria-labelledby="mn-dispatch-title">
 	<h2 id="mn-dispatch-title" class="mn-sr-only"><?php p($l->t('Dispatch')); ?></h2>
 	<div class="mn-card__body mn-card__body--table">
 		<div id="mn-dispatch-board" class="mn-board mn-listing" aria-busy="true"></div>

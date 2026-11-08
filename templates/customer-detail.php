@@ -33,7 +33,7 @@ $qsSteps = [
 require __DIR__ . '/parts/page-quickstart.php';
 ?>
 <div id="mn-customer-detail" class="mn-detail" aria-busy="true"></div>
-<section class="mn-card mn-card--table-solo" aria-labelledby="mn-sites-section-title">
+<section class="mn-list-section" aria-labelledby="mn-sites-section-title">
 	<div class="mn-table-toolbar">
 		<h2 id="mn-sites-section-title" class="mn-table-toolbar__title"><?php p($l->t('Sites')); ?></h2>
 		<div id="mn-sites-section-actions" class="mn-table-toolbar__actions"></div>
@@ -42,7 +42,7 @@ require __DIR__ . '/parts/page-quickstart.php';
 		<div id="mn-customer-sites" class="mn-listing" aria-busy="true"></div>
 	</div>
 </section>
-<section class="mn-card mn-card--table-solo" aria-labelledby="mn-equipment-section-title">
+<section class="mn-list-section" aria-labelledby="mn-equipment-section-title">
 	<div class="mn-table-toolbar">
 		<h2 id="mn-equipment-section-title" class="mn-table-toolbar__title"><?php p($l->t('Equipment at this customer')); ?></h2>
 		<div id="mn-equipment-section-actions" class="mn-table-toolbar__actions"></div>

@@ -102,24 +102,6 @@
 	height: 16px;
 }
 
-/* ── Page header ─────────────────────────────────────────────────────
-   Geometry (column stack, __main grid, mobile collapse) lives in
-   shell-chrome.css — do not reintroduce flex-wrap / space-between here. */
-
-.mn-page-header__title {
-	margin: 0;
-	/* NC page headings sit at ~20px/600; 26px/700 is the SaaS look. */
-	font-size: 1.25rem;
-	font-weight: 600;
-	line-height: 1.25;
-}
-
-.mn-page-header__hint {
-	margin: var(--mn-space-1) 0 0;
-	color: var(--color-text-maxcontrast);
-	font-size: var(--mn-fs-sm);
-}
-
 .mn-main:focus {
 	outline: none;
 }
@@ -370,10 +352,8 @@ textarea.mn-input {
 	max-width: 420px;
 }
 
-/* Legacy toolbar chrome — DO NOT put this class on mn-filter-panel__form.
- * Combined with filter-panel form { flex-direction: column } it sets
- * align-items: flex-end and shoves the whole filter grid to the right.
- * Prefer mn-filter-panel__form + mn-filter-grid (+ --search / --extended). */
+/* Legacy boxed toolbar chrome — list pages use the flat .mn-toolbar row now
+ * (css/common/page-patterns.css). Kept only for surfaces not yet migrated. */
 .mn-filterbar {
 	display: flex;
 	flex-wrap: wrap;
@@ -637,8 +617,7 @@ textarea.mn-input {
    titles and the breadcrumb rendered ~20px tall. inline-flex + min-height
    grows the hit box without changing row height (customercheck parity). */
 .mn-table a.mn-table-link,
-.mn-row__title a,
-.mn-breadcrumb__link {
+.mn-row__title a {
 	display: inline-flex;
 	align-items: center;
 	min-height: 24px;
@@ -686,55 +665,47 @@ textarea.mn-input {
 }
 
 /*
- * table-solo = ONE frame only (the card). No soft-band header, no inset wrap
- * border — that was box-in-a-box on Work orders / Visits / Customers lists.
- * Headed cards keep CustomerCheck inset (space-5 + wrap border) above.
- */
-#content.app-maintenancecheck #app-content .mn-card.mn-card--table-solo,
-#app-content.mn-app .mn-card.mn-card--table-solo {
+ * List sections: the table sits directly on the page surface (Nextcloud list
+ * convention) — no card frame, no inner wrap border, no card padding. */
+#content.app-maintenancecheck #app-content .mn-list-section,
+#app-content.mn-app .mn-list-section {
 	padding: 0;
-	overflow: hidden;
+	margin: 0;
+	border: 0;
+	background: none;
+	box-shadow: none;
+	overflow: visible;
 }
-#content.app-maintenancecheck #app-content .mn-card.mn-card--table-solo > .mn-card__body--table,
-#content.app-maintenancecheck #app-content .mn-card.mn-card--table-solo > .mn-card__body,
-#app-content.mn-app .mn-card.mn-card--table-solo > .mn-card__body--table,
-#app-content.mn-app .mn-card.mn-card--table-solo > .mn-card__body {
+#content.app-maintenancecheck #app-content .mn-list-section > .mn-card__body--table,
+#content.app-maintenancecheck #app-content .mn-list-section > .mn-card__body,
+#app-content.mn-app .mn-list-section > .mn-card__body--table,
+#app-content.mn-app .mn-list-section > .mn-card__body {
 	padding: 0;
 	gap: 0;
 }
-/* Beat shell-chrome wrap border at equal/higher specificity — solo card is the frame. */
-#content.app-maintenancecheck #app-content .mn-card.mn-card--table-solo .mn-table-wrap,
-#content.app-maintenancecheck #app-content .mn-card.mn-card--table-solo .table-container,
-#content.app-maintenancecheck .mn-card.mn-card--table-solo .mn-table-wrap,
-#content.app-maintenancecheck .mn-card.mn-card--table-solo .table-container,
-#app-content.mn-app .mn-card.mn-card--table-solo .mn-table-wrap,
-#app-content.mn-app .mn-card.mn-card--table-solo .table-container {
+#content.app-maintenancecheck #app-content .mn-list-section .mn-table-wrap,
+#content.app-maintenancecheck #app-content .mn-list-section .table-container,
+#app-content.mn-app .mn-list-section .mn-table-wrap,
+#app-content.mn-app .mn-list-section .table-container {
 	border: none;
 	border-radius: 0;
 	background: transparent;
 }
-#content.app-maintenancecheck #app-content .mn-card.mn-card--table-solo .mn-empty,
-#content.app-maintenancecheck #app-content .mn-card.mn-card--table-solo .mn-skeleton,
-#app-content.mn-app .mn-card.mn-card--table-solo .mn-empty,
-#app-content.mn-app .mn-card.mn-card--table-solo .mn-skeleton {
-	margin: var(--mn-space-5, 24px);
+#content.app-maintenancecheck #app-content .mn-list-section .mn-pagination,
+#app-content.mn-app .mn-list-section .mn-pagination {
+	padding: var(--mn-space-3) 0 0;
 }
-#content.app-maintenancecheck #app-content .mn-card.mn-card--table-solo .mn-pagination,
-#app-content.mn-app .mn-card.mn-card--table-solo .mn-pagination {
-	padding: var(--mn-space-3, 12px) var(--mn-space-5, 24px) var(--mn-space-5, 24px);
-}
-#content.app-maintenancecheck #app-content .mn-visits-toolbar + .mn-card.mn-card--table-solo,
-#content.app-maintenancecheck #app-content .mn-exceptions-toolbar + .mn-card.mn-card--table-solo,
-#content.app-maintenancecheck #app-content .mn-tours-toolbar + .mn-card.mn-card--table-solo,
-#content.app-maintenancecheck #app-content .mn-filter-panel + .mn-card.mn-card--table-solo,
-#app-content.mn-app .mn-visits-toolbar + .mn-card.mn-card--table-solo,
-#app-content.mn-app .mn-exceptions-toolbar + .mn-card.mn-card--table-solo,
-#app-content.mn-app .mn-tours-toolbar + .mn-card.mn-card--table-solo,
-#app-content.mn-app .mn-filter-panel + .mn-card.mn-card--table-solo {
-	margin-top: var(--mn-space-5, 24px);
+#content.app-maintenancecheck #app-content .mn-visits-toolbar + .mn-list-section,
+#content.app-maintenancecheck #app-content .mn-exceptions-toolbar + .mn-list-section,
+#content.app-maintenancecheck #app-content .mn-tours-toolbar + .mn-list-section,
+#app-content.mn-app .mn-visits-toolbar + .mn-list-section,
+#app-content.mn-app .mn-exceptions-toolbar + .mn-list-section,
+#app-content.mn-app .mn-tours-toolbar + .mn-list-section,
+#app-content.mn-app .mn-toolbar + .mn-list-section {
+	margin-top: 0;
 }
 
-/* Compact title + actions strip inside table-solo (catalogs / detail) — white, not soft-band. */
+/* Compact title + actions strip above a list section (catalogs / detail). */
 .mn-table-toolbar {
 	display: flex;
 	flex-wrap: wrap;
@@ -1261,8 +1232,8 @@ textarea.mn-input {
 	outline-offset: 2px;
 }
 
-#content.app-maintenancecheck #app-content .mn-catalogs-toolbar + .mn-card.mn-card--table-solo,
-#app-content.mn-app .mn-catalogs-toolbar + .mn-card.mn-card--table-solo {
+#content.app-maintenancecheck #app-content .mn-catalogs-toolbar + .mn-list-section,
+#app-content.mn-app .mn-catalogs-toolbar + .mn-list-section {
 	margin-top: 0;
 }
 
@@ -1309,27 +1280,6 @@ textarea.mn-input {
 .mn-table button.mn-table-link:focus-visible {
 	outline: 3px solid var(--color-primary-element);
 	outline-offset: 2px;
-}
-
-.mn-breadcrumb {
-	margin-bottom: var(--mn-space-3);
-	font-size: var(--mn-fs-sm);
-}
-
-.mn-breadcrumb__link {
-	color: var(--mn-accent-ink, var(--color-primary-element));
-	text-decoration: underline;
-	text-underline-offset: 0.12em;
-}
-
-.mn-breadcrumb__link:hover,
-.mn-breadcrumb__link:focus-visible {
-	text-decoration: underline;
-}
-
-.mn-breadcrumb__current,
-.mn-breadcrumb__sep {
-	color: var(--mn-muted, #6b6b6b);
 }
 
 .mn-detail {
@@ -2389,7 +2339,6 @@ textarea.mn-input {
 }
 #content.app-maintenancecheck .mn-card,
 #content.app-maintenancecheck .mn-section,
-#content.app-maintenancecheck .mn-filter-panel,
 #content.app-maintenancecheck .mn-table-wrap,
 #content.app-maintenancecheck .mn-empty,
 #content.app-maintenancecheck .mn-empty-state {
@@ -2435,13 +2384,13 @@ body > .mn-dialog-overlay > .mn-dialog {
 	outline-offset: 2px;
 }
 
-#content.app-maintenancecheck #app-content .mn-dispatch-toolbar + .mn-card.mn-card--table-solo,
-#app-content.mn-app .mn-dispatch-toolbar + .mn-card.mn-card--table-solo {
-	margin-top: var(--mn-space-5, 24px);
+#content.app-maintenancecheck #app-content .mn-dispatch-toolbar + .mn-list-section,
+#app-content.mn-app .mn-dispatch-toolbar + .mn-list-section {
+	margin-top: 0;
 }
 
-.mn-card.mn-card--table-solo .mn-board.mn-listing {
-	padding: var(--mn-space-5);
+.mn-list-section .mn-board.mn-listing {
+	padding: 0;
 	box-sizing: border-box;
 }
 
@@ -2546,9 +2495,6 @@ body > .mn-dialog-overlay > .mn-dialog {
 	flex-wrap: wrap;
 	gap: var(--mn-space-3);
 	align-items: center;
-}
-.mn-breadcrumb {
-	margin: 0 0 var(--mn-space-4);
 }
 .mn-wo-detail__meta {
 	display: flex;

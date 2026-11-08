@@ -28,7 +28,7 @@ final class VisitsFilterUxContractTest extends TestCase
 		$this->assertStringContainsString('id="mn-filter-reset"', $tpl);
 		$this->assertStringContainsString('Clear filters', $tpl);
 		$this->assertStringContainsString('disabled', $tpl);
-		$this->assertStringContainsString('mn-card--table-solo', $tpl);
+		$this->assertStringContainsString('mn-list-section', $tpl);
 		$this->assertStringNotContainsString('Apply filters', $tpl);
 		$this->assertStringNotContainsString('mn-filter-panel', $tpl);
 		$this->assertStringNotContainsString('mn-card__header', $tpl);
@@ -62,7 +62,8 @@ final class VisitsFilterUxContractTest extends TestCase
 	public function testWorkOrdersTemplateDropsApplyButton(): void
 	{
 		$tpl = (string)file_get_contents($this->root . '/templates/work-orders.php');
-		$this->assertStringContainsString('mn-filter-panel', $tpl);
+		$this->assertStringContainsString('class="mn-toolbar"', $tpl);
+		$this->assertStringNotContainsString('mn-filter-panel', $tpl);
 		$this->assertStringNotContainsString('Apply filters', $tpl);
 		$this->assertStringContainsString('mn-wo-filter-live-hint', $tpl);
 		$this->assertStringContainsString('Filters update as you type or change a control.', $tpl);
@@ -73,15 +74,10 @@ final class VisitsFilterUxContractTest extends TestCase
 		$css = (string)file_get_contents($this->root . '/css/common/page-patterns.css');
 		$this->assertStringContainsString('.mn-filter-status-chips', $css);
 		$this->assertStringContainsString('.mn-date-range--compact', $css);
-		// extended must be 4 tracks (3 fields + actions), not 5 with an empty column
-		$this->assertMatchesRegularExpression(
-			'/\.mn-filter-grid--extended\s*\{[^}]*grid-template-columns:\s*'
-			. 'minmax\(0,\s*1fr\)\s+'
-			. 'minmax\(0,\s*1\.35fr\)\s+'
-			. 'minmax\(0,\s*0\.9fr\)\s+'
-			. 'auto/s',
-			$css
-		);
+		// Toolbar fields are a wrapping flex row — no named grid tracks whose
+		// count can drift out of sync with the markup.
+		$this->assertStringContainsString('.mn-toolbar__fields', $css);
+		$this->assertStringNotContainsString('mn-filter-grid', $css);
 	}
 
 	public function testVisitsToolbarCssSharesDueChipTargets(): void

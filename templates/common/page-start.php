@@ -9,8 +9,6 @@ declare(strict_types=1);
  * @var \OCP\IL10N $l
  */
 
-use OCA\MaintenanceCheck\Support\IconCatalog;
-
 $pageId = (string)$_['pageId'];
 $pageTitle = (string)$_['pageTitle'];
 $pageHint = (string)$_['pageHint'];
@@ -25,26 +23,7 @@ $timezone = (string)($_['timezone'] ?? 'UTC');
 $roleLabel = (string)($_['roleLabel'] ?? ($isAppAdmin ? $l->t('Administrator') : ($isOffice ? $l->t('Office') : $l->t('Technician'))));
 $htmlLang = str_replace('_', '-', $l->getLanguageCode());
 
-$pageIcons = [
-	'due' => 'layout-grid',
-	'visits' => 'calendar-check',
-	'customers' => 'users',
-	'customer-detail' => 'users',
-	'equipment' => 'wrench',
-	'equipment-detail' => 'wrench',
-	'catalogs' => 'list-checks',
-	'settings' => 'settings',
-	'access-denied' => 'shield',
-	'work-orders' => 'clipboard-list',
-	'work-order-detail' => 'clipboard-list',
-	'dispatch' => 'kanban',
-	'tours' => 'route',
-	'kpi' => 'gauge',
-	'exceptions' => 'alert-triangle',
-];
-$headerIcon = $pageIcons[$pageId] ?? (str_starts_with($pageId, 'settings-') ? 'settings' : 'wrench');
 $navUrls = json_decode($urlsJson, true)['pages'] ?? [];
-$homeUrl = (string)($navUrls['due'] ?? '#');
 
 /* Detail pages: one breadcrumb trail (home → list → current). No second nav in page body. */
 $parentCrumb = null;
@@ -93,44 +72,30 @@ require __DIR__ . '/navigation.php';
 	<div id="mn-alert-region" class="mn-sr-only" role="alert" aria-live="assertive" aria-atomic="true"></div>
 	<div id="mn-toast-region" class="mn-toast-region" role="region" aria-label="<?php p($l->t('Notifications')); ?>"></div>
 	<div id="app-content-wrapper" class="mn-shell">
+<?php if (is_array($parentCrumb)): ?>
+		<nav class="mn-breadcrumb" aria-label="<?php p($l->t('Breadcrumb')); ?>">
+			<ol class="mn-breadcrumb__list">
+				<li class="mn-breadcrumb__item">
+					<a
+						class="mn-breadcrumb__link"
+						id="<?php p((string)$parentCrumb['id']); ?>"
+						href="<?php p((string)$parentCrumb['href']); ?>"
+					><?php p((string)$parentCrumb['label']); ?></a>
+				</li>
+				<li class="mn-breadcrumb__item mn-breadcrumb__item--current" aria-current="page">
+					<span class="mn-breadcrumb__current"><?php p($pageTitle); ?></span>
+				</li>
+			</ol>
+		</nav>
+<?php endif; ?>
 		<header class="mn-page-header" aria-labelledby="mn-page-title">
-			<nav class="mn-breadcrumb" aria-label="<?php p($l->t('Breadcrumb')); ?>">
-				<ol class="mn-breadcrumb__list">
-					<li class="mn-breadcrumb__item">
-						<a class="mn-breadcrumb__link" href="<?php p($homeUrl); ?>"><?php p($l->t('MaintenanceCheck')); ?></a>
-					</li>
-					<?php if (is_array($parentCrumb)): ?>
-					<li class="mn-breadcrumb__item">
-						<a
-							class="mn-breadcrumb__link"
-							id="<?php p((string)$parentCrumb['id']); ?>"
-							href="<?php p((string)$parentCrumb['href']); ?>"
-						><?php p((string)$parentCrumb['label']); ?></a>
-					</li>
-					<?php endif; ?>
-					<li class="mn-breadcrumb__item mn-breadcrumb__item--current" aria-current="page">
-						<span class="mn-breadcrumb__current"><?php p($pageTitle); ?></span>
-					</li>
-				</ol>
-			</nav>
-			<div class="mn-page-header__main">
-				<div class="mn-page-header__icon" aria-hidden="true">
-					<?php print_unescaped(IconCatalog::render($headerIcon, 'mn-page-header__icon-svg')); ?>
-				</div>
-				<div class="mn-page-header__text">
-					<h1 id="mn-page-title"><?php p($pageTitle); ?></h1>
-					<?php if ($pageHint !== ''): ?>
-						<p class="mn-page-header__lead"><?php p($pageHint); ?></p>
-					<?php endif; ?>
-				</div>
-				<div id="mn-page-actions" class="mn-page-header__actions" aria-live="polite"></div>
-			</div>
-			<div class="mn-scope-strip" role="group" aria-label="<?php p($l->t('Active session context')); ?>">
-				<span class="mn-scope-strip__label"><?php p($l->t('Role')); ?></span>
-				<span class="mn-badge mn-badge--neutral mn-scope-strip__badge"><?php p($roleLabel); ?></span>
-				<span class="mn-scope-strip__sep" aria-hidden="true">·</span>
-				<span class="mn-scope-strip__label"><?php p($l->t('Timezone')); ?></span>
-				<span class="mn-scope-strip__value"><?php p($timezone); ?></span>
-			</div>
+			<h1 id="mn-page-title"><?php p($pageTitle); ?></h1>
+			<div id="mn-page-actions" class="mn-page-header__actions" aria-live="polite"></div>
+			<?php if ($pageHint !== ''): ?>
+				<p class="mn-page-header__lead"><?php p($pageHint); ?></p>
+			<?php endif; ?>
+			<p class="mn-page-header__meta">
+				<span class="mn-page-header__meta-text"><?php p($roleLabel); ?> · <?php p($timezone); ?></span>
+			</p>
 		</header>
 		<main id="mn-main-content" class="mn-main" tabindex="-1" aria-labelledby="mn-page-title">

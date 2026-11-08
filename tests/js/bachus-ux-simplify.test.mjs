@@ -59,13 +59,13 @@ test('Bachus: CSS attention ring + toast action touch target', () => {
 	assert.match(css, /min-height:\s*44px/);
 	assert.match(css, /\.mn-badge:not\(:has\(\.mn-badge__dot\)\):not\(:has\(\.mn-badge__icon\)\)::before/);
 	assert.match(css, /\.mn-table-toolbar/);
-	assert.match(css, /\.mn-card--table-solo/);
+	assert.match(css, /\.mn-list-section/);
 });
 
-test('Bachus: list/board tables are table-solo (no soft-band header glued onto thead)', () => {
+test('Bachus: list/board tables sit in a flat list section (no soft-band header glued onto thead)', () => {
 	const chrome = readFileSync(join(root, 'css/common/shell-chrome.css'), 'utf8');
 	assert.match(chrome, /#content\.app-maintenancecheck\s+#app-content\s+\.mn-card:has\(\.mn-card__header\)/);
-	assert.match(chrome, /Bachus \/ AZ parity: structured cards/);
+	assert.match(chrome, /Structured cards keep a header band/);
 
 	for (const page of [
 		'visits.php',
@@ -77,14 +77,14 @@ test('Bachus: list/board tables are table-solo (no soft-band header glued onto t
 		'exceptions.php',
 	]) {
 		const tpl = readFileSync(join(root, 'templates', page), 'utf8');
-		assert.match(tpl, /mn-card--table-solo/, `${page} missing mn-card--table-solo`);
+		assert.match(tpl, /mn-list-section/, `${page} missing mn-list-section`);
 		assert.doesNotMatch(tpl, /mn-card__header/, `${page} still has soft-band mn-card__header`);
 		assert.doesNotMatch(tpl, /mn-card__lead/, `${page} still has lead glued above table`);
 	}
 
 	for (const page of ['catalogs.php', 'customer-detail.php', 'equipment-detail.php', 'kpi.php']) {
 		const tpl = readFileSync(join(root, 'templates', page), 'utf8');
-		assert.match(tpl, /mn-card--table-solo/, `${page} missing mn-card--table-solo`);
+		assert.match(tpl, /mn-list-section/, `${page} missing mn-list-section`);
 		assert.match(tpl, /mn-table-toolbar/, `${page} missing mn-table-toolbar`);
 		assert.doesNotMatch(tpl, /mn-card__header/, `${page} still uses soft-band header`);
 		assert.doesNotMatch(tpl, /mn-card__lead/, `${page} still has lead glued above table`);
@@ -142,7 +142,7 @@ test('Bachus: Day tours empty CTA + date nav outside list + tech buckets', () =>
 	assert.doesNotMatch(emptyCss, /\.mn-empty[\s\S]{0,120}dashed/);
 	const tours = readFileSync(join(root, 'templates/tours.php'), 'utf8');
 	assert.match(tours, /tours_quickstart_v3/);
-	assert.match(tours, /mn-card--table-solo/);
+	assert.match(tours, /mn-list-section/);
 	assert.match(tours, /id="mn-tours-toolbar"/);
 	assert.match(tours, /mn-board mn-listing/);
 	const ctrl = readFileSync(join(root, 'lib/Controller/PageController.php'), 'utf8');
@@ -152,7 +152,7 @@ test('Bachus: Day tours empty CTA + date nav outside list + tech buckets', () =>
 test('Bachus: Dispatch flat chips + day buckets + Assign CTA, no nested day cards', () => {
 	const tpl = readFileSync(join(root, 'templates/dispatch.php'), 'utf8');
 	assert.match(tpl, /mn-dispatch-toolbar/);
-	assert.match(tpl, /mn-card--table-solo/);
+	assert.match(tpl, /mn-list-section/);
 	assert.match(tpl, /dispatch_quickstart_v2/);
 	assert.match(tpl, /data-mn-dispatch-filter="unassigned"/);
 	assert.match(tpl, /data-mn-dispatch-filter="all"/);
@@ -184,7 +184,7 @@ test('Bachus: Dispatch flat chips + day buckets + Assign CTA, no nested day card
 test('Bachus: Exceptions flat chips + filter-aware empty CTA, no soft-band lead', () => {
 	const tpl = readFileSync(join(root, 'templates/exceptions.php'), 'utf8');
 	assert.match(tpl, /mn-exceptions-toolbar/);
-	assert.match(tpl, /mn-card--table-solo/);
+	assert.match(tpl, /mn-list-section/);
 	assert.match(tpl, /exceptions_quickstart_v2/);
 	assert.match(tpl, /aria-pressed/);
 	assert.doesNotMatch(tpl, /mn-card__header/);

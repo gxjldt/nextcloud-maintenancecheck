@@ -101,12 +101,12 @@ final class SettingsUnderpagesContractTest extends TestCase
 	public function testNavigationNestsSettingsWithoutOverviewOrAdminWrapper(): void
 	{
 		$nav = (string)file_get_contents($this->root . '/templates/common/navigation.php');
-		$this->assertStringContainsString('id="mn-settings-subnav"', $nav);
+		$this->assertStringContainsString('app-navigation-settings', $nav);
 		$this->assertStringContainsString("t('Settings')", $nav);
 		$this->assertStringNotContainsString("t('Overview')", $nav);
 		$this->assertStringNotContainsString('Go to settings overview', $nav);
 		$this->assertStringContainsString('settingsSections', $nav);
-		$this->assertStringContainsString('Open settings', $nav);
+		$this->assertStringContainsString("Access and license", $nav);
 		$this->assertStringNotContainsString('mn-admin-subnav', $nav);
 	}
 

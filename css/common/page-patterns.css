@@ -64,113 +64,46 @@
 	display: none;
 }
 
-/* ── Filter panel (manager + compliance lists) ──────────────── */
-/* NC cards have no accent bar; keep an outline like native surfaces. */
-#app-content.mn-app .mn-filter-panel {
-	border: 1px solid var(--mn-border, var(--color-border));
-}
-
-#app-content.mn-app .mn-filter-panel__head {
-	margin-bottom: var(--mn-space-4);
-}
-
-#app-content.mn-app .mn-filter-panel__head h2 {
-	margin: 0 0 var(--mn-space-2);
-	font-size: var(--mn-fs-lg);
-	font-weight: 600;
-	line-height: var(--mn-line-tight);
-}
-
-#app-content.mn-app .mn-filter-panel__intro {
-	margin: 0;
-	max-width: 65ch;
-	font-size: var(--mn-fs-sm);
-	line-height: var(--mn-line-base);
-	color: var(--mn-muted);
-}
-
-#app-content.mn-app .mn-filter-panel__form {
+/* ── Toolbar (list pages) ───────────────────────────────────────
+   Nextcloud keeps list controls as a plain row above the list (see the
+   Files toolbar): no panel card, no border, no heading. Fields stay in
+   normal flow, actions sit at the row end, and the whole row wraps instead
+   of turning into a grid of named tracks. */
+#app-content.mn-app .mn-toolbar {
 	display: flex;
-	flex-direction: column;
-	align-items: stretch; /* never flex-end — that right-aligns the grid (legacy mn-filterbar clash) */
-	gap: var(--mn-space-3);
+	flex-wrap: wrap;
+	align-items: flex-end;
+	gap: var(--mn-space-2) var(--mn-space-4);
 	width: 100%;
-}
-
-/* Kill legacy .mn-filterbar chrome when the form is a filter-panel form. */
-#app-content.mn-app .mn-filter-panel__form.mn-filterbar,
-#content.app-maintenancecheck #app-content .mn-filter-panel__form.mn-filterbar {
-	display: flex;
-	flex-direction: column;
-	align-items: stretch;
-	justify-content: flex-start;
-	flex-wrap: nowrap;
+	margin: 0 0 var(--mn-space-4);
 	padding: 0;
-	margin: 0;
-	background: transparent;
-	border-radius: 0;
-	width: 100%;
+	border: 0;
+	background: none;
+	box-shadow: none;
 }
 
-#app-content.mn-app .mn-filter-grid {
-	display: grid;
-	grid-template-columns:
-		minmax(0, 1.15fr)
-		minmax(0, 1.6fr)
-		minmax(0, 1fr)
-		auto;
-	grid-template-rows: auto minmax(44px, auto);
-	column-gap: var(--mn-space-5);
-	row-gap: var(--mn-space-2);
-	align-items: stretch;
-	justify-items: stretch;
-	width: 100%;
-}
-
-/* Single search field — never stretch into an empty 4-column grid. */
-#app-content.mn-app .mn-filter-grid--search {
-	grid-template-columns: minmax(0, 36rem);
-	max-width: 36rem;
-}
-
-#app-content.mn-app .mn-filter-grid--extended {
-	/* 4 fields + actions (never leave an empty track — that blew out visits/WO layout). */
-	grid-template-columns:
-		minmax(0, 1fr)
-		minmax(0, 1.35fr)
-		minmax(0, 0.9fr)
-		auto;
-}
-
-#app-content.mn-app .mn-filter-grid--visits {
-	grid-template-columns:
-		minmax(0, 1.55fr)
-		minmax(12rem, 1.1fr)
-		minmax(0, auto)
-		auto;
-}
-
-#app-content.mn-app .mn-filter-grid--record {
-	grid-template-columns:
-		minmax(0, 1.2fr)
-		minmax(0, 1fr)
-		minmax(0, 1fr)
-		minmax(0, 1fr)
-		auto;
+#app-content.mn-app .mn-toolbar__fields {
+	display: flex;
+	flex: 1 1 auto;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	gap: var(--mn-space-2) var(--mn-space-4);
+	min-width: 0;
 }
 
 #app-content.mn-app .mn-filter-field {
-	display: grid;
-	grid-template-rows: subgrid;
-	grid-row: span 2;
-	gap: var(--mn-space-2);
+	display: flex;
+	flex: 0 1 16rem;
+	flex-direction: column;
+	gap: var(--mn-space-1);
 	min-width: 0;
+	max-width: 32rem;
 }
 
 #app-content.mn-app .mn-filter-field__label {
 	font-size: var(--mn-fs-sm);
-	font-weight: 600;
-	color: var(--mn-text);
+	font-weight: 400;
+	color: var(--mn-muted);
 	line-height: var(--mn-line-tight, 1.2);
 	margin: 0;
 }
@@ -184,13 +117,9 @@
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-end;
-	min-height: 44px;
+	min-height: var(--mn-clickable-area);
 	min-width: 0;
 	gap: var(--mn-space-1);
-}
-
-#app-content.mn-app .mn-filter-field--dates .mn-filter-field__control {
-	min-height: 44px;
 }
 
 #app-content.mn-app .mn-filter-field__hint {
@@ -208,26 +137,25 @@
 }
 
 #app-content.mn-app .mn-filter-status-chips .mn-chip {
-	min-height: 44px;
-	min-width: 44px;
-	padding: 0.55rem 1rem;
+	min-height: var(--mn-clickable-area);
+	padding: 0 var(--mn-space-3);
 	font-size: var(--mn-fs-sm, 0.875rem);
-	font-weight: 600;
-	border-radius: var(--mn-radius-md, 12px);
-	border: 1px solid var(--color-border, #ccc);
+	font-weight: 400;
+	border-radius: var(--border-radius-element, 8px);
+	border: 1px solid var(--color-border-maxcontrast, #949494);
 	background: var(--color-main-background, #fff);
-	color: var(--mn-text, var(--color-main-text));
+	color: var(--color-main-text);
 	cursor: pointer;
 }
 
 #app-content.mn-app .mn-filter-status-chips .mn-chip.is-active {
 	border-color: var(--color-primary-element, #0073ad);
-	background: var(--color-primary-element-light, #e6f3f9);
-	color: var(--color-primary-element-light-text, var(--color-main-text));
+	background: color-mix(in srgb, var(--color-primary-element) 16%, transparent);
+	color: var(--color-main-text);
 }
 
 #app-content.mn-app .mn-filter-status-chips .mn-chip:focus-visible {
-	outline: 3px solid var(--color-primary-element, #0073ad);
+	outline: 2px solid var(--color-main-text);
 	outline-offset: 2px;
 }
 
@@ -261,13 +189,13 @@
 
 #app-content.mn-app .mn-date-range__sublabel {
 	font-size: var(--mn-fs-xs);
-	font-weight: 500;
+	font-weight: 400;
 	color: var(--mn-muted);
 }
 
 #app-content.mn-app .mn-date-range__sep {
 	align-self: flex-end;
-	padding-bottom: 0.65rem;
+	padding-bottom: 0.4rem;
 	color: var(--mn-muted);
 	font-size: var(--mn-fs-sm);
 	flex: 0 0 auto;
@@ -280,12 +208,10 @@
 
 #app-content.mn-app .mn-filter-actions {
 	display: flex;
-	flex-wrap: nowrap;
-	align-items: flex-end;
-	justify-content: flex-start; /* actions follow fields LTR — never hug the far right of a skinny auto column alone */
+	flex-wrap: wrap;
+	align-items: center;
 	gap: var(--mn-space-2);
-	grid-row: span 2;
-	align-self: end;
+	margin-inline-start: auto;
 }
 
 #app-content.mn-app .mn-filter-actions .mn-btn[disabled],
@@ -300,27 +226,16 @@
 	outline-color: var(--mn-danger-border, var(--color-element-error, #c90000));
 }
 
-@media (max-width: 1200px) {
-	#app-content.mn-app .mn-filter-grid--extended,
-	#app-content.mn-app .mn-filter-grid--visits,
-	#app-content.mn-app .mn-filter-grid--record {
-		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-	}
-}
-
 @media (max-width: 768.98px) {
-	#app-content.mn-app .mn-filter-grid,
-	#app-content.mn-app .mn-filter-grid--extended,
-	#app-content.mn-app .mn-filter-grid--visits,
-	#app-content.mn-app .mn-filter-grid--record {
-		grid-template-columns: 1fr;
-		grid-template-rows: auto;
+	#app-content.mn-app .mn-toolbar,
+	#app-content.mn-app .mn-toolbar__fields {
+		flex-direction: column;
+		align-items: stretch;
 	}
 
 	#app-content.mn-app .mn-filter-field {
-		grid-row: auto;
-		display: flex;
-		flex-direction: column;
+		flex: 1 1 auto;
+		max-width: none;
 	}
 
 	#app-content.mn-app .mn-filter-field__label--spacer {
@@ -332,10 +247,9 @@
 	}
 
 	#app-content.mn-app .mn-filter-actions {
-		grid-row: auto;
+		margin-inline-start: 0;
 		width: 100%;
 		justify-content: stretch;
-		flex-wrap: wrap;
 	}
 
 	#app-content.mn-app .mn-filter-actions .mn-btn,
@@ -344,6 +258,16 @@
 	}
 }
 
+/* Flat list section: the table sits on the page surface like a NC list,
+   not inside a raised card. */
+#app-content.mn-app .mn-list-section {
+	display: block;
+	padding: 0;
+	margin: 0;
+	border: 0;
+	background: none;
+	box-shadow: none;
+}
 /* ── Empty / loading states ─────────────────────────────────── */
 #app-content.mn-app .mn-empty-state {
 	display: flex;
@@ -423,8 +347,6 @@
 #maintenancecheck-personal-settings .mn-btn + .mn-btn {
 	margin-inline-start: var(--mn-space-2, 0.5rem);
 }
-
-/* Filter panel cards use mn-card header/body padding (app.css); accent bar only on .mn-filter-panel */
 
 /* ── Data tables (single convention app-wide) ─────────────────
    Markup: .table-container > .table.table--hover

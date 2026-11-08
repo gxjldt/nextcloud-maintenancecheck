@@ -131,20 +131,22 @@ final class DesignSystemTokensContractTest extends TestCase
 	public function testPageHeaderGeometryOwnedByShellChrome(): void
 	{
 		$chrome = (string)file_get_contents($this->root . '/css/common/shell-chrome.css');
+		// Nextcloud page header: one wrapping row (title + actions), with the
+		// hint and session meta on their own lines. No icon well, no scope strip.
 		$this->assertMatchesRegularExpression(
-			'/\.mn-page-header\s*\{[^}]*flex-direction:\s*column/s',
+			'/\.mn-page-header\s*\{[^}]*display:\s*flex/s',
 			$chrome
 		);
 		$this->assertMatchesRegularExpression(
-			'/\.mn-page-header__main\s*\{[^}]*grid-template-columns:\s*56px minmax\(0,\s*1fr\) auto/s',
+			'/\.mn-page-header\s*\{[^}]*align-items:\s*center/s',
 			$chrome
 		);
-		$app = (string)file_get_contents($this->root . '/css/app.css');
-		// Later app.css must not undo the column stack with space-between flex wrap
-		$this->assertDoesNotMatchRegularExpression(
-			'/\.mn-page-header\s*\{[^}]*justify-content:\s*space-between/s',
-			$app
+		$this->assertMatchesRegularExpression(
+			'/#app-content\.mn-app \.mn-page-header h1\s*\{[^}]*font-size:\s*20px/s',
+			$chrome
 		);
+		$this->assertStringNotContainsString('mn-page-header__icon', $chrome);
+		$this->assertStringNotContainsString('mn-scope-strip', $chrome);
 	}
 
 	public function testSmallButtonsMeetTouchTarget(): void
@@ -170,9 +172,9 @@ final class DesignSystemTokensContractTest extends TestCase
 		);
 		$app = (string)file_get_contents($this->root . '/css/app.css');
 		$this->assertMatchesRegularExpression(
-			'/\.mn-card\.mn-card--table-solo\s+\.mn-table-wrap[\s\S]*?border:\s*none/s',
+			'/\.mn-list-section\s+\.mn-table-wrap[\s\S]*?border:\s*none/s',
 			$app,
-			'principle 14: table-solo must strip wrap border (single frame)'
+			'list sections must strip the wrap border (one surface, not a frame)'
 		);
 	}
 

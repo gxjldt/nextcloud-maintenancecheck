@@ -47,7 +47,7 @@ require __DIR__ . '/parts/page-quickstart.php';
 
 	<section
 		id="mn-catalog-panel-equip"
-		class="mn-card mn-card--table-solo mn-catalog-panel"
+		class="mn-list-section mn-catalog-panel"
 		role="tabpanel"
 		aria-labelledby="mn-equip-types-title"
 		data-mn-catalog-panel="equip"
@@ -63,7 +63,7 @@ require __DIR__ . '/parts/page-quickstart.php';
 
 	<section
 		id="mn-catalog-panel-maint"
-		class="mn-card mn-card--table-solo mn-catalog-panel"
+		class="mn-list-section mn-catalog-panel"
 		role="tabpanel"
 		aria-labelledby="mn-maint-types-title"
 		data-mn-catalog-panel="maint"
@@ -80,7 +80,7 @@ require __DIR__ . '/parts/page-quickstart.php';
 
 	<section
 		id="mn-catalog-panel-procedures"
-		class="mn-card mn-card--table-solo mn-catalog-panel"
+		class="mn-list-section mn-catalog-panel"
 		role="tabpanel"
 		aria-labelledby="mn-procedures-title"
 		data-mn-catalog-panel="procedures"
@@ -97,7 +97,7 @@ require __DIR__ . '/parts/page-quickstart.php';
 
 	<section
 		id="mn-catalog-panel-skills"
-		class="mn-card mn-card--table-solo mn-catalog-panel"
+		class="mn-list-section mn-catalog-panel"
 		role="tabpanel"
 		aria-labelledby="mn-skills-title"
 		data-mn-catalog-panel="skills"
@@ -114,7 +114,7 @@ require __DIR__ . '/parts/page-quickstart.php';
 
 	<section
 		id="mn-catalog-panel-kits"
-		class="mn-card mn-card--table-solo mn-catalog-panel"
+		class="mn-list-section mn-catalog-panel"
 		role="tabpanel"
 		aria-labelledby="mn-kit-templates-title"
 		data-mn-catalog-panel="kits"

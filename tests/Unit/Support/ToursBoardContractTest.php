@@ -23,12 +23,12 @@ final class ToursBoardContractTest extends TestCase
 	{
 		$tpl = (string)file_get_contents($this->root . '/templates/tours.php');
 		$this->assertStringContainsString('id="mn-tours-toolbar"', $tpl);
-		$this->assertStringContainsString('mn-card--table-solo', $tpl);
+		$this->assertStringContainsString('mn-list-section', $tpl);
 		$this->assertStringContainsString('tours_quickstart_v3', $tpl);
 		$this->assertStringContainsString('mn-board mn-listing', $tpl);
 		$this->assertStringNotContainsString('mn-card__header', $tpl);
 		$posToolbar = strpos($tpl, 'id="mn-tours-toolbar"');
-		$posCard = strpos($tpl, 'mn-card--table-solo');
+		$posCard = strpos($tpl, 'mn-list-section');
 		$this->assertNotFalse($posToolbar);
 		$this->assertNotFalse($posCard);
 		$this->assertLessThan($posCard, $posToolbar, 'Toolbar must precede the list card');

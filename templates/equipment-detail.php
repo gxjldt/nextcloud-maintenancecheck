@@ -35,7 +35,7 @@ $qsSteps = [
 require __DIR__ . '/parts/page-quickstart.php';
 ?>
 <div id="mn-equipment-detail" class="mn-detail" aria-busy="true"></div>
-<section class="mn-card mn-card--table-solo" aria-labelledby="mn-meters-section-title">
+<section class="mn-list-section" aria-labelledby="mn-meters-section-title">
 	<div class="mn-table-toolbar">
 		<h2 id="mn-meters-section-title" class="mn-table-toolbar__title"><?php p($l->t('Meters')); ?></h2>
 		<div id="mn-meters-section-actions" class="mn-table-toolbar__actions"></div>
@@ -45,7 +45,7 @@ require __DIR__ . '/parts/page-quickstart.php';
 	</div>
 </section>
 
-<section class="mn-card mn-card--table-solo" aria-labelledby="mn-obligations-section-title">
+<section class="mn-list-section" aria-labelledby="mn-obligations-section-title">
 	<div class="mn-table-toolbar">
 		<h2 id="mn-obligations-section-title" class="mn-table-toolbar__title"><?php p($l->t('Inspection obligations')); ?></h2>
 		<div id="mn-obligations-section-actions" class="mn-table-toolbar__actions"></div>
@@ -54,7 +54,7 @@ require __DIR__ . '/parts/page-quickstart.php';
 		<div id="mn-equipment-obligations" class="mn-listing" aria-busy="true"></div>
 	</div>
 </section>
-<section class="mn-card mn-card--table-solo" aria-labelledby="mn-plans-section-title">
+<section class="mn-list-section" aria-labelledby="mn-plans-section-title">
 	<div class="mn-table-toolbar">
 		<h2 id="mn-plans-section-title" class="mn-table-toolbar__title"><?php p($l->t('Maintenance plans')); ?></h2>
 		<div id="mn-plans-section-actions" class="mn-table-toolbar__actions"></div>
@@ -63,7 +63,7 @@ require __DIR__ . '/parts/page-quickstart.php';
 		<div id="mn-equipment-plans" class="mn-listing" aria-busy="true"></div>
 	</div>
 </section>
-<section class="mn-card mn-card--table-solo" aria-labelledby="mn-history-section-title">
+<section class="mn-list-section" aria-labelledby="mn-history-section-title">
 	<div class="mn-table-toolbar">
 		<h2 id="mn-history-section-title" class="mn-table-toolbar__title"><?php p($l->t('Visit history')); ?></h2>
 	</div>

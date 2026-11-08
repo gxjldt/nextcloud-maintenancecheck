@@ -129,7 +129,7 @@ test('touch targets are at least 44px on mobile and desktop viewports', async ({
 	}
 })
 
-test('shell header uses design-system column grid (not legacy flex wrap)', async ({ page }) => {
+test('page header is one flat row: title, actions, then hint', async ({ page }) => {
 	const creds = primaryCreds()
 	test.skip(!creds, 'Requires NC_E2E_* / NC_ADMIN_*')
 
@@ -139,22 +139,27 @@ test('shell header uses design-system column grid (not legacy flex wrap)', async
 
 	const layout = await page.evaluate(() => {
 		const header = document.querySelector('.mn-page-header')
-		const main = document.querySelector('.mn-page-header__main')
-		if (!header || !main) {
+		const title = document.getElementById('mn-page-title')
+		if (!header || !title) {
 			return null
 		}
 		const hs = getComputedStyle(header)
-		const ms = getComputedStyle(main)
+		const ts = getComputedStyle(title)
 		return {
-			headerDisplay: hs.display,
 			headerDirection: hs.flexDirection,
-			mainDisplay: ms.display,
-			mainColumns: ms.gridTemplateColumns,
+			headerAlign: hs.alignItems,
+			hasIconWell: !!document.querySelector('.mn-page-header__icon'),
+			hasScopeStrip: !!document.querySelector('.mn-scope-strip'),
+			titleSize: Number.parseFloat(ts.fontSize),
 		}
 	})
 	expect(layout, 'page header must exist').not.toBeNull()
-	expect(layout.headerDirection).toBe('column')
-	expect(layout.mainDisplay).toBe('grid')
+	expect(layout.headerDirection).toBe('row')
+	expect(layout.headerAlign).toBe('center')
+	expect(layout.hasIconWell).toBe(false)
+	expect(layout.hasScopeStrip).toBe(false)
+	// Nextcloud page headings are ~20px bold, not a 30px dashboard hero.
+	expect(layout.titleSize).toBeLessThanOrEqual(22)
 })
 
 test('toast region sits below the Nextcloud header via overlay token', async ({ page }) => {

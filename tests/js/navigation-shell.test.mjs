@@ -28,11 +28,12 @@ test('MN dialogs use modal-backdrop and inert unlock', () => {
 	assert.match(src, /removeAttribute\('inert'\)/);
 });
 
-test('MN list pages use AZ filter-panel cards (visits + due use flat Bachus toolbars)', () => {
+test('MN list pages use a flat Nextcloud toolbar above the list', () => {
 	for (const page of ['customers.php', 'equipment.php', 'work-orders.php']) {
 		const tpl = readFileSync(join(root, 'templates', page), 'utf8');
-		assert.match(tpl, /mn-filter-panel/, `${page} missing mn-filter-panel`);
-		assert.doesNotMatch(tpl, /class="mn-toolbar"/, `${page} still uses bare mn-toolbar`);
+		assert.match(tpl, /class="mn-toolbar"/, `${page} missing flat mn-toolbar`);
+		assert.doesNotMatch(tpl, /mn-filter-panel/, `${page} still wraps filters in a panel card`);
+		assert.match(tpl, /mn-list-section/, `${page} list not in a flat list section`);
 	}
 	const visits = readFileSync(join(root, 'templates/visits.php'), 'utf8');
 	assert.match(visits, /mn-visits-toolbar/);

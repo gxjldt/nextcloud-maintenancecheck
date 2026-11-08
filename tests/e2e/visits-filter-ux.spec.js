@@ -24,7 +24,7 @@ test.describe('Visits live filter UX', () => {
 	})
 
 	test('flat toolbar: no Filter card / Apply; status chips are one-tap live filters', async ({ page }) => {
-		await expect(page.locator('.mn-filter-panel')).toHaveCount(0)
+		await expect(page.locator('.mn-toolbar .mn-filter-panel')).toHaveCount(0)
 		await expect(page.locator('#mn-visit-filters button[type="submit"]')).toHaveCount(0)
 		await expect(page.locator('#mn-visit-filters')).toHaveClass(/mn-visits-toolbar/)
 

@@ -45,19 +45,27 @@ final class AzcShellParityContractTest extends TestCase
 		$this->assertStringContainsString("t('License & mobile')", $nav);
 	}
 
-	public function testPageChromeHasBreadcrumbIconScopeStrip(): void
+	public function testPageChromeIsPlainNextcloudHeader(): void
 	{
 		$start = (string)file_get_contents($this->root . '/templates/common/page-start.php');
-		foreach (['mn-breadcrumb', 'mn-page-header__icon', 'mn-scope-strip', 'mn-live-region', 'mn-alert-region'] as $token) {
+		foreach (['mn-breadcrumb', 'mn-page-header', 'mn-page-title', 'mn-page-actions', 'mn-live-region', 'mn-alert-region'] as $token) {
 			$this->assertStringContainsString($token, $start, $token);
 		}
+		// Nextcloud page headings are a plain h1 plus its actions: no icon well,
+		// no context strip, no second navigation control in the page body.
+		$this->assertStringNotContainsString('mn-page-header__icon', $start);
+		$this->assertStringNotContainsString('mn-scope-strip', $start);
+		$this->assertStringNotContainsString('mn-nav-toggle', $start);
 	}
 
 	public function testAppLayoutUsesAzcFlexShell(): void
 	{
 		$layout = (string)file_get_contents($this->root . '/css/common/app-layout.css');
 		$this->assertStringContainsString('#content.app-maintenancecheck', $layout);
-		$this->assertMatchesRegularExpression('/flex:\s*0 0 280px/', $layout);
+		// Nextcloud core owns the navigation width (300px); the shell only stretches it.
+		$this->assertMatchesRegularExpression('/flex:\s*0 0 auto/', $layout);
+		$this->assertStringNotContainsString('flex: 0 0 280px', $layout);
+		$this->assertStringNotContainsString('flex: 0 0 240px', $layout);
 	}
 
 	public function testNoPillRadiiRemainInAppCss(): void
@@ -74,7 +82,7 @@ final class AzcShellParityContractTest extends TestCase
 		$this->assertStringContainsString('mn-visits-toolbar', $tpl);
 		$this->assertStringContainsString('mn-filter-status-chips', $tpl);
 		$this->assertStringContainsString('mn-filter-when-chips', $tpl);
-		$this->assertStringContainsString('mn-card--table-solo', $tpl);
+		$this->assertStringContainsString('mn-list-section', $tpl);
 		$this->assertStringContainsString('mn-sr-only', $tpl);
 		$this->assertStringNotContainsString('mn-filter-panel', $tpl);
 		$this->assertStringNotContainsString('mn-card__header', $tpl);
@@ -82,7 +90,7 @@ final class AzcShellParityContractTest extends TestCase
 		$this->assertStringNotContainsString('Apply filters', $tpl);
 	}
 
-	public function testListAndBoardTablesAreTableSolo(): void
+	public function testListAndBoardTablesSitInFlatListSections(): void
 	{
 		foreach ([
 			'templates/customers.php',
@@ -97,7 +105,8 @@ final class AzcShellParityContractTest extends TestCase
 			'templates/equipment-detail.php',
 		] as $rel) {
 			$tpl = (string)file_get_contents($this->root . '/' . $rel);
-			$this->assertStringContainsString('mn-card--table-solo', $tpl, $rel);
+			$this->assertStringContainsString('mn-list-section', $tpl, $rel);
+			$this->assertStringNotContainsString('mn-card--table-solo', $tpl, $rel);
 			$this->assertStringNotContainsString('mn-card__header', $tpl, $rel);
 			$this->assertStringNotContainsString('mn-card__lead', $tpl, $rel);
 		}
@@ -107,21 +116,16 @@ final class AzcShellParityContractTest extends TestCase
 	}
 
 	/**
-	 * Headed table cards keep CustomerCheck inset; table-solo is a single frame
-	 * (no box-in-a-box — DESIGN-SYSTEM principle 14 / §3.3 / §3.7).
+	 * Remaining cards keep one padding layer: a header band, then a body that
+	 * pads itself — never a frame inside a frame.
 	 */
-	public function testStructuredCardsMatchFilterPanelChromeSpecificity(): void
+	public function testStructuredCardsKeepSinglePaddingLayer(): void
 	{
 		$chrome = (string)file_get_contents($this->root . '/css/common/shell-chrome.css');
 		$this->assertMatchesRegularExpression(
 			'/#content\.app-maintenancecheck\s+#app-content\s+\.mn-card:has\(\.mn-card__header\)[\s\S]*?padding:\s*0/s',
 			$chrome,
-			'Structured list cards need padding:0 at #content specificity (Filter parity)'
-		);
-		$this->assertMatchesRegularExpression(
-			'/#content\.app-maintenancecheck\s+#app-content\s+\.mn-card__header\s*\{[^}]*background:\s*var\(--mn-bg-soft/s',
-			$chrome,
-			'List card headers must share Filter soft-band chrome'
+			'Structured cards must not double-pad (header band + body inset only)'
 		);
 		$this->assertMatchesRegularExpression(
 			'/#content\.app-maintenancecheck\s+#app-content\s+\.mn-card__body--table\s*\{[^}]*padding:\s*var\(--mn-space-5/s',
@@ -130,50 +134,44 @@ final class AzcShellParityContractTest extends TestCase
 		);
 	}
 
-	public function testTableSoloIsSingleFrameNotBoxInBox(): void
+	public function testListSectionIsFlatNotATableFrame(): void
 	{
 		$app = (string)file_get_contents($this->root . '/css/app.css');
 		$this->assertMatchesRegularExpression(
-			'/\.mn-card\.mn-card--table-solo\s*>\s*\.mn-card__body--table[\s\S]*?padding:\s*0/s',
+			'/\.mn-list-section\s*>\s*\.mn-card__body--table[\s\S]*?padding:\s*0/s',
 			$app,
-			'table-solo body must be flush (card is the frame)'
+			'list sections must be flush (the table itself is the surface)'
 		);
 		$this->assertMatchesRegularExpression(
-			'/\.mn-card\.mn-card--table-solo\s+\.mn-table-wrap[\s\S]*?border:\s*none/s',
+			'/\.mn-list-section\s+\.mn-table-wrap[\s\S]*?border:\s*none/s',
 			$app,
-			'table-solo must strip wrap border to avoid box-in-a-box'
+			'list sections must strip the wrap border to avoid box-in-a-box'
 		);
 		$chrome = (string)file_get_contents($this->root . '/css/common/shell-chrome.css');
 		$this->assertMatchesRegularExpression(
-			'/#content\.app-maintenancecheck\s+#app-content\s+\.mn-table-wrap\s*\{[^}]*border:\s*1px/s',
-			$chrome
+			'/#content\.app-maintenancecheck\s+\.mn-table-wrap[\s\S]*?border:\s*0/s',
+			$chrome,
+			'Nextcloud tables sit on the page surface — the wrapper draws no box'
 		);
 	}
 
-	public function testFilterPanelFormsStretchLtrNeverLegacyFilterbar(): void
+	public function testListToolbarsAreFlatRows(): void
 	{
 		$patterns = (string)file_get_contents($this->root . '/css/common/page-patterns.css');
 		$this->assertMatchesRegularExpression(
-			'/\.mn-filter-panel__form\s*\{[^}]*align-items:\s*stretch/s',
+			'/\.mn-toolbar\s*\{[^}]*align-items:\s*flex-end/s',
 			$patterns,
-			'Filter forms must stretch LTR (never flex-end right-shove)'
+			'List toolbars are a flat row (no panel card, no grid tracks)'
 		);
-		$this->assertStringContainsString('mn-filter-panel__form.mn-filterbar', $patterns);
+		$this->assertStringNotContainsString('mn-filter-panel', $patterns);
+		$this->assertStringNotContainsString('mn-filter-grid', $patterns);
 
 		foreach ($this->filterListTemplates() as $rel) {
 			$tpl = (string)file_get_contents($this->root . '/' . $rel);
-			$this->assertStringNotContainsString(
-				'mn-filter-panel__form mn-filterbar',
-				$tpl,
-				$rel . ' must not combine filter-panel form with legacy mn-filterbar'
-			);
-			$this->assertStringContainsString('mn-filter-panel__form', $tpl, $rel);
+			$this->assertStringNotContainsString('mn-filterbar', $tpl, $rel . ' must not use legacy boxed toolbar chrome');
+			$this->assertStringNotContainsString('mn-filter-panel', $tpl, $rel . ' must not wrap filters in a panel card');
+			$this->assertStringContainsString('class="mn-toolbar"', $tpl, $rel);
 		}
-
-		$customers = (string)file_get_contents($this->root . '/templates/customers.php');
-		$equipment = (string)file_get_contents($this->root . '/templates/equipment.php');
-		$this->assertStringContainsString('mn-filter-grid--search', $customers);
-		$this->assertStringContainsString('mn-filter-grid--search', $equipment);
 	}
 
 	/**
@@ -188,20 +186,16 @@ final class AzcShellParityContractTest extends TestCase
 		];
 	}
 
-	public function testAllListFiltersUseFilterPanelHeadChrome(): void
+	public function testListFiltersCarryNoCardChrome(): void
 	{
 		foreach ($this->filterListTemplates() as $rel) {
 			$tpl = (string)file_get_contents($this->root . '/' . $rel);
-			preg_match_all('/<section[^>]*\bmn-filter-panel\b[^>]*>[\s\S]*?<\/section>/', $tpl, $blocks);
-			$this->assertNotEmpty($blocks[0], $rel . ' missing filter panel');
+			preg_match_all('/<form[^>]*\bmn-toolbar\b[^>]*>[\s\S]*?<\/form>/', $tpl, $blocks);
+			$this->assertNotEmpty($blocks[0], $rel . ' missing flat toolbar');
 			foreach ($blocks[0] as $i => $block) {
-				$label = $rel . ' panel#' . $i;
-				$this->assertStringContainsString('mn-filter-panel__head', $block, $label);
-				$this->assertStringContainsString('mn-filter-panel__intro', $block, $label);
-				$this->assertStringContainsString('mn-filter-panel__body', $block, $label);
-				$this->assertStringNotContainsString('mn-card__header', $block, $label);
-				$this->assertStringNotContainsString('mn-card__title', $block, $label);
-				$this->assertStringNotContainsString('mn-card__lead', $block, $label);
+				$label = $rel . ' toolbar#' . $i;
+				$this->assertStringNotContainsString('mn-card', $block, $label);
+				$this->assertStringNotContainsString('mn-filter-panel', $block, $label);
 			}
 		}
 	}
@@ -215,26 +209,25 @@ final class AzcShellParityContractTest extends TestCase
 	}
 
 
-	public function testNavigationActiveIsSolidPrimaryPillLikeAzc(): void
+	public function testNavigationLeavesActiveStateToCore(): void
 	{
 		$css = (string)file_get_contents($this->root . '/css/navigation.css');
-		$this->assertStringContainsString('solid primary pill', $css);
-		$this->assertStringContainsString('color-primary-element-text', $css);
-		$this->assertStringContainsString('background-color: var(--color-primary-element)', $css);
-		// Legacy inset bar (pre-AZ sync) must not define active rows.
-		$this->assertDoesNotMatchRegularExpression(
-			'/li\.active > a[^{]*\{[^}]*inset 4px 0 0/s',
-			$css,
-			'Active nav must be solid primary fill, not inset bar'
-		);
-		$this->assertStringContainsString('nav-item-inset', $css);
+		// Core paints the active row (solid --color-primary-element fill). The app
+		// sheet must not re-declare row metrics, fills or chevrons.
+		$this->assertStringNotContainsString('background-color: var(--color-primary-element)', $css);
+		$this->assertStringNotContainsString('nav-item-inset', $css);
+		$this->assertStringNotContainsString('linear-gradient', $css);
+		$this->assertStringContainsString('nav-entry-icon', $css);
+		$this->assertStringContainsString('nav-entry-name', $css);
 	}
 
-	public function testLayoutCssPinsMidDesktopNavWidthLikeAzc(): void
+	public function testLayoutCssLeavesNavWidthToCore(): void
 	{
 		$layout = (string)file_get_contents($this->root . '/css/common/app-layout.css');
-		$this->assertStringContainsString('max-width: 1280px', $layout);
-		$this->assertMatchesRegularExpression('/flex:\s*0 0 240px/', $layout);
+		// Core pins #app-navigation at 300px; the app must not narrow it per breakpoint.
+		$this->assertStringNotContainsString('flex: 0 0 240px', $layout);
+		$this->assertStringNotContainsString('flex: 0 0 280px', $layout);
+		$this->assertMatchesRegularExpression('/flex:\s*0 0 auto/', $layout);
 	}
 
 	public function testShellHasNoArtificalContentMaxWidth(): void
@@ -267,16 +260,25 @@ final class AzcShellParityContractTest extends TestCase
 		$this->assertStringContainsString('Skip to app navigation', $nav);
 	}
 
-	public function testTableChromeMatchesAzcBaseStyles(): void
+	public function testTableChromeMatchesNextcloudListStyles(): void
 	{
 		$chrome = (string)file_get_contents($this->root . '/css/common/shell-chrome.css');
-		$this->assertStringContainsString('AZ table parity', $chrome);
+		$this->assertStringContainsString('Tables — Nextcloud list chrome', $chrome);
 		$this->assertMatchesRegularExpression(
-			'/th[^{]*\{[^}]*font-weight:\s*600/s',
+			'/th[^{]*\{[^}]*font-weight:\s*bold/s',
 			$chrome
 		);
 		$this->assertMatchesRegularExpression(
 			'/th[^{]*\{[^}]*padding:\s*var\(/s',
+			$chrome
+		);
+		// Hairline separators on the page surface, no wrapper frame.
+		$this->assertMatchesRegularExpression(
+			'/td[^{]*\{[^}]*border-bottom:\s*1px solid var\(--color-border/s',
+			$chrome
+		);
+		$this->assertMatchesRegularExpression(
+			'/\.mn-table-wrap[\s\S]*?border:\s*0/s',
 			$chrome
 		);
 		// Wrap must scroll — never clip overflow for sticky headers / mobile.
@@ -287,11 +289,12 @@ final class AzcShellParityContractTest extends TestCase
 		);
 	}
 
-	public function testListTemplatesUseCardBodyTableChrome(): void
+	public function testListTemplatesUseFlatListSections(): void
 	{
 		foreach (['/templates/customers.php', '/templates/equipment.php', '/templates/visits.php', '/templates/work-orders.php'] as $rel) {
 			$tpl = (string)file_get_contents($this->root . $rel);
-			$this->assertStringContainsString('mn-card__body--table', $tpl, $rel);
+			$this->assertStringContainsString('mn-list-section', $tpl, $rel);
+			$this->assertStringNotContainsString('mn-card--table-solo', $tpl, $rel);
 		}
 	}
 
@@ -333,8 +336,7 @@ final class AzcShellParityContractTest extends TestCase
 	public function testCatalogsUseCardChromeNotBareSections(): void
 	{
 		$tpl = (string)file_get_contents($this->root . '/templates/catalogs.php');
-		$this->assertStringContainsString('mn-card', $tpl);
-		$this->assertStringContainsString('mn-card--table-solo', $tpl);
+		$this->assertStringContainsString('mn-list-section', $tpl);
 		$this->assertStringContainsString('mn-table-toolbar', $tpl);
 		$this->assertStringContainsString('mn-card__body--table', $tpl);
 		$this->assertStringContainsString('mn-catalogs', $tpl);
@@ -352,8 +354,7 @@ final class AzcShellParityContractTest extends TestCase
 	{
 		foreach (['customer-detail.php', 'equipment-detail.php'] as $file) {
 			$tpl = (string)file_get_contents($this->root . '/templates/' . $file);
-			$this->assertStringContainsString('mn-card', $tpl, $file);
-			$this->assertStringContainsString('mn-card--table-solo', $tpl, $file);
+			$this->assertStringContainsString('mn-list-section', $tpl, $file);
 			$this->assertStringNotContainsString('mn-section', $tpl, $file);
 			$this->assertStringNotContainsString('<nav class="mn-breadcrumb"', $tpl, $file . ' must not duplicate shell breadcrumb');
 		}
@@ -447,9 +448,10 @@ final class AzcShellParityContractTest extends TestCase
 	public function testContentSurfacesMatchAzcCardsAndButtons(): void
 	{
 		$chrome = (string)file_get_contents($this->root . '/css/common/shell-chrome.css');
-		$this->assertStringContainsString('AZ content surfaces', $chrome);
+		$this->assertStringContainsString('content surfaces', $chrome);
 		$this->assertStringContainsString('-section', $chrome);
-		$this->assertStringContainsString('-filter-panel', $chrome);
+		// Filter toolbars are flat rows now; no panel surface may come back.
+		$this->assertStringNotContainsString('filter-panel', $chrome);
 		$this->assertMatchesRegularExpression('/border-radius:\s*var\(--[a-z]+-radius-md,\s*12px\)/', $chrome);
 		$app = (string)file_get_contents($this->root . '/css/app.css');
 		$this->assertStringContainsString('AZ-PARITY-RADIUS-ENFORCER', $app);

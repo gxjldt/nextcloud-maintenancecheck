@@ -32,7 +32,7 @@ $qsSteps = [
 ];
 require __DIR__ . '/parts/page-quickstart.php';
 ?>
-<section class="mn-card mn-card--table-solo" aria-labelledby="mn-kpi-title">
+<section class="mn-list-section" aria-labelledby="mn-kpi-title">
 	<div class="mn-table-toolbar">
 		<h2 id="mn-kpi-title" class="mn-table-toolbar__title"><?php p($l->t('Ops KPI')); ?></h2>
 		<div class="mn-table-toolbar__actions mn-kpi-actions">

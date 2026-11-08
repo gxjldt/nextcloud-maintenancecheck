@@ -38,7 +38,7 @@ final class DispatchBoardContractTest extends TestCase
 	{
 		$tpl = (string)file_get_contents($this->root . '/templates/dispatch.php');
 		$this->assertStringContainsString('mn-dispatch-toolbar', $tpl);
-		$this->assertStringContainsString('mn-card--table-solo', $tpl);
+		$this->assertStringContainsString('mn-list-section', $tpl);
 		$this->assertStringContainsString('dispatch_quickstart_v2', $tpl);
 		$this->assertStringNotContainsString('mn-card__header', $tpl);
 		$js = (string)file_get_contents($this->root . '/js/work-order-pages.js');

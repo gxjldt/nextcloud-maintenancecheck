@@ -39,7 +39,7 @@ require __DIR__ . '/parts/page-quickstart.php';
 	role="group"
 	aria-label="<?php p($l->t('Tour date')); ?>"
 ></div>
-<section class="mn-card mn-card--table-solo" aria-labelledby="mn-tours-title">
+<section class="mn-list-section" aria-labelledby="mn-tours-title">
 	<h2 id="mn-tours-title" class="mn-sr-only"><?php p($l->t('Day tours')); ?></h2>
 	<div class="mn-card__body mn-card__body--table">
 		<div id="mn-tours-board" class="mn-board mn-listing" aria-busy="true"></div>

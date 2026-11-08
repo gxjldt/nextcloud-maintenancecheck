@@ -199,8 +199,8 @@ test.describe('Bachus UX journeys', () => {
 
 		await expect(page.locator('#mn-exceptions-title')).toBeAttached()
 		await expect(page.locator('#mn-exceptions-title')).toHaveClass(/mn-sr-only/)
-		await expect(page.locator('.mn-card--table-solo .mn-card__header')).toHaveCount(0)
-		await expect(page.locator('.mn-card--table-solo .mn-card__lead')).toHaveCount(0)
+		await expect(page.locator('.mn-list-section .mn-card__header')).toHaveCount(0)
+		await expect(page.locator('.mn-list-section .mn-card__lead')).toHaveCount(0)
 		await expect(page.locator('#mn-exceptions-board .mn-card__lead')).toHaveCount(0)
 
 		const toolbar = page.locator('#mn-exceptions-toolbar')
@@ -356,7 +356,7 @@ test.describe('Bachus UX journeys', () => {
 		await page.goto('/apps/maintenancecheck/visits')
 		await expect(page.locator('#mn-visit-list')).toBeVisible({ timeout: 30_000 })
 		await expect(page.locator('#mn-visit-list')).not.toHaveAttribute('aria-busy', 'true', { timeout: 30_000 })
-		await expect(page.locator('.mn-card--table-solo .mn-card__header')).toHaveCount(0)
+		await expect(page.locator('.mn-list-section .mn-card__header')).toHaveCount(0)
 		await expect(page.locator('.mn-card__lead')).toHaveCount(0)
 
 		const row = page.locator('#mn-visit-list table.mn-table tbody tr', { hasText: marker }).first()

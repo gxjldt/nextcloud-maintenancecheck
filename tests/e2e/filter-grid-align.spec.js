@@ -4,10 +4,11 @@ import AxeBuilder from '@axe-core/playwright'
 import { login, primaryCreds } from './helpers/auth.js'
 
 /**
- * Bachus: filter grids must start LTR under the panel body — never shoved right
- * by legacy .mn-filterbar { align-items: flex-end } + column flex.
+ * List toolbars are flat rows: the first field starts at the content edge
+ * (never shoved right by legacy boxed chrome) and the row itself carries no
+ * card surface.
  */
-test('Work order filter grid is left-aligned and axe clean', async ({ page }) => {
+test('Work order toolbar is left-aligned and axe clean', async ({ page }) => {
 	const creds = primaryCreds()
 	test.skip(!creds, 'Requires NC_E2E_* or NC_ADMIN_*')
 
@@ -17,33 +18,32 @@ test('Work order filter grid is left-aligned and axe clean', async ({ page }) =>
 
 	const metrics = await page.evaluate(() => {
 		const form = document.getElementById('mn-wo-filters')
-		const body = form?.closest('.mn-filter-panel')?.querySelector('.mn-filter-panel__body')
-		const grid = form?.querySelector('.mn-filter-grid')
-		const first = grid?.children?.[0]
-		if (!form || !body || !grid || !first) {
+		const fields = form?.querySelector('.mn-toolbar__fields')
+		const first = fields?.children?.[0]
+		if (!form || !fields || !first) {
 			return { ok: false, reason: 'missing nodes' }
 		}
 		const formCs = getComputedStyle(form)
-		const bodyR = body.getBoundingClientRect()
+		const formR = form.getBoundingClientRect()
 		const firstR = first.getBoundingClientRect()
-		const bodyPad = Number.parseFloat(getComputedStyle(body).paddingLeft) || 0
-		const expectedLeft = bodyR.left + bodyPad
 		return {
 			ok: true,
 			alignItems: formCs.alignItems,
 			flexDirection: formCs.flexDirection,
 			hasLegacyFilterbar: form.classList.contains('mn-filterbar'),
-			delta: Math.abs(firstR.left - expectedLeft),
+			hasCardChrome: formCs.backgroundColor !== 'rgba(0, 0, 0, 0)' || formCs.borderTopWidth !== '0px',
+			delta: Math.abs(firstR.left - formR.left),
 			firstLeft: firstR.left,
-			expectedLeft,
+			expectedLeft: formR.left,
 		}
 	})
 
 	expect(metrics.ok, metrics.reason || 'nodes').toBeTruthy()
 	expect(metrics.hasLegacyFilterbar, 'form must not carry legacy mn-filterbar').toBe(false)
-	expect(metrics.alignItems).toBe('stretch')
-	expect(metrics.flexDirection).toBe('column')
-	expect(metrics.delta, `grid starts ${metrics.delta}px off body padding edge`).toBeLessThanOrEqual(2)
+	expect(metrics.hasCardChrome, 'toolbar must be a flat row, not a card').toBe(false)
+	expect(metrics.alignItems).toBe('flex-end')
+	expect(metrics.flexDirection).toBe('row')
+	expect(metrics.delta, `toolbar starts ${metrics.delta}px off the content edge`).toBeLessThanOrEqual(2)
 
 	const axe = await new AxeBuilder({ page })
 		.include('#mn-main-content')

@@ -19,7 +19,7 @@ final class WorkOrderUiTemplatesContractTest extends TestCase
 		}
 		$list = (string)file_get_contents($root . '/work-orders.php');
 		$this->assertStringContainsString('mn-wo-list', $list);
-		$this->assertStringContainsString('mn-filter-panel', $list);
+		$this->assertStringContainsString('class="mn-toolbar"', $list);
 		$detail = (string)file_get_contents($root . '/work-order-detail.php');
 		$this->assertStringContainsString('mn-wo-detail', $detail);
 	}

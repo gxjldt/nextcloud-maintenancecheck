@@ -45,7 +45,7 @@ require __DIR__ . '/parts/page-quickstart.php';
 	<button type="button" class="mn-chip" data-mn-exception-filter="kit" aria-pressed="false"><?php p($l->t('Kit incomplete')); ?></button>
 	<button type="button" class="mn-chip" data-mn-exception-filter="skills" aria-pressed="false"><?php p($l->t('Skills missing')); ?></button>
 </div>
-<section class="mn-card mn-card--table-solo" aria-labelledby="mn-exceptions-title">
+<section class="mn-list-section" aria-labelledby="mn-exceptions-title">
 	<h2 id="mn-exceptions-title" class="mn-sr-only"><?php p($l->t('Exceptions')); ?></h2>
 	<div class="mn-card__body mn-card__body--table">
 		<div id="mn-exceptions-board" class="mn-listing" aria-busy="true"></div>

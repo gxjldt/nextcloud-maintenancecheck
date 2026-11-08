@@ -132,7 +132,7 @@ const PROBES = [
 		rows: [
 			{ sel: '.mn-badge--overdue, .mn-badge--error, .mn-badge', kind: 'badge', what: 'text' },
 			{ sel: 'button.mn-btn--primary, a.mn-btn--primary, .mn-btn--primary', kind: 'primary-cta', what: 'text' },
-			{ sel: '.mn-filter-panel select, .mn-filter-panel .mn-select, .mn-filter-panel input', kind: 'control-border', what: 'border' },
+			{ sel: '.mn-toolbar select, .mn-toolbar .mn-select, .mn-toolbar input', kind: 'control-border', what: 'border' },
 		],
 	},
 	{
@@ -140,14 +140,14 @@ const PROBES = [
 		label: 'visits',
 		rows: [
 			{ sel: '.mn-badge, .mn-pill, .mn-status', kind: 'badge', what: 'text' },
-			{ sel: '.mn-filter-panel select, .mn-filter-panel .mn-select, .mn-filter-panel input, #mn-visit-search', kind: 'control-border', what: 'border' },
+			{ sel: '.mn-toolbar select, .mn-toolbar .mn-select, .mn-toolbar input, #mn-visit-search', kind: 'control-border', what: 'border' },
 		],
 	},
 	{
 		page: '/apps/maintenancecheck/customers',
 		label: 'customers',
 		rows: [
-			{ sel: '#mn-customer-search, #mn-customer-filters select, .mn-filter-panel input, .mn-pagination button', kind: 'control-border', what: 'border' },
+			{ sel: '#mn-customer-search, #mn-customer-filters select, .mn-toolbar input, .mn-pagination button', kind: 'control-border', what: 'border' },
 		],
 	},
 ]

@@ -99,7 +99,7 @@ require __DIR__ . '/parts/page-quickstart.php';
 	</div>
 </form>
 
-<section class="mn-card mn-card--table-solo" aria-labelledby="mn-visit-list-title">
+<section class="mn-list-section" aria-labelledby="mn-visit-list-title">
 	<h2 id="mn-visit-list-title" class="mn-sr-only"><?php p($l->t('Visits')); ?></h2>
 	<div class="mn-card__body mn-card__body--table">
 		<div id="mn-visit-list" class="mn-listing" aria-busy="true"></div>
