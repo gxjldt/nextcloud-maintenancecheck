@@ -433,11 +433,15 @@ final class AzcShellParityContractTest extends TestCase
 		$path = $this->root . '/css/common/form-controls.css';
 		$this->assertFileExists($path);
 		$css = (string)file_get_contents($path);
-		$this->assertStringContainsString('min-height: 44px', $css);
+		// Core control metrics: height from the clickable-area token, 2px
+		// maxcontrast border, no custom focus glow.
+		$this->assertStringContainsString('min-height: var(--mn-clickable-area', $css);
+		$this->assertStringContainsString('border: 2px solid var(--mn-form-border)', $css);
+		$this->assertStringContainsString('box-shadow: 0 0 0 2px', $css);
+		$this->assertStringNotContainsString('box-shadow: 0 0 0 3px', $css);
 		$this->assertStringContainsString('accent-color: var(--color-primary-element)', $css);
 		$this->assertStringContainsString('input[type="checkbox"]', $css);
 		$this->assertStringContainsString('select', $css);
-		$this->assertStringContainsString('box-shadow: 0 0 0 3px', $css);
 		$this->assertStringContainsString('[role="combobox"]', $css);
 		// Must stay scoped — never style NC global chrome
 		$this->assertStringContainsString('#content.app-', $css);

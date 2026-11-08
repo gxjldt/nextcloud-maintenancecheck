@@ -447,77 +447,25 @@
 	text-overflow: ellipsis;
 	max-width: min(100%, 40rem);
 }
-/* ── Buttons (mn-btn taxonomy) ──────────────────────────────── */
-.mn-btn,
-.mn-app .btn {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	gap: var(--mn-space-2);
-	min-height: 44px;
-	min-width: 44px;
-	padding: var(--mn-space-2) var(--mn-space-4);
-	border-radius: var(--mn-radius-sm);
-	font-size: var(--mn-fs-md);
-	font-weight: 600;
-	line-height: 1.2;
-	text-decoration: none;
-	cursor: pointer;
-	border: 1px solid transparent;
-	transition: background-color 0.15s ease, border-color 0.15s ease;
-}
-.mn-btn:focus-visible,
-.mn-app .btn:focus-visible {
-	outline: 3px solid var(--color-primary-element, #0082c9);
-	outline-offset: 2px;
-}
-.mn-btn--primary,
-.mn-app .btn--primary {
-	background: var(--color-primary-element, #0082c9);
-	color: var(--color-primary-element-text, #fff);
-	/* Primary page actions: 48×48 preferred (design system §0.4) */
-	min-height: 48px;
-	min-width: 48px;
-}
-.mn-btn--secondary,
-.mn-app .btn--secondary {
-	background: var(--color-background-dark, #f5f5f5);
-	color: var(--mn-text);
-	border-color: var(--mn-form-border);
-}
-.mn-btn--danger,
-.mn-app .btn--danger {
-	background: var(--mn-danger-fill);
-	border-color: var(--mn-danger-fill);
-	color: var(--mn-danger-on-fill);
-	min-height: 48px;
-	min-width: 48px;
-}
-
-/* NC core styles `button.button` with --color-primary-element-light, which outranks
-   single-class variants and turned solid primary CTAs pale. Enforce variant fills at
-   higher specificity for app surfaces and body-portaled dialogs. */
+/* ── Buttons ──────────────────────────────────────────────────
+   Base metrics live in app.css (.mn-btn): core height, radius, weight.
+   These rules only re-assert the variant fills where NC's own
+   `button.button` / `#app-content button` rules would win the cascade. */
 #content.app-maintenancecheck button.mn-btn--primary,
 #content.app-maintenancecheck a.mn-btn--primary,
 .mn-dialog-overlay button.mn-btn--primary,
 .mn-dialog-overlay a.mn-btn--primary {
-	background: var(--color-primary-element, #0082c9);
-	color: var(--color-primary-element-text, #fff);
+	background: var(--color-primary-element);
+	border-color: var(--color-primary-element);
+	color: var(--color-primary-element-text);
 }
 #content.app-maintenancecheck button.mn-btn--primary:hover:not(:disabled),
 #content.app-maintenancecheck a.mn-btn--primary:hover,
 .mn-dialog-overlay button.mn-btn--primary:hover:not(:disabled),
 .mn-dialog-overlay a.mn-btn--primary:hover {
 	background: var(--color-primary-element-hover, var(--color-primary-element));
-	color: var(--color-primary-element-text, #fff);
-}
-#content.app-maintenancecheck button.mn-btn--secondary,
-#content.app-maintenancecheck a.mn-btn--secondary,
-.mn-dialog-overlay button.mn-btn--secondary,
-.mn-dialog-overlay a.mn-btn--secondary {
-	background: var(--color-background-dark, var(--color-background-hover));
-	color: var(--mn-text, var(--color-main-text));
-	border-color: var(--mn-border, var(--mn-form-border));
+	border-color: var(--color-primary-element-hover, var(--color-primary-element));
+	color: var(--color-primary-element-text);
 }
 #content.app-maintenancecheck button.mn-btn--danger,
 #content.app-maintenancecheck a.mn-btn--danger,
@@ -539,6 +487,16 @@
 #content.app-maintenancecheck a.mn-btn--ghost,
 .mn-dialog-overlay button.mn-btn--ghost,
 .mn-dialog-overlay a.mn-btn--ghost {
+	background: transparent;
+	border-color: transparent;
+	color: var(--color-main-text);
+}
+.mn-btn--ghost {
+	background: transparent;
+	border-color: transparent;
+	color: var(--color-main-text);
+}
+.mn-btn--ghost {
 	background: transparent;
 	color: var(--mn-text, var(--color-main-text));
 }

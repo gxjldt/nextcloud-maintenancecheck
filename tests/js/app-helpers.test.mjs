@@ -277,7 +277,9 @@ test('A9 touch targets: chip remove and toast close are ≥44px in CSS', async (
 	assert.match(css, /\.mn-chip__remove\s*\{[^}]*min-height:\s*44px/s);
 	assert.match(css, /\.mn-toast__close\s*\{[^}]*min-width:\s*44px/s);
 	assert.match(css, /\.mn-toast__close\s*\{[^}]*min-height:\s*44px/s);
-	assert.match(css, /\.mn-btn--compact\s*\{[^}]*min-height:\s*44px/s);
+	// Compact buttons follow Nextcloud's dense rows (34px fine pointer) and grow
+	// to the 44px coarse-pointer floor through --mn-clickable-area.
+	assert.match(css, /\.mn-btn\s*\{[^}]*min-height:\s*var\(--mn-clickable-area/s);
 });
 
 test('catalogs page: chip panels, no dead Status column, click-name edit', async () => {

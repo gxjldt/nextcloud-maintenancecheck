@@ -1,26 +1,31 @@
 /**
- * Form controls — ArbeitszeitCheck parity (prefix mn).
- * Scoped to #content.app-maintenancecheck so NC chrome is untouched.
- * Uses Nextcloud --color-* tokens (theme-safe). WCAG 2.1 AA: 44px targets,
- * 3px focus ring, accent-color on checkbox/radio.
+ * Form controls — Nextcloud core metrics (prefix mn).
+ *
+ * Values follow core/css/inputs.css so a control inside this app is
+ * pixel-identical to one in Files or Settings:
+ *   - height var(--default-clickable-area) (34px fine pointer / 44px touch)
+ *   - text fields: border 2px var(--color-border-maxcontrast), padding 0 12px
+ *   - buttons:    padding calc((area - 1lh)/2) 12px, radius --border-radius-element
+ *   - focus:      border --color-main-text + 2px --color-main-background ring
+ * Selector surface is unchanged (JS and templates still address .mn-input /
+ * .form-input etc.), only the metrics are core's.
  */
 #content.app-maintenancecheck {
 	--mn-form-bg: var(--color-main-background);
 	--mn-form-fg: var(--color-main-text);
 	/* Interactive controls need >=3:1 (WCAG 1.4.11): maxcontrast is NC's own
-	   input border. --color-border / --mn-border stay surface-only — this
-	   scope must NOT re-pin the faint token (shadows the tokens.css fix). */
+	   input border. --color-border / --mn-border stay surface-only. */
 	--mn-form-border: var(--color-border-maxcontrast, var(--mn-border-strong, color-mix(in srgb, var(--color-main-text) 24%, transparent)));
-	--mn-form-border-focus: var(--color-primary-element, #0082c9);
-	--mn-form-ring: color-mix(in srgb, var(--color-primary-element, #0082c9) 28%, transparent);
+	--mn-form-border-focus: var(--color-main-text);
+	--mn-form-ring: var(--color-main-background);
 	--mn-form-disabled-bg: var(--color-background-dark, var(--color-background-hover));
 	--mn-form-error: var(--mn-danger-ink, var(--color-element-error, #c90000));
 	--mn-form-error-ring: color-mix(in srgb, var(--mn-danger-fill, var(--color-element-error, #c90000)) 28%, transparent);
 	--mn-form-success: var(--mn-success-ink, var(--color-element-success, #099f05));
-	--mn-form-radius: var(--mn-radius-sm, 6px);
+	--mn-form-radius: var(--border-radius-element, 8px);
 }
 
-/* Text fields, selects, textareas — match AZ .form-input / base input chrome */
+/* Text fields, selects, textareas — core input chrome */
 #content.app-maintenancecheck #app-content input[type="text"]:not(.input-field__input),
 #content.app-maintenancecheck #app-content input[type="search"]:not(.input-field__input),
 #content.app-maintenancecheck #app-content input[type="email"],
@@ -43,58 +48,45 @@
 	display: block;
 	width: 100%;
 	max-width: 100%;
-	min-height: 44px;
-	padding: var(--mn-space-2, 0.5rem) var(--mn-space-3, 0.75rem);
+	min-height: var(--mn-clickable-area, var(--default-clickable-area));
+	padding: 0 var(--mn-space-3);
 	box-sizing: border-box;
 	font-family: inherit;
-	font-size: var(--mn-fs-md, 1rem);
-	line-height: var(--mn-line-base, 1.45);
+	font-size: var(--default-font-size, 1rem);
+	line-height: 1.4;
 	font-weight: 400;
 	color: var(--mn-form-fg);
 	background-color: var(--mn-form-bg);
-	border: 1px solid var(--mn-form-border);
+	border: 2px solid var(--mn-form-border);
 	border-radius: var(--mn-form-radius);
-	transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+	transition: border-color 0.1s ease-in-out;
 }
 
 #content.app-maintenancecheck #app-content textarea,
 #content.app-maintenancecheck #app-content .form-textarea,
 #content.app-maintenancecheck #app-content .mn-textarea {
-	min-height: 100px;
+	min-height: var(--mn-space-7);
+	padding: var(--mn-space-3);
 	resize: vertical;
 	appearance: auto;
 	-webkit-appearance: auto;
 }
 
-/* Native select: AZ chevron + 44px height.
- * Prefer NC --icon-triangle-s-dark (theme-aware). Fallbacks use currentColour-ish
- * greys tuned per theme so the chevron stays visible on dark/HC backgrounds. */
+/* Native select keeps core's triangle glyph and trailing room for it. */
 #content.app-maintenancecheck #app-content select,
 #content.app-maintenancecheck #app-content select.mn-input,
 #content.app-maintenancecheck #app-content .form-select,
 #content.app-maintenancecheck #app-content .mn-select {
-	height: 44px;
-	min-height: 44px;
-	padding: 0.625rem 2.5rem 0.625rem 1rem;
-	line-height: 1.5;
+	height: var(--mn-clickable-area, var(--default-clickable-area));
+	padding: 0 28px 0 var(--mn-space-3);
 	appearance: none;
 	-webkit-appearance: none;
 	-moz-appearance: none;
-	background-color: var(--mn-form-bg);
-	background-image: var(--icon-triangle-s-dark, url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b6b6b' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e"));
-	background-position: right 0.75rem center;
+	background-image: var(--icon-triangle-s-dark, url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23767676' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e"));
+	background-position: right 8px center;
 	background-repeat: no-repeat;
-	background-size: 1.25em 1.25em;
+	background-size: 1rem 1rem;
 	cursor: pointer;
-}
-
-body[data-theme-dark] #content.app-maintenancecheck #app-content select,
-body[data-theme-dark] #content.app-maintenancecheck #app-content .form-select,
-body[data-theme-dark] #content.app-maintenancecheck #app-content .mn-select,
-body[data-theme-dark-highcontrast] #content.app-maintenancecheck #app-content select,
-body[data-theme-dark-highcontrast] #content.app-maintenancecheck #app-content .form-select,
-body[data-theme-dark-highcontrast] #content.app-maintenancecheck #app-content .mn-select {
-	background-image: var(--icon-triangle-s-dark, url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23c0c0c0' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e"));
 }
 
 #content.app-maintenancecheck #app-content select::-ms-expand,
@@ -111,6 +103,7 @@ body[data-theme-dark-highcontrast] #content.app-maintenancecheck #app-content .m
 	outline: none;
 }
 
+/* Core focus: darken the border, no glow. */
 #content.app-maintenancecheck #app-content input:not([type="checkbox"]):not([type="radio"]):focus-visible,
 #content.app-maintenancecheck #app-content textarea:focus-visible,
 #content.app-maintenancecheck #app-content select:focus-visible,
@@ -118,7 +111,7 @@ body[data-theme-dark-highcontrast] #content.app-maintenancecheck #app-content .m
 #content.app-maintenancecheck #app-content .form-select:focus-visible,
 #content.app-maintenancecheck #app-content .form-textarea:focus-visible {
 	border-color: var(--mn-form-border-focus);
-	box-shadow: 0 0 0 3px var(--mn-form-ring);
+	box-shadow: 0 0 0 2px var(--mn-form-ring);
 	outline: none;
 }
 
@@ -129,8 +122,8 @@ body[data-theme-dark-highcontrast] #content.app-maintenancecheck #app-content .m
 #content.app-maintenancecheck #app-content .form-select:disabled {
 	background-color: var(--mn-form-disabled-bg);
 	color: var(--mn-muted, var(--color-text-maxcontrast));
-	cursor: not-allowed;
-	opacity: 0.85;
+	cursor: default;
+	opacity: 0.7;
 }
 
 #content.app-maintenancecheck #app-content input::placeholder,
@@ -140,7 +133,7 @@ body[data-theme-dark-highcontrast] #content.app-maintenancecheck #app-content .m
 	opacity: 1;
 }
 
-/* Error / success states (AZ) */
+/* Error / success states */
 #content.app-maintenancecheck #app-content .form-input--error,
 #content.app-maintenancecheck #app-content input[aria-invalid="true"],
 #content.app-maintenancecheck #app-content select[aria-invalid="true"],
@@ -152,10 +145,11 @@ body[data-theme-dark-highcontrast] #content.app-maintenancecheck #app-content .m
 #content.app-maintenancecheck #app-content select[aria-invalid="true"]:focus-visible,
 #content.app-maintenancecheck #app-content textarea[aria-invalid="true"]:focus-visible {
 	border-color: var(--mn-form-error);
-	box-shadow: 0 0 0 3px var(--mn-form-error-ring);
+	box-shadow: 0 0 0 2px var(--mn-form-error-ring);
 }
 
-/* Checkbox / radio — accent + touch-friendly label row */
+/* Checkbox / radio — native controls with the theme accent, row height from
+   the clickable-area token. */
 #content.app-maintenancecheck #app-content .form-checkbox,
 #content.app-maintenancecheck #app-content .form-radio,
 #content.app-maintenancecheck #app-content .mn-checkbox,
@@ -163,8 +157,8 @@ body[data-theme-dark-highcontrast] #content.app-maintenancecheck #app-content .m
 #content.app-maintenancecheck #app-content label:has(> input[type="radio"]) {
 	display: inline-flex;
 	align-items: center;
-	gap: var(--mn-space-2, 0.5rem);
-	min-height: 44px;
+	gap: var(--mn-space-2);
+	min-height: var(--mn-clickable-area, var(--default-clickable-area));
 	cursor: pointer;
 	user-select: none;
 	color: var(--mn-form-fg);
@@ -186,39 +180,19 @@ body[data-theme-dark-highcontrast] #content.app-maintenancecheck #app-content .m
 	flex-shrink: 0;
 	cursor: pointer;
 	accent-color: var(--color-primary-element);
-	background-color: var(--mn-form-bg);
-	border: 1px solid var(--mn-form-border);
-	border-radius: 3px;
 	box-sizing: border-box;
 	color-scheme: inherit;
 	appearance: auto;
 	-webkit-appearance: auto;
 }
 
-#content.app-maintenancecheck #app-content input[type="radio"] {
-	border-radius: 50%;
-}
-
 #content.app-maintenancecheck #app-content input[type="checkbox"]:focus-visible,
 #content.app-maintenancecheck #app-content input[type="radio"]:focus-visible {
-	outline: 3px solid var(--mn-form-border-focus);
+	outline: 2px solid var(--color-main-text);
 	outline-offset: 2px;
 }
 
 /* Do not restyle file / color / range / hidden / button inputs as text fields */
-#content.app-maintenancecheck #app-content input[type="file"],
-#content.app-maintenancecheck #app-content input[type="color"],
-#content.app-maintenancecheck #app-content input[type="range"],
-#content.app-maintenancecheck #app-content input[type="hidden"],
-#content.app-maintenancecheck #app-content input[type="checkbox"],
-#content.app-maintenancecheck #app-content input[type="radio"],
-#content.app-maintenancecheck #app-content input[type="button"],
-#content.app-maintenancecheck #app-content input[type="submit"],
-#content.app-maintenancecheck #app-content input[type="reset"],
-#content.app-maintenancecheck #app-content input[type="image"] {
-	/* checkbox/radio keep size rules above; reset text-field chrome for others */
-}
-
 #content.app-maintenancecheck #app-content input[type="file"],
 #content.app-maintenancecheck #app-content input[type="color"],
 #content.app-maintenancecheck #app-content input[type="range"],
@@ -227,24 +201,22 @@ body[data-theme-dark-highcontrast] #content.app-maintenancecheck #app-content .m
 #content.app-maintenancecheck #app-content input[type="reset"],
 #content.app-maintenancecheck #app-content input[type="image"] {
 	width: auto;
-	min-height: 44px;
-	padding: var(--mn-space-2, 0.5rem) var(--mn-space-3, 0.75rem);
+	min-height: var(--mn-clickable-area, var(--default-clickable-area));
+	padding: 0 var(--mn-space-3);
 	background-image: none;
 	appearance: auto;
 	-webkit-appearance: auto;
 }
 
-/* Filter / form labels — never restyle switch / date-part labels as block field labels */
+/* Field labels — core keeps them plain and muted above the control. */
 #content.app-maintenancecheck #app-content .form-label,
-#content.app-maintenancecheck #app-content .mn-filter-field > label.mn-filter-field__label,
-#content.app-maintenancecheck #app-content .mn-filter-field > .mn-filter-field__label,
 #content.app-maintenancecheck #app-content .mn-field > label,
 #content.app-maintenancecheck #app-content label.form-label {
 	display: block;
 	font-size: var(--mn-fs-sm, 0.875rem);
-	font-weight: 600;
-	color: var(--mn-form-fg);
-	margin-bottom: var(--mn-space-2, 0.5rem);
+	font-weight: 400;
+	color: var(--mn-muted);
+	margin-bottom: var(--mn-space-1);
 }
 #content.app-maintenancecheck #app-content .mn-filter-field .mn-switch,
 #content.app-maintenancecheck #app-content .mn-filter-field label.mn-switch {
@@ -253,18 +225,18 @@ body[data-theme-dark-highcontrast] #content.app-maintenancecheck #app-content .m
 	font-weight: inherit;
 }
 
-/* Combobox-ish NC / custom listboxes */
+/* Combobox-ish custom listboxes */
 #content.app-maintenancecheck #app-content [role="combobox"],
 #content.app-maintenancecheck #app-content [role="listbox"] {
-	min-height: 44px;
+	min-height: var(--mn-clickable-area, var(--default-clickable-area));
 	border-radius: var(--mn-form-radius);
-	border: 1px solid var(--mn-form-border);
+	border: 2px solid var(--mn-form-border);
 	box-sizing: border-box;
 }
 #content.app-maintenancecheck #app-content [role="combobox"]:focus-visible,
 #content.app-maintenancecheck #app-content [role="listbox"]:focus-visible {
 	border-color: var(--mn-form-border-focus);
-	box-shadow: 0 0 0 3px var(--mn-form-ring);
+	box-shadow: 0 0 0 2px var(--mn-form-ring);
 	outline: none;
 }
 
@@ -281,7 +253,7 @@ body[data-theme-dark-highcontrast] #content.app-maintenancecheck #app-content .m
 	#content.app-maintenancecheck #app-content .form-input,
 	#content.app-maintenancecheck #app-content .form-select {
 		max-width: 100%;
-		min-height: 44px;
+		min-height: var(--mn-clickable-area, var(--default-clickable-area));
 	}
 }
 
