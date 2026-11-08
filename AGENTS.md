@@ -40,6 +40,29 @@ Nextcloud 应用加载器按固定路径找文件，`composer.json` 的 PSR-4 �
 3. **删除文件前先确认有引用**。`grep -rn "<文件名>" . --exclude-dir=.git --exclude-dir=vendor`，无命中才删。
 4. **测试脚本改名要同步改**：`phpunit.xml`、`composer.json` 的 `scripts`、`package.json` 的 `scripts`、`playwright.config.js` 的 `testMatch`/`globalSetup`、`.gitignore` 里的输出路径。
 
+## 前端一律用 Nextcloud core 的结构与度量
+
+前端按 Nextcloud 自己的实现走，不要在应用里另建一套设计系统。判断标准：能指到 core 某条规则，就照抄 core；指不到才写本仓 CSS，并在注释里写清「core 没有覆盖到哪一点」。
+
+| 部位 | 用 core 的什么 | 本仓只剩什么 |
+|---|---|---|
+| 侧栏 | `#app-navigation.app-navigation-personal` + `li > a.nav-entry-link`；折叠是 `li.collapsible` + `button.collapse` + `open`；移动抽屉是 `body.snapjs-left` + `#app-navigation-toggle`；底部固定项是 `li.pinned` | 内联 SVG 图标对齐（core 只给 `img` 写样式） |
+| 页面头 | 一个 `h1`（20px 加粗）+ 右侧动作行；提示语是普通灰色小字 | 无：不再有图标井、徽章条 |
+| 列表工具栏 | Files 那样的一行控件，不套卡片 | `.mn-toolbar` 一行 flex + `.mn-filter-field` 字段 |
+| 表格 | 表头 bold 透明底、行间 1px `--color-border`、无斑马纹无外框 | `.mn-list-section` 只做扁平化，不再画框 |
+| 表单/按钮 | `core/css/inputs.css`：高度 `var(--default-clickable-area)`、2px `--color-border-maxcontrast`、按钮 `calc((area - 1lh)/2) 12px`、8px 圆角、bold | 语义类名 `.mn-btn--primary/secondary/danger` 仍在，只复述 core 配色 |
+| Toast | `window.OCP.Toast`（→ `@nextcloud/dialogs`） | 去重（同文案重置计时器）+ 可选动作按钮 |
+| 弹窗 | core 没有兼容的表单弹窗 API，结构自留；**度量照 NcModal/NcDialog**：600/400/900px、`--border-radius-container`、`0 0 40px var(--color-box-shadow)`、标题 21px、动作区 gap 6px | 结构 + 焦点陷阱 |
+
+硬性禁止：
+
+- 不改写 core 已有的行高、圆角、主色选中态、抽屉断点（曾经写过 280/240px 侧栏宽、42px 行高、44px 一刀切按钮，都与 core 打架）
+- 不新增「卡片套卡片」的列表框：列表直接在页面底色上
+- 不在 CSS 里写裸色值（`tests/js/css-theme-guard.test.mjs` 会拦），保留 `var()` 回退
+- 不在应用里重建 core 的能力（toast、confirm 提示、抽屉、折叠）
+
+改完动 CSS 形状的提交要同步断言：`tests/Unit/Support/AzcShellParityContractTest.php`、`DesignSystemTokensContractTest.php`、`tests/js/*.test.mjs`，以及 `tests/e2e/list-card-filter-parity.spec.js`（扁平列表）、`filter-grid-align.spec.js`（工具栏贴左）、`interaction-a11y.spec.js`（页面头、toast）。
+
 ## 提交信息
 
 格式与用词规则取自 workbuddy2api-panel 的 172 条非 Merge 提交统计（feat 65 / fix 62 / chore 17 / ci 9），scope 按本仓目录名取。
