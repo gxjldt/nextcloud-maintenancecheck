@@ -9,12 +9,9 @@ use OCA\MaintenanceCheck\Support\IconCatalog as SupportIconCatalog;
 /**
  * Service-namespace bridge to the canonical icon catalogue.
  *
- * The verbatim-synced shared pack partial
- * (templates/parts/feedback-nav-footer.php, rendered from
- * _shared/app-feedback/feedback-nav-footer.php.tpl) resolves the catalogue
- * as {AppNamespace}\Service\IconCatalog. MaintenanceCheck keeps the real
- * catalogue in Support — this facade delegates so the shared partial finds
- * it without breaking the verbatim sync.
+ * Kept as a Service-namespace alias because the shared partial pack resolves the
+ * catalogue as {AppNamespace}\Service\IconCatalog. The real catalogue lives in
+ * Support — this facade delegates.
  */
 final class IconCatalog
 {

@@ -33,21 +33,16 @@
 	white-space: nowrap;
 }
 
+/* Core's legacy nav (`#app-navigation:not(.vue)`) is translucent + blurred for
+ * the theming image; match its selector to land later in the cascade and make
+ * the column opaque so it merges with the content surface. */
+#app-navigation:not(.vue) {
+	background-color: var(--color-main-background);
+	backdrop-filter: none;
+	-webkit-backdrop-filter: none;
+}
+
 /* Core only styles #app-navigation-toggle inside its <1024px media query. */
 #app-navigation-toggle {
 	display: none;
-}
-
-/* Help entry: core pins `li.pinned` to the bottom of the flex list, so the
-   footer only has to stop inheriting row metrics. */
-#app-navigation li.mn-nav-footer-slot {
-	display: block;
-	margin-inline: 0;
-	padding: 0;
-}
-
-#app-navigation li.mn-nav-footer-slot .mn-nav-footer {
-	margin: 0;
-	width: 100%;
-	box-sizing: border-box;
 }

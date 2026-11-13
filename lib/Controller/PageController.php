@@ -233,7 +233,6 @@ class PageController extends Controller
 		$pageId = array_key_exists('pageId', $extra) ? (string)$extra['pageId'] : $template;
 		Util::addStyle(Application::APP_ID, 'app');
 		Util::addScript(Application::APP_ID, 'app');
-		Util::addScript(Application::APP_ID, 'common/app-feedback');
 		if (in_array($pageId, ['work-orders', 'work-order-detail', 'dispatch', 'tours', 'kpi', 'exceptions'], true)) {
 			Util::addScript(Application::APP_ID, 'work-order-pages');
 		}
