@@ -219,4 +219,3 @@ $navGroup = static function (string $id, string $href, string $label, string $hi
 			</li>
 		</ul>
 	</nav>
-</div>
