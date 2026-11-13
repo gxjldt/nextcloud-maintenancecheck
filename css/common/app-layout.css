@@ -48,27 +48,27 @@
   text-align: left;
 }
 
-@media (min-width: 1024px) {
-  #content.app-maintenancecheck #maintenancecheck-app,
-  #content.app-maintenancecheck .maintenancecheck-app {
-    display: flex;
-    flex-direction: row;
-    align-items: stretch;
-  }
+/* Nav + content stay side by side at every width: the app is a desktop
+ * workbench and core's <1024px drawer only exists to save space we have. */
+#content.app-maintenancecheck #maintenancecheck-app,
+#content.app-maintenancecheck .maintenancecheck-app {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
 
-  #content.app-maintenancecheck #app-navigation {
-    /* Width (300px) and surface come from Nextcloud core's #app-navigation rules. */
-    flex: 0 0 auto;
-    align-self: stretch;
-  }
+#content.app-maintenancecheck #app-navigation {
+  /* Width (300px) and surface come from Nextcloud core's #app-navigation rules. */
+  flex: 0 0 auto;
+  align-self: stretch;
+}
 
-  #content.app-maintenancecheck #app-content {
-    flex: 1 1 0;
-    min-width: 0;
-    width: auto;
-    max-width: none;
-    text-align: left;
-  }
+#content.app-maintenancecheck #app-content {
+  flex: 1 1 0;
+  min-width: 0;
+  width: auto;
+  max-width: none;
+  text-align: left;
 }
 
 /* ===== APP-CONTENT & WRAPPER (100% WIDTH, SCROLLABLE) ===== */

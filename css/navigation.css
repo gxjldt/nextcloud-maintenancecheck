@@ -35,11 +35,14 @@
 
 /* Core's legacy nav (`#app-navigation:not(.vue)`) is translucent + blurred for
  * the theming image; match its selector to land later in the cascade and make
- * the column opaque so it merges with the content surface. */
+ * the column opaque so it merges with the content surface. Same selector also
+ * cancels core's <1024px off-canvas drawer: the sidebar stays in flow. */
 #app-navigation:not(.vue) {
 	background-color: var(--color-main-background);
 	backdrop-filter: none;
 	-webkit-backdrop-filter: none;
+	position: sticky;
+	transform: none;
 }
 
 /* Core only styles #app-navigation-toggle inside its <1024px media query. */

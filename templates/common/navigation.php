@@ -108,14 +108,6 @@ $navGroup = static function (string $id, string $href, string $label, string $hi
 };
 ?>
 <div id="maintenancecheck-app" class="maintenancecheck-app">
-	<button type="button"
-		id="app-navigation-toggle"
-		class="icon-menu"
-		aria-controls="app-navigation"
-		aria-expanded="false"
-		aria-label="<?php p($l->t('Open navigation menu')); ?>"
-		data-aria-label-open="<?php p($l->t('Open navigation menu')); ?>"
-		data-aria-label-close="<?php p($l->t('Close navigation menu')); ?>"></button>
 	<a href="#app-navigation" class="skip-link mn-skip-link--nav"><?php p($l->t('Skip to app navigation')); ?></a>
 
 	<nav id="app-navigation"
