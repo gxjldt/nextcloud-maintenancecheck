@@ -382,7 +382,6 @@
 }
 .mn-page-header__lead {
 	font-size: var(--mn-fs-sm);
-	max-width: 70ch;
 }
 .mn-page-header__meta {
 	font-size: var(--mn-fs-xs);
