@@ -43,17 +43,24 @@
 
 /* Selection, copied from @nextcloud/vue's NcAppNavigationItem (what the built-in
  * apps render): 16% primary wash + 3px pill bar + normal text colour. Core's PHP
- * legacy rule paints a solid primary block, which is the look this app had. */
+ * legacy rule paints a solid primary block, which is the look this app had.
+ * The wash belongs on the row only — the link spans it, so painting both doubles
+ * the alpha. */
 #app-navigation.app-navigation-personal > ul > li.active,
-#app-navigation.app-navigation-personal > ul > li.active > a,
-#app-navigation.app-navigation-personal > ul > li.active > ul > li.active,
-#app-navigation.app-navigation-personal > ul > li.active > ul > li.active > a {
+#app-navigation.app-navigation-personal > ul > li > ul > li.active {
 	background-color: color-mix(in srgb, var(--color-primary-element) 16%, transparent);
-	color: var(--color-main-text);
 }
 
-#app-navigation.app-navigation-personal > ul > li.active > a:hover {
+#app-navigation.app-navigation-personal > ul > li.active:hover,
+#app-navigation.app-navigation-personal > ul > li > ul > li.active:hover {
 	background-color: color-mix(in srgb, var(--color-primary-element) 22%, transparent);
+}
+
+#app-navigation.app-navigation-personal > ul > li.active > a,
+#app-navigation.app-navigation-personal > ul > li.active > a:hover,
+#app-navigation.app-navigation-personal > ul > li.active > ul > li.active > a {
+	background-color: transparent;
+	color: var(--color-main-text);
 }
 
 /* `:not(.collapsible)` — core draws the group chevron on the same ::before. */
@@ -65,9 +72,4 @@
 	width: 3px;
 	border-radius: 999px;
 	background-color: var(--color-primary-element);
-}
-
-/* Core only styles #app-navigation-toggle inside its <1024px media query. */
-#app-navigation-toggle {
-	display: none;
 }
