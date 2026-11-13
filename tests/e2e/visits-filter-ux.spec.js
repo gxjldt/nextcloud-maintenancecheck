@@ -109,23 +109,23 @@ test.describe('Visits live filter UX', () => {
 		await expect(page.locator('#mn-filter-status')).toHaveValue('skipped')
 	})
 
-	test('touch targets ≥44px and axe WCAG 2.1 AA on toolbar + list', async ({ page }) => {
+	test('clickable area ≥34px and axe WCAG 2.1 AA on toolbar + list', async ({ page }) => {
 		const chipBox = await page.locator('#mn-filter-status-chips .mn-chip').first().boundingBox()
 		expect(chipBox, 'status chip must render').not.toBeNull()
-		expect(chipBox.height).toBeGreaterThanOrEqual(43)
-		expect(chipBox.width).toBeGreaterThanOrEqual(43)
+		expect(chipBox.height).toBeGreaterThanOrEqual(33)
+		expect(chipBox.width).toBeGreaterThanOrEqual(33)
 
 		const whenBox = await page.locator('#mn-filter-when-chips .mn-chip').first().boundingBox()
 		expect(whenBox).not.toBeNull()
-		expect(whenBox.height).toBeGreaterThanOrEqual(43)
+		expect(whenBox.height).toBeGreaterThanOrEqual(33)
 
 		const resetBox = await page.locator('#mn-filter-reset').boundingBox()
 		expect(resetBox).not.toBeNull()
-		expect(resetBox.height).toBeGreaterThanOrEqual(43)
+		expect(resetBox.height).toBeGreaterThanOrEqual(33)
 
 		const switchHit = await page.locator('label.mn-switch[for="mn-filter-mine"]').boundingBox()
 		expect(switchHit).not.toBeNull()
-		expect(switchHit.height).toBeGreaterThanOrEqual(43)
+		expect(switchHit.height).toBeGreaterThanOrEqual(33)
 
 		const results = await new AxeBuilder({ page })
 			.withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])

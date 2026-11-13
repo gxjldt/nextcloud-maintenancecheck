@@ -157,7 +157,7 @@ final class DesignSystemTokensContractTest extends TestCase
 			$chrome
 		);
 		$this->assertMatchesRegularExpression(
-			'/\.mn-btn--sm\s*\{[^}]*min-height:\s*44px/s',
+			'/\.mn-btn--sm\s*\{[^}]*min-height:\s*var\(--mn-clickable-area\)/s',
 			$chrome
 		);
 	}

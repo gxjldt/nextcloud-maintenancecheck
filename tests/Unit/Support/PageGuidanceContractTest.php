@@ -124,7 +124,7 @@ final class PageGuidanceContractTest extends TestCase
 		$this->assertStringContainsString('.mn-section__header', $css);
 		$this->assertStringContainsString('.mn-section__sub', $css);
 		$this->assertMatchesRegularExpression(
-			'/\.mn-hint-dismiss\s*\{[^}]*min-height:\s*44px/s',
+			'/\.mn-hint-dismiss\s*\{[^}]*min-height:\s*var\(--mn-clickable-area\)/s',
 			$css,
 		);
 		$this->assertStringContainsString('.mn-quickstart-card[hidden]', $css);

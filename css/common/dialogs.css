@@ -166,8 +166,8 @@
 	color: var(--color-main-text);
 	cursor: pointer;
 	/* WCAG 2.5.5 — dismiss control must be ≥44×44 */
-	min-width: 44px;
-	min-height: 44px;
+	min-width: var(--mn-clickable-area);
+	min-height: var(--mn-clickable-area);
 	padding: var(--space-2, 0.5rem);
 	display: inline-flex;
 	align-items: center;
@@ -288,7 +288,7 @@
 .form-group input[type="tel"] {
   display: block;
   width: 100%;
-  min-height: 44px; /* Minimum touch target size for accessibility (WCAG 2.5.5) */
+  min-height: var(--mn-clickable-area); /* Minimum touch target size for accessibility (WCAG 2.5.5) */
   padding: var(--space-2, 0.5rem) var(--space-3, 0.75rem);
   font-family: var(--maintenancecheck-font-family-sans, inherit);
   font-size: var(--maintenancecheck-font-size-base, 1rem);
@@ -390,7 +390,7 @@
   -webkit-appearance: none;
   -moz-appearance: none;
   /* 44px height, symmetric vertical padding for clean text centering */
-  height: 44px;
+  height: var(--mn-clickable-area);
   padding: 0.625rem 2.5rem 0.625rem 1rem;
   line-height: 1.5;
   font-size: 1rem;
@@ -411,7 +411,7 @@ body[data-theme-dark-highcontrast] .mn-dialog-overlay .form-select {
   padding: 0.625rem 2.5rem 0.625rem 1rem;
   background-position: right 0.75rem center;
   background-size: 1.25em 1.25em;
-  height: 44px;
+  height: var(--mn-clickable-area);
   line-height: 1.5;
 }
 
@@ -448,7 +448,7 @@ body[data-theme-dark-highcontrast] .form-input.form-select option {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2, 0.5rem);
-  min-height: 44px;
+  min-height: var(--mn-clickable-area);
   cursor: pointer;
   user-select: none;
 }

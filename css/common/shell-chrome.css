@@ -33,7 +33,7 @@
 	display: inline-flex;
 	align-items: center;
 	gap: 0.35rem;
-	min-height: 44px;
+	min-height: var(--mn-clickable-area);
 	width: max-content;
 	max-width: calc(100vw - 1rem);
 	height: auto;
@@ -180,8 +180,8 @@
 #content.app-maintenancecheck #app-content button.button,
 #content.app-maintenancecheck #app-content a.button {
 	border-radius: var(--mn-radius-md, 12px);
-	/* 44px, not 2.75rem: NC root font-size is 15px, so 2.75rem = 41.25px (< WCAG 2.5.5) */
-	min-height: 44px;
+	/* --mn-clickable-area, not 2.75rem: 2.75rem is 41.25px at NC's 15px root */
+	min-height: var(--mn-clickable-area);
 	padding: 0.625rem 1.15rem;
 	font-weight: 600;
 }
@@ -189,8 +189,8 @@
 #content.app-maintenancecheck #app-content .button.small,
 #content.app-maintenancecheck #app-content .button--sm {
 	border-radius: var(--mn-radius-sm, 6px);
-	min-height: 44px;
-	min-width: 44px;
+	min-height: var(--mn-clickable-area);
+	min-width: var(--mn-clickable-area);
 	padding: var(--mn-space-2) var(--mn-space-3);
 }
 
@@ -206,14 +206,11 @@
 	outline: 3px solid var(--color-primary-element);
 	outline-offset: 2px;
 }
-/* Empty states — soft panel (solid border; no dashed clutter) */
+/* Empty states — core `.emptycontent`: no frame, no fill, just centred text. */
 #content.app-maintenancecheck #app-content .mn-empty,
 #content.app-maintenancecheck #app-content .mn-empty-state {
-	border: 1px solid var(--mn-border, var(--color-border));
-	border-radius: var(--mn-radius-md, 12px);
 	padding: var(--mn-space-6, 32px) var(--mn-space-5, 24px);
 	text-align: center;
-	background: var(--mn-bg-soft, transparent);
 }
 /* ===== END AZ content surfaces ===== */
 
@@ -506,8 +503,8 @@
 	border-color: transparent;
 }
 .mn-btn--sm {
-	min-height: 44px;
-	min-width: 44px;
+	min-height: var(--mn-clickable-area);
+	min-width: var(--mn-clickable-area);
 	padding: var(--mn-space-2) var(--mn-space-3);
 	font-size: var(--mn-fs-sm);
 }

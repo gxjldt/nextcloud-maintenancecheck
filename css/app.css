@@ -53,8 +53,8 @@
 	left: -9999px;
 	top: 0;
 	z-index: 3000;
-	/* 44px, not 2.75rem: NC root font-size is 15px, so 2.75rem = 41.25px (< WCAG 2.5.5) */
-	min-height: 44px;
+	/* --mn-clickable-area, not 2.75rem: 2.75rem is 41.25px at NC's 15px root */
+	min-height: var(--mn-clickable-area);
 	padding: var(--mn-space-2) var(--mn-space-4);
 	background: var(--color-primary-element);
 	color: var(--color-primary-element-text);
@@ -187,9 +187,9 @@
 /* ── Forms ─────────────────────────────────────────────────────────── */
 
 .mn-input {
-	/* AZ form chrome: 1px border, sm radius, 44px target */
+	/* Core control chrome: 1px border, sm radius, clickable-area height */
 	width: 100%;
-	min-height: 44px;
+	min-height: var(--mn-clickable-area);
 	padding: var(--mn-space-2, 8px) var(--mn-space-3, 12px);
 	border: 1px solid var(--color-border, var(--mn-border));
 	border-radius: var(--mn-radius-sm, 6px);
@@ -272,7 +272,7 @@ textarea.mn-input {
 	display: inline-flex;
 	align-items: center;
 	gap: var(--mn-space-3);
-	min-height: 44px;
+	min-height: var(--mn-clickable-area);
 	cursor: pointer;
 }
 
@@ -284,7 +284,7 @@ textarea.mn-input {
 }
 
 .mn-switch__label {
-	font-size: var(--mn-fs-sm);
+	font-size: var(--default-font-size);
 }
 
 /* Checkbox row — also covers body-mounted dialogs (outside #app-content).
@@ -298,7 +298,7 @@ textarea.mn-input {
 	box-sizing: border-box;
 	cursor: pointer;
 	user-select: none;
-	min-height: 44px;
+	min-height: var(--mn-clickable-area);
 	margin: 0 0 var(--mn-space-4);
 	padding: 0;
 }
@@ -746,13 +746,13 @@ textarea.mn-input {
 	padding: 0;
 }
 .mn-kpi-actions .mn-chip {
-	min-height: 44px;
-	min-width: 44px;
-	padding: 0.55rem 1.1rem;
-	font-size: var(--mn-fs-md, 1rem);
-	font-weight: 600;
-	border-radius: 999px;
-	border: 1px solid var(--color-border, #ccc);
+	min-height: var(--mn-clickable-area);
+	min-width: var(--mn-clickable-area);
+	padding: 7px 14px;
+	font-size: var(--default-font-size);
+	font-weight: normal;
+	border-radius: var(--border-radius-element);
+	border: 1px solid var(--color-border-dark);
 	background: var(--color-main-background, #fff);
 	color: var(--mn-text, var(--color-main-text));
 	cursor: pointer;
@@ -768,7 +768,7 @@ textarea.mn-input {
 	outline-offset: 2px;
 }
 .mn-kpi-actions #mn-kpi-csv {
-	min-height: 44px;
+	min-height: var(--mn-clickable-area);
 	align-self: center;
 	display: inline-flex;
 	align-items: center;
@@ -787,14 +787,13 @@ textarea.mn-input {
 	box-sizing: border-box;
 }
 .mn-exceptions-toolbar .mn-chip {
-	min-height: 44px;
+	min-height: var(--mn-clickable-area);
 	padding-inline: var(--mn-space-4, 16px);
 }
 .mn-exceptions-toolbar .mn-chip.is-active {
 	background: var(--color-primary-element);
 	color: var(--color-primary-element-text);
 	border-color: var(--color-primary-element);
-	font-weight: 600;
 }
 .mn-exceptions-toolbar .mn-chip:focus-visible {
 	outline: 3px solid var(--color-primary-element);
@@ -879,24 +878,23 @@ textarea.mn-input {
 }
 
 .mn-tours-toolbar__nav {
-	min-width: 44px;
-	min-height: 44px;
+	min-width: var(--mn-clickable-area);
+	min-height: var(--mn-clickable-area);
 	font-size: 1.35rem;
 	line-height: 1;
 	padding-inline: var(--mn-space-3);
 }
 
 .mn-tours-toolbar__date {
-	min-height: 44px;
+	min-height: var(--mn-clickable-area);
 	min-width: 11rem;
 	flex: 1 1 12rem;
 	max-width: 18rem;
 }
 
 .mn-tours-toolbar .mn-chip {
-	min-height: 44px;
+	min-height: var(--mn-clickable-area);
 	padding-inline: var(--mn-space-4);
-	font-weight: 600;
 }
 
 .mn-tours-toolbar .mn-chip.is-active {
@@ -917,7 +915,6 @@ textarea.mn-input {
 	align-items: center;
 	justify-content: space-between;
 	gap: var(--mn-space-3);
-	border-inline-start-color: var(--color-primary-element);
 }
 
 .mn-tour__title {
@@ -926,8 +923,8 @@ textarea.mn-input {
 	align-items: center;
 	gap: var(--mn-space-2);
 	margin: 0;
-	font-size: var(--mn-fs-md);
-	font-weight: 700;
+	font-size: var(--default-font-size);
+	font-weight: 600;
 	line-height: var(--mn-line-tight, 1.3);
 	min-width: 0;
 }
@@ -953,8 +950,8 @@ textarea.mn-input {
 
 .mn-tour__actions .mn-btn,
 .mn-tours-table .mn-btn {
-	min-height: 44px;
-	min-width: 44px;
+	min-height: var(--mn-clickable-area);
+	min-width: var(--mn-clickable-area);
 }
 
 .mn-tour__empty {
@@ -1007,13 +1004,13 @@ textarea.mn-input {
 
 .mn-due-toolbar .mn-chip,
 .mn-visits-toolbar .mn-chip {
-	min-height: 44px;
-	min-width: 44px;
-	padding: 0.55rem 1.1rem;
-	font-size: var(--mn-fs-md, 1rem);
-	font-weight: 600;
-	border-radius: 999px;
-	border: 1px solid var(--color-border, #ccc);
+	min-height: var(--mn-clickable-area);
+	min-width: var(--mn-clickable-area);
+	padding: 7px 14px;
+	font-size: var(--default-font-size);
+	font-weight: normal;
+	border-radius: var(--border-radius-element);
+	border: 1px solid var(--color-border-dark);
 	background: var(--color-main-background, #fff);
 	color: var(--mn-text, var(--color-main-text));
 	cursor: pointer;
@@ -1021,9 +1018,9 @@ textarea.mn-input {
 
 .mn-due-toolbar .mn-chip.is-active,
 .mn-visits-toolbar .mn-chip.is-active {
-	border-color: var(--color-primary-element, #0073ad);
-	background: var(--color-primary-element-light, #e6f3f9);
-	color: var(--color-primary-element-light-text, var(--color-main-text));
+	border-color: var(--color-primary-element);
+	background: var(--color-primary-element);
+	color: var(--color-primary-element-text);
 }
 
 .mn-due-toolbar .mn-chip:focus-visible,
@@ -1056,8 +1053,8 @@ textarea.mn-input {
 }
 
 .mn-overflow__toggle {
-	min-height: 44px;
-	min-width: 44px;
+	min-height: var(--mn-clickable-area);
+	min-width: var(--mn-clickable-area);
 }
 
 .mn-overflow__menu {
@@ -1085,7 +1082,7 @@ textarea.mn-input {
 .mn-overflow__item {
 	display: flex;
 	align-items: center;
-	min-height: 44px;
+	min-height: var(--mn-clickable-area);
 	width: 100%;
 	padding: 0.5rem 0.85rem;
 	border: 0;
@@ -1187,11 +1184,15 @@ textarea.mn-input {
 }
 
 .mn-catalogs-toolbar .mn-chip {
-	min-height: 44px;
-	min-width: 44px;
-	padding: 0.55rem 1.1rem;
-	font-size: var(--mn-fs-md, 1rem);
-	font-weight: 600;
+	min-height: var(--mn-clickable-area);
+	min-width: var(--mn-clickable-area);
+	padding: 7px 14px;
+	font-size: var(--default-font-size);
+	font-weight: normal;
+	border-radius: var(--border-radius-element);
+	border: 1px solid var(--color-border-dark);
+	background: var(--color-main-background);
+	color: var(--color-main-text);
 }
 
 .mn-catalogs-toolbar .mn-chip.is-active,
@@ -1220,7 +1221,7 @@ textarea.mn-input {
 }
 
 .mn-catalogs .mn-table-toolbar__actions .mn-btn {
-	min-height: 44px;
+	min-height: var(--mn-clickable-area);
 }
 
 .mn-table-primary-row {
@@ -1328,8 +1329,8 @@ textarea.mn-input {
 
 .mn-empty__title {
 	margin: 0;
-	font-size: var(--mn-fs-lg, 1.25rem);
-	font-weight: 700;
+	font-size: var(--default-font-size);
+	font-weight: 600;
 	color: var(--color-main-text);
 }
 
@@ -1342,8 +1343,6 @@ textarea.mn-input {
 
 .mn-empty .mn-btn {
 	margin-top: var(--mn-space-3);
-	min-height: 44px;
-	min-width: 11rem;
 }
 
 /* ── Quickstart cards (DutyCheck parity — clean card, not empty-state chrome) ─ */
@@ -1451,7 +1450,7 @@ textarea.mn-input {
 .mn-quickstart__item .button,
 .mn-quickstart__item .mn-quickstart__cta {
 	align-self: center;
-	min-height: 44px;
+	min-height: var(--mn-clickable-area);
 	margin-top: auto;
 	text-align: center;
 }
@@ -1556,7 +1555,7 @@ textarea.mn-input {
 	display: block;
 	width: 100%;
 	max-width: 100%;
-	min-height: 44px;
+	min-height: var(--mn-clickable-area);
 	padding: var(--mn-space-2, 8px) var(--mn-space-3, 12px);
 	border: 1px solid var(--color-border, var(--mn-border));
 	border-radius: var(--mn-radius-sm, 6px);
@@ -1669,7 +1668,7 @@ textarea.mn-input {
 	display: inline-flex;
 	align-items: center;
 	gap: 0;
-	min-height: 44px;
+	min-height: var(--mn-clickable-area);
 	padding: 0 0 0 var(--mn-space-3);
 	font-size: var(--mn-fs-sm);
 	line-height: 1.3;
@@ -1698,10 +1697,10 @@ textarea.mn-input {
 	justify-content: center;
 	flex-shrink: 0;
 	/* SPEC §11.5 A9 — interactive targets ≥ 44×44 (including fine pointers) */
-	min-width: 44px;
-	min-height: 44px;
-	width: 44px;
-	height: 44px;
+	min-width: var(--mn-clickable-area);
+	min-height: var(--mn-clickable-area);
+	width: var(--mn-clickable-area);
+	height: var(--mn-clickable-area);
 	border: none;
 	border-radius: var(--mn-radius-sm, 6px);
 	background: transparent;
@@ -1782,7 +1781,7 @@ textarea.mn-input {
 .mn-user-picker__option,
 .mn-user-picker__empty {
 	padding: var(--mn-space-3);
-	min-height: 44px;
+	min-height: var(--mn-clickable-area);
 	display: flex;
 	align-items: center;
 	cursor: pointer;
@@ -2217,7 +2216,7 @@ textarea.mn-input {
 #content.app-maintenancecheck #app-content input.mn-input,
 #content.app-maintenancecheck #app-content select.mn-input,
 #content.app-maintenancecheck #app-content textarea.mn-input {
-	min-height: 44px;
+	min-height: var(--mn-clickable-area);
 	border-radius: var(--mn-radius-sm, 6px);
 	border: 1px solid var(--mn-form-border, var(--mn-border));
 	background-color: var(--color-main-background);
@@ -2225,7 +2224,7 @@ textarea.mn-input {
 	box-sizing: border-box;
 }
 #content.app-maintenancecheck #app-content select.mn-input {
-	height: 44px;
+	height: var(--mn-clickable-area);
 	padding: var(--mn-space-2) var(--mn-space-6) var(--mn-space-2) var(--mn-space-4);
 	appearance: none;
 	-webkit-appearance: none;
@@ -2245,9 +2244,8 @@ textarea.mn-input {
 	min-width: var(--mn-clickable-area) !important;
 }
 #content.app-maintenancecheck .mn-badge,
-#content.app-maintenancecheck .mn-chip,
 #content.app-maintenancecheck .mn-status {
-	border-radius: var(--mn-radius-sm, 6px) !important;
+	border-radius: var(--mn-radius-element, 8px) !important;
 }
 #content.app-maintenancecheck .mn-card,
 #content.app-maintenancecheck .mn-section,
@@ -2278,11 +2276,15 @@ body > .mn-dialog-overlay > .mn-dialog {
 }
 
 .mn-dispatch-toolbar .mn-chip {
-	min-height: 44px;
-	min-width: 44px;
-	padding: 0.55rem 1.1rem;
-	font-size: var(--mn-fs-md, 1rem);
-	font-weight: 600;
+	min-height: var(--mn-clickable-area);
+	min-width: var(--mn-clickable-area);
+	padding: 7px 14px;
+	font-size: var(--default-font-size);
+	font-weight: normal;
+	border-radius: var(--border-radius-element);
+	border: 1px solid var(--color-border-dark);
+	background: var(--color-main-background);
+	color: var(--color-main-text);
 }
 
 .mn-dispatch-toolbar .mn-chip.is-active {
@@ -2330,8 +2332,8 @@ body > .mn-dialog-overlay > .mn-dialog {
 }
 
 .mn-dispatch-table .mn-btn {
-	min-height: 44px;
-	min-width: 44px;
+	min-height: var(--mn-clickable-area);
+	min-width: var(--mn-clickable-area);
 }
 
 /* ===== Work orders (W1 phone execute) ===== */
@@ -2341,8 +2343,8 @@ body > .mn-dialog-overlay > .mn-dialog {
 	gap: var(--mn-space-3);
 }
 .mn-wo-actions .mn-btn {
-	min-height: 44px;
-	min-width: 44px;
+	min-height: var(--mn-clickable-area);
+	min-width: var(--mn-clickable-area);
 }
 .mn-checklist {
 	list-style: none;
@@ -2380,8 +2382,8 @@ body > .mn-dialog-overlay > .mn-dialog {
 	gap: var(--mn-space-2);
 }
 .mn-checklist__actions .mn-btn {
-	min-height: 44px;
-	min-width: 44px;
+	min-height: var(--mn-clickable-area);
+	min-width: var(--mn-clickable-area);
 }
 .mn-photo-list {
 	display: flex;
@@ -2392,7 +2394,7 @@ body > .mn-dialog-overlay > .mn-dialog {
 .mn-photo-chip {
 	display: inline-flex;
 	align-items: center;
-	min-height: 44px;
+	min-height: var(--mn-clickable-area);
 	padding: var(--mn-space-2) var(--mn-space-3);
 	border-radius: var(--mn-radius-sm, 6px);
 	border: 1px solid var(--color-border, var(--mn-border));
@@ -2705,7 +2707,7 @@ textarea {
 }
 
 /* NC core `button:not(.button-vue, [class^="vs__"])` (0-1-1) defeats single-class
-   .mn-* rules (0-1-0) — restores app intent: 44px floors, overflow item styles,
+   .mn-* rules (0-1-0) — restores app intent: clickable-area floors, overflow item styles,
    danger ink/fill. Same cascade class as logcheck (visual-critic precedent). */
 .mn-btn {
 	min-height: var(--mn-clickable-area) !important;

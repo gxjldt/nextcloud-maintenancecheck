@@ -90,7 +90,7 @@ final class VisitsFilterUxContractTest extends TestCase
 			$css
 		);
 		$this->assertMatchesRegularExpression(
-			'/\.mn-visits-toolbar\s+\.mn-chip[\s\S]{0,200}?min-height:\s*44px/s',
+			'/\.mn-visits-toolbar\s+\.mn-chip[\s\S]{0,200}?min-height:\s*var\(--mn-clickable-area\)/s',
 			$css
 		);
 	}

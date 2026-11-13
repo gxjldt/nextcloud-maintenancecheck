@@ -630,7 +630,7 @@
 	#app-content.mn-app .table.mn-table--responsive tbody td.layer-card__history-actions .btn {
 		width: 100%;
 		justify-content: center;
-		min-height: 44px;
+		min-height: var(--mn-clickable-area);
 	}
 
 	#app-content.mn-app .table.mn-table--responsive tbody td.actions-cell .btn-icon {
@@ -738,7 +738,7 @@
 	display: inline-flex;
 	align-items: center;
 	gap: var(--mn-space-2);
-	min-height: 44px;
+	min-height: var(--mn-clickable-area);
 	padding: 0.5rem 0.85rem;
 	border: 1px solid transparent;
 	border-radius: var(--mn-radius-md, 12px);

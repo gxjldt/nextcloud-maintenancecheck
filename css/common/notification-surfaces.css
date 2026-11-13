@@ -345,7 +345,7 @@
 #app-content.mn-app .inline-notice__actions .btn,
 .modal-backdrop .inline-notice__actions .mn-btn,
 .modal-backdrop .inline-notice__actions .btn {
-	min-height: 44px;
+	min-height: var(--mn-clickable-area);
 	white-space: nowrap;
 }
 
@@ -469,8 +469,8 @@
 	border-radius: var(--mn-radius-sm, 6px);
 	opacity: 0.85;
 	flex-shrink: 0;
-	min-width: 44px;
-	min-height: 44px;
+	min-width: var(--mn-clickable-area);
+	min-height: var(--mn-clickable-area);
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;

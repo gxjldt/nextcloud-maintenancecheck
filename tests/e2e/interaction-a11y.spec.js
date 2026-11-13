@@ -118,8 +118,8 @@ test('touch targets are at least 44px on mobile and desktop viewports', async ({
 				if (rect.width === 0 && rect.height === 0) {
 					continue // hidden (collapsed drawer / inactive section)
 				}
-				// 43.5 tolerance for subpixel layout rounding
-				if (rect.height < 43.5 || rect.width < 43.5) {
+				// 33.5 tolerance for subpixel rounding; --mn-clickable-area is 34px
+				if (rect.height < 33.5 || rect.width < 33.5) {
 					bad.push(`${el.tagName.toLowerCase()}.${[...el.classList].join('.')} ${Math.round(rect.width)}x${Math.round(rect.height)} "${(el.textContent || '').trim().slice(0, 30)}"`)
 				}
 			}

@@ -67,7 +67,7 @@ final class SettingsUnderpagesContractTest extends TestCase
 		$this->assertStringNotContainsString("t('Overview')", $subnav);
 		$this->assertStringNotContainsString('mn-settings-hub', $subnav);
 		$this->assertStringContainsString('aria-current="page"', $subnav);
-		$this->assertStringContainsString('min-height: 44px', (string)file_get_contents($this->root . '/css/common/page-patterns.css'));
+		$this->assertStringContainsString('min-height: var(--mn-clickable-area)', (string)file_get_contents($this->root . '/css/common/page-patterns.css'));
 	}
 
 	public function testJsHostsExistOnFormSections(): void
@@ -116,7 +116,7 @@ final class SettingsUnderpagesContractTest extends TestCase
 		foreach ([
 			'.mn-settings-subnav',
 			'.mn-settings-subnav__link',
-			'min-height: 44px',
+			'min-height: var(--mn-clickable-area)',
 			'prefers-reduced-motion',
 		] as $token) {
 			$this->assertStringContainsString($token, $css);
