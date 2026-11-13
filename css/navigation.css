@@ -1,11 +1,11 @@
 /**
  * App navigation — Nextcloud core owns the rows.
  *
- * Everything visual (row height 34px, hover, active = --color-primary-element,
- * submenu indent, chevron, collapse) comes from core/css/apps.css
- * `.app-navigation-personal`; do not re-declare metrics here. The only
- * app-side need is the inline SVG glyph, which core styles for `img` children
- * while this app renders <span><svg></span>.
+ * Row height, hover, chevron and collapse come from core/css/apps.css
+ * `.app-navigation-personal`; do not re-declare those. Two things are app-side:
+ * the inline SVG glyph (core styles `img` children, this app renders
+ * `<span><svg></span>`) and the selected-row look, which is copied from
+ * `@nextcloud/vue` because the built-in apps no longer use core's PHP rule.
  */
 
 #app-navigation .nav-entry-link > .nav-entry-icon {
@@ -34,15 +34,37 @@
 }
 
 /* Core's legacy nav (`#app-navigation:not(.vue)`) is translucent + blurred for
- * the theming image; match its selector to land later in the cascade and make
- * the column opaque so it merges with the content surface. Same selector also
- * cancels core's <1024px off-canvas drawer: the sidebar stays in flow. */
+ * the theming image — that frost IS what native apps look like, so keep it. The
+ * same selector cancels core's <1024px off-canvas drawer: sidebar stays in flow. */
 #app-navigation:not(.vue) {
-	background-color: var(--color-main-background);
-	backdrop-filter: none;
-	-webkit-backdrop-filter: none;
 	position: sticky;
 	transform: none;
+}
+
+/* Selection, copied from @nextcloud/vue's NcAppNavigationItem (what the built-in
+ * apps render): 16% primary wash + 3px pill bar + normal text colour. Core's PHP
+ * legacy rule paints a solid primary block, which is the look this app had. */
+#app-navigation.app-navigation-personal > ul > li.active,
+#app-navigation.app-navigation-personal > ul > li.active > a,
+#app-navigation.app-navigation-personal > ul > li.active > ul > li.active,
+#app-navigation.app-navigation-personal > ul > li.active > ul > li.active > a {
+	background-color: color-mix(in srgb, var(--color-primary-element) 16%, transparent);
+	color: var(--color-main-text);
+}
+
+#app-navigation.app-navigation-personal > ul > li.active > a:hover {
+	background-color: color-mix(in srgb, var(--color-primary-element) 22%, transparent);
+}
+
+/* `:not(.collapsible)` — core draws the group chevron on the same ::before. */
+#app-navigation.app-navigation-personal > ul > li.active:not(.collapsible)::before {
+	content: "";
+	position: absolute;
+	inset-block: 8px;
+	inset-inline-start: 0;
+	width: 3px;
+	border-radius: 999px;
+	background-color: var(--color-primary-element);
 }
 
 /* Core only styles #app-navigation-toggle inside its <1024px media query. */

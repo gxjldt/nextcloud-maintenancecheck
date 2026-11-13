@@ -219,19 +219,6 @@
   outline-offset: 2px;
 }
 
-/* Section left accent: quick visual scanning (border + bar, not only color — WCAG 1.4.11) */
-#app-content-wrapper>.section:not(.page-header-section)::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: var(--space-5);
-  bottom: var(--space-5);
-  width: 5px;
-  border-radius: 0 var(--radius-full) var(--radius-full) 0;
-  background: var(--maintenancecheck-color-primary);
-  opacity: 0.85;
-}
-
 /* Section title: large and bold so sections are easy to identify */
 #app-content-wrapper .section__title {
   font-size: var(--maintenancecheck-font-size-xl);
@@ -252,10 +239,6 @@
   box-shadow: none;
   background: transparent;
   padding: var(--space-4) 0;
-}
-
-#app-content-wrapper>.section.page-header-section::before {
-  display: none;
 }
 
 /* Section header: title + optional description */
@@ -391,12 +374,6 @@
     border-radius: var(--radius-xl);
   }
 
-  #app-content-wrapper>.section::before {
-    top: var(--space-4);
-    bottom: var(--space-4);
-    width: 4px;
-  }
-
   .page-header-section {
     margin-bottom: var(--space-5);
     padding: var(--space-3) 0;
@@ -446,12 +423,6 @@
 
   .info-box {
     padding: var(--space-3) var(--space-4);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  #app-content-wrapper>.section::before {
-    transition: none;
   }
 }
 

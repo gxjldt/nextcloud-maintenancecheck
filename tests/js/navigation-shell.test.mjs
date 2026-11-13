@@ -18,7 +18,9 @@ test('MN navigation shell uses Nextcloud core navigation structure', () => {
 	assert.doesNotMatch(nav, /mn-admin-subnav/);
 	const js = readFileSync(join(root, 'js/common/navigation.js'), 'utf8');
 	assert.match(js, /aria-expanded/);
-	assert.match(js, /snapjs-left/);
+	// The sidebar is in flow at every width, so core's mobile drawer is unused.
+	assert.doesNotMatch(js, /snapjs-left/);
+	assert.doesNotMatch(js, /app-navigation-toggle/);
 	assert.doesNotMatch(js, /mn-nav--open/);
 });
 
