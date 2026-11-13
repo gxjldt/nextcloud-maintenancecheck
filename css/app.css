@@ -811,9 +811,7 @@ textarea.mn-input {
 }
 
 .mn-bucket {
-	border: 1px solid var(--color-border);
-	border-radius: var(--mn-radius-md);
-	background: var(--color-main-background);
+	/* Native groups are headings over rows, not cards. */
 	/* visible so overflow “More” menus are not clipped */
 	overflow: visible;
 }
@@ -828,28 +826,11 @@ textarea.mn-input {
 	display: flex;
 	align-items: center;
 	gap: var(--mn-space-2);
-	margin: 0;
-	padding: var(--mn-space-3) var(--mn-space-4);
-	font-size: var(--mn-fs-sm);
-	font-weight: 700;
-	border-bottom: 1px solid var(--color-border);
-	border-inline-start: 4px solid transparent;
-}
-
-.mn-bucket--overdue .mn-bucket__title {
-	border-inline-start-color: var(--mn-danger-border);
-}
-
-.mn-bucket--today .mn-bucket__title {
-	border-inline-start-color: var(--mn-warning-border);
-}
-
-.mn-bucket--next7 .mn-bucket__title {
-	border-inline-start-color: var(--color-primary-element);
-}
-
-.mn-bucket--later .mn-bucket__title {
-	border-inline-start-color: var(--color-border-dark);
+	margin: 0 0 var(--mn-space-2);
+	padding: 0;
+	font-size: var(--default-font-size);
+	font-weight: 600;
+	color: var(--color-main-text);
 }
 
 .mn-bucket__list {
@@ -1333,6 +1314,11 @@ textarea.mn-input {
 	padding: var(--mn-space-7) var(--mn-space-5);
 	text-align: center;
 	color: var(--color-text-maxcontrast);
+}
+
+/* `display:flex` above beats the UA `[hidden]` rule — the attribute needs a match. */
+.mn-empty[hidden] {
+	display: none;
 }
 
 .mn-empty__icon {
