@@ -128,8 +128,9 @@ final class PageGuidanceContractTest extends TestCase
 			$css,
 		);
 		$this->assertStringContainsString('.mn-quickstart-card[hidden]', $css);
-		$this->assertMatchesRegularExpression(
-			'/\.mn-quickstart__item\s*\{[^}]*background:\s*var\(--mn-bg-card/s',
+		// Steps are plain text, not a row of cards — native apps never frame guidance.
+		$this->assertDoesNotMatchRegularExpression(
+			'/\.mn-quickstart__item\s*\{[^}]*border:\s*1px/s',
 			$css,
 		);
 		$this->assertMatchesRegularExpression(

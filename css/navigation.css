@@ -8,14 +8,14 @@
  * `@nextcloud/vue` because the built-in apps no longer use core's PHP rule.
  */
 
+/* Icon slot = --default-clickable-area, glyph 16px centred inside — that is the
+ * geometry NcAppNavigationItem uses, and it sets where the label starts. */
 #app-navigation .nav-entry-link > .nav-entry-icon {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	flex: 0 0 16px;
-	width: 16px;
-	height: 16px;
-	margin-inline-end: 8px;
+	flex: 0 0 var(--default-clickable-area, 34px);
+	height: var(--default-clickable-area, 34px);
 	vertical-align: middle;
 }
 

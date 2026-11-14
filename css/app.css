@@ -1345,18 +1345,17 @@ textarea.mn-input {
 	margin-top: var(--mn-space-3);
 }
 
-/* ── Quickstart cards (DutyCheck parity — clean card, not empty-state chrome) ─ */
+/* Quickstart is an inline hint, not a card — native apps never frame guidance. */
 .mn-quickstart-card {
-	position: relative;
 	display: flex;
 	flex-direction: column;
 	gap: var(--mn-space-4);
 	align-items: stretch;
 	text-align: start;
-	/* Keep card padding (do not use mn-card__header strip chrome). */
-	padding: var(--mn-space-4) !important;
+	padding: 0 !important;
 	margin-bottom: var(--mn-space-5);
-	border-style: solid;
+	border: 0 !important;
+	background: transparent !important;
 	color: var(--color-main-text);
 }
 .mn-quickstart-card[hidden] {
@@ -1388,12 +1387,7 @@ textarea.mn-input {
 	align-items: center;
 	gap: var(--mn-space-2);
 }
-.mn-quickstart-card .mn-section__header h2::before {
-	content: "★";
-	color: var(--mn-accent-ink, var(--color-primary-element, #00679e));
-	font-size: 0.85em;
-	line-height: 1;
-}
+/* No ★ prefix: core never decorates a heading with a glyph. */
 .mn-section__sub {
 	margin: var(--mn-space-1) 0 0;
 	color: var(--mn-muted, var(--color-text-maxcontrast));
@@ -1426,10 +1420,6 @@ textarea.mn-input {
 	}
 }
 .mn-quickstart__item {
-	padding: var(--mn-space-4);
-	border: 1px solid var(--mn-border, var(--color-border));
-	border-radius: var(--mn-radius-sm, 6px);
-	background: var(--mn-bg-card, var(--color-main-background));
 	display: flex;
 	flex-direction: column;
 	gap: var(--mn-space-2);
