@@ -46,8 +46,11 @@
  * legacy rule paints a solid primary block, which is the look this app had.
  * The wash belongs on the row only — the link spans it, so painting both doubles
  * the alpha. */
+/* `position: relative` — core leaves the row static, so the 3px bar would
+ * anchor to #app-navigation instead of the row. */
 #app-navigation.app-navigation-personal > ul > li.active,
 #app-navigation.app-navigation-personal > ul > li > ul > li.active {
+	position: relative;
 	background-color: color-mix(in srgb, var(--color-primary-element) 16%, transparent);
 }
 

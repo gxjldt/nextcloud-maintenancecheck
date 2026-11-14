@@ -309,8 +309,10 @@
 	align-items: stretch;
 	text-align: left;
 	width: 100%;
-	max-width: none;
-	margin: 0;
+	/* Core apps cap the reading column (Activity sits near 900px and centres
+	   it); `.mn-shell--wide` opts a page back out. */
+	max-width: 72rem;
+	margin-inline: auto;
 	/* Nextcloud .section gutter: 30px sides, so rows line up with core pages */
 	padding: var(--mn-space-5) 30px var(--mn-space-5);
 	box-sizing: border-box;
