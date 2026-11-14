@@ -22,9 +22,11 @@
 	   itself only grows controls on touch, so match that instead of a global 44. */
 	--mn-clickable-area: 34px;
 
-	--mn-radius-sm: 4px;
-	--mn-radius-md: 8px;
-	--mn-radius-lg: 12px;
+	/* Aliases of the core scale — one source of truth, so an app control can
+	   never drift a pixel off the Files/Calendar control next to it. */
+	--mn-radius-sm: var(--border-radius-small);
+	--mn-radius-md: var(--border-radius-element);
+	--mn-radius-lg: var(--border-radius-container);
 
 	--mn-fs-xs: 0.75rem;
 	--mn-fs-sm: 0.875rem;

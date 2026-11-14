@@ -71,7 +71,7 @@ final class AzcShellParityContractTest extends TestCase
 	public function testNoPillRadiiRemainInAppCss(): void
 	{
 		$css = (string)file_get_contents($this->root . '/css/app.css');
-		$this->assertStringNotContainsString('border-radius-pill', $css);
+		$this->assertStringNotContainsString('border-radius: 999px', $css);
 		$this->assertStringContainsString('AZ-PARITY-RADIUS-ENFORCER', $css);
 		$this->assertFileExists($this->root . '/css/common/notification-surfaces.css');
 	}
@@ -460,17 +460,18 @@ final class AzcShellParityContractTest extends TestCase
 		$this->assertStringContainsString('-section', $chrome);
 		// Filter toolbars are flat rows now; no panel surface may come back.
 		$this->assertStringNotContainsString('filter-panel', $chrome);
-		$this->assertMatchesRegularExpression('/border-radius:\s*var\(--[a-z]+-radius-md,\s*12px\)/', $chrome);
+		$this->assertMatchesRegularExpression('/border-radius:\s*var\(--mn-radius-lg\)/', $chrome);
 		$app = (string)file_get_contents($this->root . '/css/app.css');
 		$this->assertStringContainsString('AZ-PARITY-RADIUS-ENFORCER', $app);
-		// Primary buttons must use md (12px) like azc-btn — not sm.
+		// Buttons carry core's element radius (8px), not AZC's 12px.
 		$this->assertMatchesRegularExpression(
-			'/\.button[^{]*\{[^}]*border-radius:\s*var\(--[a-z]+-radius-md,\s*12px\)\s*!important/s',
+			'/\.button[^{]*\{[^}]*border-radius:\s*var\(--mn-radius-md\)\s*!important/s',
 			$app
 		);
-		// Body-mounted dialogs must use lg (16px) — #content-scoped rules never apply.
+		// Body-mounted dialogs must match NcDialog's element radius (8px) —
+		// #content-scoped rules never apply to them.
 		$this->assertMatchesRegularExpression(
-			'/body\s*>\s*\.modal-backdrop\s*>\s*\.modal[^{]*\{[^}]*border-radius:\s*var\(--[a-z]+-radius-lg,\s*16px\)\s*!important/s',
+			'/body\s*>\s*\.modal-backdrop\s*>\s*\.modal[^{]*\{[^}]*border-radius:\s*var\(--mn-radius-md\)\s*!important/s',
 			$app,
 			'Dialogs mount on body; radius enforcer must cover modal-backdrop > .modal'
 		);

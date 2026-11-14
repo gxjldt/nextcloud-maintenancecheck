@@ -22,7 +22,8 @@
 	--mn-form-error: var(--mn-danger-ink, var(--color-element-error, #c90000));
 	--mn-form-error-ring: color-mix(in srgb, var(--mn-danger-fill, var(--color-element-error, #c90000)) 28%, transparent);
 	--mn-form-success: var(--mn-success-ink, var(--color-element-success, #099f05));
-	--mn-form-radius: var(--border-radius-element, 8px);
+	/* Core text inputs use --border-radius (= small, 4px); buttons are the 8px ones. */
+	--mn-form-radius: var(--border-radius-small);
 }
 
 /* Text fields, selects, textareas — core input chrome */

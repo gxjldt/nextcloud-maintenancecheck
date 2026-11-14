@@ -39,6 +39,14 @@ final class DesignSystemTokensContractTest extends TestCase
 		] as $token) {
 			$this->assertStringContainsString($token, $css, $token);
 		}
+		// The app radii must alias core's scale, not restate pixel values.
+		foreach (['sm' => 'small', 'md' => 'element', 'lg' => 'container'] as $mn => $core) {
+			$this->assertStringContainsString(
+				'--mn-radius-' . $mn . ': var(--border-radius-' . $core . ')',
+				$css,
+				'--mn-radius-' . $mn
+			);
+		}
 	}
 
 	public function testFeatureCssHasNoBareHexFills(): void

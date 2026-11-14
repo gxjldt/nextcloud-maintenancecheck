@@ -28,12 +28,13 @@
 	--space-10: 2.5rem;
 	--space-12: 3rem;
 
-	/* AZC utilities.css radii */
-	--radius-base: 0.25rem;
-	--radius-lg: 0.5rem;
-	--radius-xl: 0.75rem;
-	--radius-2xl: 1rem;
-	--radius-full: 9999px;
+	/* AZC utilities.css radii — repointed at the core scale so a consumer that
+	   still says --radius-lg gets 8px, not AZC's own 0.5rem. */
+	--radius-base: var(--border-radius-small);
+	--radius-lg: var(--border-radius-element);
+	--radius-xl: var(--border-radius-container);
+	--radius-2xl: var(--border-radius-container);
+	--radius-full: var(--border-radius-pill);
 
 	/* AZC utilities.css z-index scale (design system §3.22) */
 	--z-modal-backdrop: 1040;

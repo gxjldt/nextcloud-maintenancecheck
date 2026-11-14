@@ -141,7 +141,7 @@
 	padding: 0 var(--mn-space-3);
 	font-size: var(--mn-fs-sm, 0.875rem);
 	font-weight: 400;
-	border-radius: var(--border-radius-element, 8px);
+	border-radius: var(--border-radius-element);
 	border: 1px solid var(--color-border-maxcontrast, #949494);
 	background: var(--color-main-background, #fff);
 	color: var(--color-main-text);
@@ -571,7 +571,7 @@
 		margin-bottom: var(--mn-space-4, 1rem);
 		padding: var(--mn-space-3, 0.75rem) var(--mn-space-4, 1rem);
 		border: 1px solid var(--mn-border, var(--color-border));
-		border-radius: var(--mn-radius-sm, 8px);
+		border-radius: var(--mn-radius-sm);
 		background: var(--mn-bg-card, var(--color-main-background));
 	}
 
@@ -680,7 +680,7 @@
 .mn-kpi-card {
 	padding: 1rem 1.25rem;
 	border: 1px solid var(--color-border, #ddd);
-	border-radius: var(--border-radius-large, 8px);
+	border-radius: var(--border-radius-large);
 	background: var(--color-main-background, #fff);
 }
 .mn-kpi-card__label {
@@ -711,7 +711,7 @@
 .mn-chip {
 	border: 1px solid var(--color-border, #ccc);
 	background: var(--color-main-background, #fff);
-	border-radius: 999px;
+	border-radius: var(--border-radius-pill);
 	padding: 0.35rem 0.85rem;
 	cursor: pointer;
 }
@@ -730,7 +730,7 @@
 	margin: 0 0 var(--mn-space-5);
 	padding: var(--mn-space-3);
 	border: 1px solid var(--mn-border, var(--color-border));
-	border-radius: var(--mn-radius-md, 12px);
+	border-radius: var(--mn-radius-md);
 	background: var(--mn-bg-soft, color-mix(in srgb, var(--color-main-background) 96%, var(--color-main-text) 4%));
 }
 
@@ -741,7 +741,7 @@
 	min-height: var(--mn-clickable-area);
 	padding: 0.5rem 0.85rem;
 	border: 1px solid transparent;
-	border-radius: var(--mn-radius-md, 12px);
+	border-radius: var(--mn-radius-md);
 	color: var(--mn-text, var(--color-main-text));
 	text-decoration: none;
 	font-size: var(--mn-fs-sm, 0.875rem);

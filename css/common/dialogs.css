@@ -46,7 +46,7 @@
 	background-color: var(--color-main-background);
 	color: var(--color-main-text);
 	border: 0;
-	border-radius: var(--border-radius-container, 12px);
+	border-radius: var(--border-radius-container);
 	box-shadow: 0 0 40px var(--color-box-shadow);
 	overflow: auto;
 }
@@ -172,7 +172,7 @@
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	border-radius: var(--radius-base, 6px);
+	border-radius: var(--border-radius-small);
 	opacity: 0.9;
 	transition: opacity 0.15s ease-in-out;
 	box-sizing: border-box;
@@ -296,7 +296,7 @@
   color: var(--maintenancecheck-color-text, var(--color-main-text));
   background-color: var(--maintenancecheck-color-form-background, var(--color-main-background));
   border: 1px solid var(--maintenancecheck-color-form-border, var(--color-border));
-  border-radius: var(--radius-base, 6px);
+  border-radius: var(--border-radius-small);
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   box-sizing: border-box;
 }

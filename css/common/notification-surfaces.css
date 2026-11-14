@@ -86,7 +86,7 @@
 	height: var(--mn-icon-well, 2.25rem);
 	min-width: var(--mn-icon-well, 2.25rem);
 	min-height: var(--mn-icon-well, 2.25rem);
-	border-radius: var(--mn-radius-sm, 6px);
+	border-radius: var(--mn-radius-sm);
 	border: 2px solid var(--color-border);
 	background: var(--color-main-background);
 	color: var(--color-main-text);
@@ -299,7 +299,7 @@
 	gap: var(--mn-space-3, 0.75rem) var(--mn-space-4, 1rem);
 	padding: var(--mn-space-4, 1rem) var(--mn-space-5, 1.25rem);
 	border: 2px solid var(--color-border, var(--mn-border));
-	border-radius: var(--mn-radius-md, 8px);
+	border-radius: var(--mn-radius-md);
 	background: var(--color-main-background, var(--mn-bg));
 	box-shadow: var(--mn-shadow-sm, 0 1px 2px rgb(0 0 0 / 8%));
 	color: var(--color-main-text, var(--mn-text));
@@ -390,7 +390,7 @@
 	gap: var(--mn-space-3, 0.75rem);
 	padding: var(--mn-space-3, 0.75rem) var(--mn-space-4, 1rem);
 	border: 1px solid var(--mn-border, var(--color-border));
-	border-radius: var(--mn-radius-md, 12px);
+	border-radius: var(--mn-radius-md);
 	background: var(--mn-bg-card, var(--color-main-background));
 	box-shadow: var(--mn-shadow-md, 0 8px 24px color-mix(in srgb, var(--color-main-text) 12%, transparent));
 	color: var(--color-main-text, var(--mn-text));
@@ -466,7 +466,7 @@
 	color: var(--color-main-text, var(--mn-text));
 	cursor: pointer;
 	padding: var(--mn-space-1, 0.25rem);
-	border-radius: var(--mn-radius-sm, 6px);
+	border-radius: var(--mn-radius-sm);
 	opacity: 0.85;
 	flex-shrink: 0;
 	min-width: var(--mn-clickable-area);

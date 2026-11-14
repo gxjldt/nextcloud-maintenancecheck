@@ -18,7 +18,7 @@
 #content.app-maintenancecheck a.button,
 .mn-dialog-overlay button.button,
 .mn-dialog-overlay a.button {
-	border-radius: var(--mn-radius-md, 12px) !important;
+	border-radius: var(--mn-radius-md) !important;
 }
 
 /* ── Shell ─────────────────────────────────────────────────────────── */
@@ -117,10 +117,11 @@
 	   regular weight). Anything taller/bolder reads as another product. */
 	min-height: var(--mn-clickable-area, 34px);
 	padding: 0 var(--mn-space-3);
-	border-radius: var(--mn-radius-md, 8px);
+	border-radius: var(--mn-radius-md);
 	border: none;
 	font-size: var(--default-font-size, var(--mn-fs-sm));
-	font-weight: normal;
+	/* NcButton: font-weight: var(--font-weight-element, bold) → 500 here. */
+	font-weight: var(--font-weight-element, 500);
 	cursor: pointer;
 	text-decoration: none;
 	box-sizing: border-box;
@@ -192,7 +193,7 @@
 	min-height: var(--mn-clickable-area);
 	padding: var(--mn-space-2, 8px) var(--mn-space-3, 12px);
 	border: 1px solid var(--color-border, var(--mn-border));
-	border-radius: var(--mn-radius-sm, 6px);
+	border-radius: var(--mn-radius-sm);
 	background-color: var(--color-main-background);
 	color: var(--color-main-text);
 	font-size: var(--mn-fs-md, 1rem);
@@ -247,7 +248,7 @@ textarea.mn-input {
 	padding: var(--mn-space-3);
 	font-size: var(--mn-fs-sm);
 	font-weight: 600;
-	border-radius: var(--mn-radius-md);
+	border-radius: var(--mn-radius-lg);
 	background: var(--mn-tint-danger, var(--color-background-dark));
 	color: var(--mn-danger-ink);
 }
@@ -358,7 +359,7 @@ textarea.mn-input {
 	padding: var(--mn-space-4);
 	margin-bottom: var(--mn-space-4);
 	background: var(--color-background-hover);
-	border-radius: var(--mn-radius-md);
+	border-radius: var(--mn-radius-lg);
 }
 
 .mn-filterbar .mn-field {
@@ -375,7 +376,7 @@ textarea.mn-input {
 .mn-card {
 	background: var(--color-main-background);
 	border: 1px solid var(--color-border);
-	border-radius: var(--mn-radius-md);
+	border-radius: var(--mn-radius-lg);
 	padding: var(--mn-space-4);
 	box-sizing: border-box;
 }
@@ -465,7 +466,7 @@ textarea.mn-input {
 	height: auto;
 	background: var(--mn-print-surface, #fff);
 	padding: var(--mn-space-2);
-	border-radius: var(--mn-radius-sm, 6px);
+	border-radius: var(--mn-radius-sm);
 }
 
 .mn-qr-sticker-dialog .mn-muted {
@@ -504,7 +505,7 @@ textarea.mn-input {
 	font-weight: 600;
 	line-height: 1.4;
 	letter-spacing: 0.01em;
-	border-radius: 999px;
+	border-radius: var(--border-radius-pill);
 	border: 1px solid color-mix(in srgb, currentColor 42%, transparent);
 	background: var(--color-background-hover, var(--color-background-dark));
 	color: var(--color-main-text);
@@ -516,7 +517,7 @@ textarea.mn-input {
 	display: inline-block;
 	width: 7px;
 	height: 7px;
-	border-radius: 999px;
+	border-radius: var(--border-radius-pill);
 	flex-shrink: 0;
 	background: currentColor;
 }
@@ -528,7 +529,7 @@ textarea.mn-input {
 	display: inline-block;
 	width: 7px;
 	height: 7px;
-	border-radius: 999px;
+	border-radius: var(--border-radius-pill);
 	flex-shrink: 0;
 	background: currentColor;
 }
@@ -783,7 +784,7 @@ textarea.mn-input {
 	padding: var(--mn-space-3, 12px) var(--mn-space-4, 16px);
 	background: var(--color-main-background);
 	border: 1px solid var(--color-border, var(--color-border-dark));
-	border-radius: var(--mn-radius-md, 12px);
+	border-radius: var(--mn-radius-lg);
 	box-sizing: border-box;
 }
 .mn-exceptions-toolbar .mn-chip {
@@ -1068,7 +1069,7 @@ textarea.mn-input {
 	margin: 0;
 	background: var(--color-main-background);
 	border: 1px solid var(--color-border, var(--color-border-dark));
-	border-radius: var(--mn-radius-md, 12px);
+	border-radius: var(--mn-radius-md);
 	box-shadow: var(--mn-shadow-md, 0 8px 24px color-mix(in srgb, var(--color-main-text) 12%, transparent));
 	display: flex;
 	flex-direction: column;
@@ -1086,7 +1087,7 @@ textarea.mn-input {
 	width: 100%;
 	padding: 0.5rem 0.85rem;
 	border: 0;
-	border-radius: var(--mn-radius-sm, 8px);
+	border-radius: var(--mn-radius-sm);
 	background: transparent;
 	color: var(--color-main-text);
 	font: inherit;
@@ -1179,7 +1180,7 @@ textarea.mn-input {
 	padding: var(--mn-space-3) var(--mn-space-4);
 	background: var(--color-main-background);
 	border: 1px solid var(--color-border, var(--color-border-dark));
-	border-radius: var(--mn-radius-md, 12px);
+	border-radius: var(--mn-radius-lg);
 	box-sizing: border-box;
 }
 
@@ -1451,7 +1452,7 @@ textarea.mn-input {
 	background: transparent;
 	border: 1px solid var(--mn-border, var(--color-border));
 	color: var(--color-main-text);
-	border-radius: var(--mn-radius-sm, 6px);
+	border-radius: var(--mn-radius-sm);
 	padding: var(--mn-space-2) var(--mn-space-3);
 	cursor: pointer;
 	min-height: var(--mn-clickable-area) !important;
@@ -1510,7 +1511,7 @@ textarea.mn-input {
 	overflow-y: auto;
 	background: var(--color-main-background);
 	color: var(--color-main-text);
-	border-radius: var(--mn-radius-lg, 16px);
+	border-radius: var(--mn-radius-lg);
 	box-shadow: var(--mn-shadow-lg, 0 8px 40px color-mix(in srgb, var(--color-main-text) 35%, transparent));
 	padding: var(--mn-space-5);
 	box-sizing: border-box;
@@ -1548,7 +1549,7 @@ textarea.mn-input {
 	min-height: var(--mn-clickable-area);
 	padding: var(--mn-space-2, 8px) var(--mn-space-3, 12px);
 	border: 1px solid var(--color-border, var(--mn-border));
-	border-radius: var(--mn-radius-sm, 6px);
+	border-radius: var(--mn-radius-sm);
 	background-color: var(--color-main-background);
 	color: var(--color-main-text);
 	font-size: var(--mn-fs-md, 1rem);
@@ -1662,7 +1663,7 @@ textarea.mn-input {
 	padding: 0 0 0 var(--mn-space-3);
 	font-size: var(--mn-fs-sm);
 	line-height: 1.3;
-	border-radius: var(--mn-radius-sm, 6px);
+	border-radius: var(--border-radius-pill);
 	background: var(--color-background-dark, var(--color-background-hover));
 	color: var(--color-main-text);
 	max-width: 100%;
@@ -1692,7 +1693,7 @@ textarea.mn-input {
 	width: var(--mn-clickable-area);
 	height: var(--mn-clickable-area);
 	border: none;
-	border-radius: var(--mn-radius-sm, 6px);
+	border-radius: var(--mn-radius-sm);
 	background: transparent;
 	color: inherit;
 	cursor: pointer;
@@ -1764,7 +1765,7 @@ textarea.mn-input {
 	list-style: none;
 	background: var(--color-main-background);
 	border: 2px solid var(--color-border-maxcontrast, var(--color-border-dark));
-	border-radius: var(--mn-radius-md);
+	border-radius: var(--mn-radius-lg);
 	box-shadow: var(--mn-shadow-md, 0 8px 24px color-mix(in srgb, var(--color-main-text) 12%, transparent));
 }
 
@@ -1807,7 +1808,7 @@ textarea.mn-input {
 	text-align: center;
 	background: var(--color-main-background);
 	border: 1px solid var(--color-border);
-	border-radius: var(--mn-radius-md);
+	border-radius: var(--mn-radius-lg);
 }
 
 .mn-denied__icon {
@@ -1962,7 +1963,7 @@ textarea.mn-input {
 	padding: var(--mn-space-4, 1rem);
 	border: 1px solid var(--color-border-maxcontrast, var(--color-border));
 	border-inline-start: 4px solid var(--color-primary-element);
-	border-radius: var(--mn-radius-md, var(--border-radius-large, 12px));
+	border-radius: var(--mn-radius-lg);
 	background: color-mix(in srgb, var(--color-primary-element) 10%, var(--color-main-background));
 	box-sizing: border-box;
 }
@@ -2044,7 +2045,7 @@ textarea.mn-input {
 	min-width: 0;
 	padding: var(--mn-space-4, 1rem);
 	border: 1px solid var(--color-border);
-	border-radius: var(--mn-radius-md, var(--border-radius-large, 12px));
+	border-radius: var(--mn-radius-lg);
 	background: var(--color-main-background);
 	box-sizing: border-box;
 }
@@ -2207,7 +2208,7 @@ textarea.mn-input {
 #content.app-maintenancecheck #app-content select.mn-input,
 #content.app-maintenancecheck #app-content textarea.mn-input {
 	min-height: var(--mn-clickable-area);
-	border-radius: var(--mn-radius-sm, 6px);
+	border-radius: var(--mn-radius-sm);
 	border: 1px solid var(--mn-form-border, var(--mn-border));
 	background-color: var(--color-main-background);
 	color: var(--color-main-text);
@@ -2227,7 +2228,7 @@ textarea.mn-input {
 #content.app-maintenancecheck .mn-btn,
 #content.app-maintenancecheck .mn-btn--primary,
 #content.app-maintenancecheck .mn-hint-dismiss {
-	border-radius: var(--mn-radius-md, 12px) !important;
+	border-radius: var(--mn-radius-md) !important;
 }
 #content.app-maintenancecheck .mn-hint-dismiss {
 	min-height: var(--mn-clickable-area) !important;
@@ -2235,20 +2236,21 @@ textarea.mn-input {
 }
 #content.app-maintenancecheck .mn-badge,
 #content.app-maintenancecheck .mn-status {
-	border-radius: var(--mn-radius-element, 8px) !important;
+	border-radius: var(--border-radius-pill) !important;
 }
 #content.app-maintenancecheck .mn-card,
 #content.app-maintenancecheck .mn-section,
 #content.app-maintenancecheck .mn-table-wrap,
 #content.app-maintenancecheck .mn-empty,
 #content.app-maintenancecheck .mn-empty-state {
-	border-radius: var(--mn-radius-md, 12px) !important;
+	border-radius: var(--mn-radius-lg) !important;
 }
+/* NcDialog ships --border-radius-element on .modal-container — 8px, not 12. */
 .modal.mn-dialog,
 .mn-dialog.modal,
 body > .modal-backdrop > .modal,
 body > .mn-dialog-overlay > .mn-dialog {
-	border-radius: var(--mn-radius-lg, 16px) !important;
+	border-radius: var(--mn-radius-md) !important;
 }
 
 /* ===== Dispatch board (W3) — day buckets + Assign CTA (no nested cards/lanes) ===== */
@@ -2261,7 +2263,7 @@ body > .mn-dialog-overlay > .mn-dialog {
 	padding: var(--mn-space-3) var(--mn-space-4);
 	background: var(--color-main-background);
 	border: 1px solid var(--color-border, var(--color-border-dark));
-	border-radius: var(--mn-radius-md, 12px);
+	border-radius: var(--mn-radius-lg);
 	box-sizing: border-box;
 }
 
@@ -2354,7 +2356,7 @@ body > .mn-dialog-overlay > .mn-dialog {
 .mn-checklist__item--attention {
 	outline: 3px solid var(--mn-warning-border);
 	outline-offset: 4px;
-	border-radius: var(--mn-radius-sm, 6px);
+	border-radius: var(--mn-radius-sm);
 	background: var(--mn-tint-warning);
 }
 .mn-checklist-blockers {
@@ -2386,7 +2388,7 @@ body > .mn-dialog-overlay > .mn-dialog {
 	align-items: center;
 	min-height: var(--mn-clickable-area);
 	padding: var(--mn-space-2) var(--mn-space-3);
-	border-radius: var(--mn-radius-sm, 6px);
+	border-radius: var(--mn-radius-sm);
 	border: 1px solid var(--color-border, var(--mn-border));
 	text-decoration: none;
 }
@@ -2464,7 +2466,7 @@ body > .mn-dialog-overlay > .mn-dialog {
 	align-items: center;
 	min-height: 32px;
 	padding: 0.25rem 0.7rem;
-	border-radius: 999px;
+	border-radius: var(--border-radius-pill);
 	border: 1px solid var(--mn-border, var(--color-border));
 	background: color-mix(in srgb, var(--color-main-background) 88%, var(--color-main-text) 12%);
 	font-size: var(--mn-fs-sm, 0.875rem);
@@ -2483,7 +2485,7 @@ body > .mn-dialog-overlay > .mn-dialog {
 	padding-inline: 1.5rem;
 	font-size: 1.125rem;
 	font-weight: 700;
-	border-radius: var(--mn-radius-md, 12px);
+	border-radius: var(--mn-radius-md);
 }
 #content.app-maintenancecheck #app-content .mn-wo-hero__primary.mn-btn,
 #content.app-maintenancecheck #app-content .mn-wo-hero__primary.button {
@@ -2500,7 +2502,7 @@ body > .mn-dialog-overlay > .mn-dialog {
 	margin: 0;
 	padding: var(--mn-space-3, 12px);
 	border: 1px solid var(--mn-border, var(--color-border));
-	border-radius: var(--mn-radius-md, 12px);
+	border-radius: var(--mn-radius-lg);
 	background: color-mix(in srgb, var(--color-main-background) 92%, var(--color-main-text) 8%);
 }
 .mn-wo-intake__row {

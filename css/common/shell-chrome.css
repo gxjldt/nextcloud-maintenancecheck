@@ -44,7 +44,7 @@
 	box-sizing: border-box;
 	background: var(--color-primary-element, #0082c9);
 	color: var(--color-primary-element-text, #fff);
-	border-radius: var(--mn-radius-sm, 6px);
+	border-radius: var(--mn-radius-sm);
 	font-weight: 600;
 	text-decoration: none;
 	line-height: 1.3;
@@ -80,7 +80,7 @@
 	min-width: var(--mn-clickable-area, 34px);
 	padding: 0 12px;
 	box-sizing: border-box;
-	border-radius: var(--border-radius-element, var(--mn-radius-md, 8px));
+	border-radius: var(--border-radius-element, var(--mn-radius-md));
 	font-size: var(--mn-fs-md, 1rem);
 	font-weight: 500;
 	line-height: 1.25;
@@ -101,7 +101,7 @@
 #content.app-maintenancecheck #app-content .mn-section {
 	background: var(--mn-bg-card, var(--color-main-background));
 	border: 1px solid var(--mn-border, var(--mn-form-border));
-	border-radius: var(--mn-radius-md, 12px);
+	border-radius: var(--mn-radius-lg);
 	box-shadow: var(--mn-shadow-sm, 0 1px 2px color-mix(in srgb, var(--color-main-text) 8%, transparent));
 	box-sizing: border-box;
 }
@@ -174,21 +174,21 @@
 	/* Default for headed/detail cards; table-solo overrides below in app.css */
 	padding: var(--mn-space-5, 24px);
 }
-/* Buttons — AZ azc-btn uses radius-md (12px), not sm */
+/* Buttons — NcButton geometry: element radius, 34px tall, 4px/12px padding and
+ * regular weight. AZC's 0.625rem/1.15rem + 600 made them 38px and bold. */
 #content.app-maintenancecheck #app-content .mn-btn,
 #content.app-maintenancecheck #app-content .button,
 #content.app-maintenancecheck #app-content button.button,
 #content.app-maintenancecheck #app-content a.button {
-	border-radius: var(--mn-radius-md, 12px);
-	/* --mn-clickable-area, not 2.75rem: 2.75rem is 41.25px at NC's 15px root */
+	border-radius: var(--mn-radius-md);
 	min-height: var(--mn-clickable-area);
-	padding: 0.625rem 1.15rem;
-	font-weight: 600;
+	padding: var(--default-grid-baseline) var(--mn-space-3);
+	font-weight: var(--font-weight-element, 500);
 }
 #content.app-maintenancecheck #app-content .mn-btn--sm,
 #content.app-maintenancecheck #app-content .button.small,
 #content.app-maintenancecheck #app-content .button--sm {
-	border-radius: var(--mn-radius-sm, 6px);
+	border-radius: var(--border-radius-element);
 	min-height: var(--mn-clickable-area);
 	min-width: var(--mn-clickable-area);
 	padding: var(--mn-space-2) var(--mn-space-3);
@@ -196,7 +196,7 @@
 
 #content.app-maintenancecheck #app-content .mn-table-wrap {
 	border: 1px solid var(--mn-border, var(--color-border));
-	border-radius: var(--mn-radius-md, 12px);
+	border-radius: var(--mn-radius-lg);
 	overflow-x: auto;
 	overflow-y: visible;
 	-webkit-overflow-scrolling: touch;
@@ -520,7 +520,7 @@
 .mn-card {
 	background: var(--mn-bg-card);
 	border: 1px solid var(--mn-border);
-	border-radius: var(--mn-radius-md);
+	border-radius: var(--mn-radius-lg);
 	padding: var(--mn-space-5);
 	box-shadow: var(--mn-shadow-sm);
 }
